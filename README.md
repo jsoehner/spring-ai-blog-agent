@@ -12,17 +12,17 @@ This agent demonstrates the true power of hooking up robust Java application log
 
 ```mermaid
 graph TD
-    A[Spring Boot Scheduled Cron] -->|Trigger (Mon & Thu)| B(ChatClient Agent)
-    B -->|Tool Call| C[WebCrawlerConfig]
-    C -->|Fetch HTML| D[(Top 25 Security Sites)]
-    D -.->|Extract Context| C
-    C -->|Return Context| B
-    B -->|Prompt + Context| E{Local/Private LLM}
-    E -->|Analyze & Write| B
-    B -->|Output HTML| F[Save to blog_draft.html]
-    F --> G[Execute Git & GitHub CLI]
-    G --> H((Open GitHub Pull Request))
-    H -->|Email Notification| I[Human Reviewer]
+    A["Spring Boot Scheduled Cron"] -->|"Trigger (Mon & Thu)"| B("ChatClient Agent")
+    B -->|"Tool Call"| C["WebCrawlerConfig"]
+    C -->|"Fetch HTML"| D[("Top 25 Security Sites")]
+    D -.->|"Extract Context"| C
+    C -->|"Return Context"| B
+    B -->|"Prompt + Context"| E{"Local/Private LLM"}
+    E -->|"Analyze & Write"| B
+    B -->|"Output HTML"| F["Save to blog_draft.html"]
+    F --> G["Execute Git & GitHub CLI"]
+    G --> H(("Open GitHub Pull Request"))
+    H -->|"Email Notification"| I["Human Reviewer"]
 ```
 
 ### Why This Is Powerful
