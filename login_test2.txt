@@ -1,0 +1,266 @@
+HTTP/2 200 
+server: nginx
+date: Wed, 17 Jun 2026 21:40:51 GMT
+content-type: text/html; charset=UTF-8
+vary: Accept-Encoding
+x-hacker: Want root?  Visit join.a8c.com/hacker and mention this header.
+host-header: WordPress.com
+link: <https://public-api.wordpress.com/wp-json/?rest_route=/sites/jeff2343.wordpress.com>; rel="https://api.w.org/"
+vary: accept, content-type
+expires: Wed, 11 Jan 1984 05:00:00 GMT
+cache-control: no-cache, must-revalidate, max-age=0, no-store, private
+set-cookie: wordpress_test_cookie=WP%20Cookie%20check; path=/; domain=.wordpress.com; secure; HttpOnly
+x-frame-options: SAMEORIGIN
+referrer-policy: strict-origin-when-cross-origin
+x-ac: 1.yyz _dca BYPASS
+alt-svc: clear
+strict-transport-security: max-age=31536000
+server-timing: a8c-cdn, dc;desc=yyz, cache;desc=BYPASS;dur=584.0
+
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="referrer" content="same-origin">
+	<title>Log In &lsaquo; Security Analyst &#8211; Jeff Soehner CISSP, GXPN,GPYC,GMOB,GCIH &#8212; WordPress</title>
+	<meta name='robots' content='max-image-preview:large, noindex, noarchive' />
+<link rel='dns-prefetch' href='//blackbox-api.wp.com' />
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??-eJx1jlsOgjAQRTdkO1Ai+mNcC21HqOmDdFqNu3ckmiiRv7mP3DNwn4WLxleLBIYI7ECTMymSDC5KdnawruhayrowWFZLekk5bGW+beJPxKCCscDs6+giwVhZaswjJxnhpjrZScVE5y1QeXh+QQ+E4n0v04LMhAE3oYmn/1JDFR8wu0vvG/Xqn8OpPRybXu1V11+fmzttZw==&cssminify=yes' type='text/css' media='all' />
+	<meta name="viewport" content="width=device-width">
+			<style type="text/css">
+			.twostep-login-details strong {
+				white-space: nowrap;
+			}
+			div.twostep-action-buttons input {
+				width: 100%;
+				margin-bottom: 0.5em !important;
+			}
+			div.twostep-action-buttons hr { border-top: 1px #dcdcde; margin-bottom: 0.5em; clear: both; }
+			@keyframes rotate-spinner {
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+			.spinner2fa {
+				display: flex;
+				align-items: center;
+			}
+			.spinner2fa__outer, .spinner2fa__inner {
+				margin: auto;
+				box-sizing: border-box;
+				border: 0.1em solid transparent;
+				border-radius: 50%;
+				animation: 3s linear infinite;
+				animation-name: rotate-spinner;
+			}
+			.spinner2fa__outer {
+				border-top-color: var(--color-accent);
+			}
+			.spinner2fa__inner {
+				width: 100%;
+				height: 100%;
+				border-top-color: var(--color-accent);
+				border-right-color: var(--color-accent);
+				opacity: 0.4;
+			}
+		</style>
+		<meta name='referrer' content='strict-origin-when-cross-origin' />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="apple-itunes-app" content="app-id=1565481562" />		</head>
+	<body class="login no-js login-action-login wp-core-ui admin-color-modern locale-en">
+	<script>
+document.body.className = document.body.className.replace('no-js','js');
+</script>
+
+				<h1 class="screen-reader-text">Log In</h1>
+			<div id="login">
+		<h1 role="presentation" class="wp-login-logo"><a href="https://wordpress.com"><span class="screen-reader-text">WordPress.com</span></a></h1>
+	<div id="login_error" class="notice notice-error"><p>You have exceeded the login limit.  Please wait a few minutes and try again.</p></div>
+		<form name="loginform" id="loginform" action="https://wordpress.com/wp-login.php" method="post">
+			<p>
+				<label for="user_login">Username or Email Address</label>
+				<input type="text" name="log" id="user_login" aria-describedby="login_error" class="input ltr" value="" size="20" autocapitalize="off" autocomplete="username" required="required" />
+			</p>
+
+			<div class="user-pass-wrap">
+				<label for="user_pass">Password</label>
+				<div class="wp-pwd">
+					<input type="password" name="pwd" id="user_pass" aria-describedby="login_error" class="input password-input ltr" value="" size="20" autocomplete="current-password" spellcheck="false" required="required" />
+					<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="Show password">
+						<span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+					</button>
+				</div>
+			</div>
+			<input type="hidden" name="blackbox_session_id" id="blackbox_session_id" value="" /><div id="blackbox_challenge_container"></div><style>#blackbox_challenge_container[data-blackbox-challenge]{width:100%;margin:16px 0}</style>			<p class="forgetmenot"><input name="rememberme" type="checkbox" id="rememberme" value="forever"  /> <label for="rememberme">Stay signed in</label></p>
+			<p class="submit">
+				<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Log In" />
+									<input type="hidden" name="redirect_to" value="https://jeff2343.wordpress.com/wp-admin/" />
+									<input type="hidden" name="testcookie" value="1" />
+			</p>
+		</form>
+
+					<p id="nav">
+				<a class="wp-login-register click-register" href="https://wordpress.com/start?ref=wplogin">Create account</a> | <a class="wp-login-lost-password" href="https://wordpress.com/wp-login.php?action=lostpassword">Lost your password?</a>			</p>
+			<script>
+function wp_attempt_focus() {setTimeout( function() {try {d = document.getElementById( "user_login" );d.focus(); d.select();} catch( er ) {}}, 200);}
+wp_attempt_focus();
+if ( typeof wpOnload === 'function' ) { wpOnload() }
+</script>
+		<p id="backtoblog">
+			<a href="https://jeff2343.wordpress.com/">&larr; Go to Security Analyst &#8211; Jeff Soehner CISSP, GXPN,GPYC,GMOB,GCIH</a>		</p>
+			</div>
+	<script data-wp-strategy="defer" id="blackbox-sdk-js" src="https://blackbox-api.wp.com/v1/dist/v.js"></script>
+<script id="blackbox-sdk-js-after">
+( function() {
+	var sessionField = document.getElementById( 'blackbox_session_id' );
+	if ( ! sessionField ) {
+		return;
+	}
+
+	var challengeActive = false;
+	var challengeSettled = Promise.resolve();
+	var resolveChallengeSettled = function() {};
+
+	if ( typeof window.Blackbox !== 'undefined' && typeof window.Blackbox.configure === 'function' ) {
+		window.Blackbox.configure( {
+			apiKey: '1b4f123e7dae4d83bbd18170c4358f8e',
+			challengeContainer: document.getElementById( 'blackbox_challenge_container' ) || undefined,
+			onSuccess: function( result ) {
+				if ( result && typeof result.sessionId === 'string' && result.sessionId ) {
+					sessionField.value = result.sessionId;
+				}
+			},
+			onChallengeStart: function() {
+				challengeActive = true;
+				challengeSettled = new Promise( function( resolve ) {
+					resolveChallengeSettled = resolve;
+				} );
+			},
+			onChallengeComplete: function() {
+				challengeActive = false;
+				resolveChallengeSettled();
+			},
+			onChallengeFailure: function() {
+				challengeActive = false;
+				resolveChallengeSettled();
+			},
+			onError: function( err ) {
+				if ( challengeActive && err && err.method === 'challenge' ) {
+					challengeActive = false;
+					resolveChallengeSettled();
+				}
+			},
+		} );
+
+		if ( typeof window.Blackbox.init === 'function' ) {
+			window.Blackbox.init().catch( function() {} );
+		}
+	}
+
+	var form = sessionField.form || sessionField.closest( 'form' );
+	if ( ! form ) {
+		return;
+	}
+
+	var handlerRunning = false;
+	var submitted = false;
+
+	form.addEventListener( 'submit', function( e ) {
+		if ( submitted ) {
+			return;
+		}
+
+		e.preventDefault();
+
+		if ( handlerRunning ) {
+			return;
+		}
+
+		if ( typeof window.Blackbox === 'undefined' || typeof window.Blackbox.collect !== 'function' ) {
+			submitted = true;
+			form.submit();
+			return;
+		}
+
+		handlerRunning = true;
+
+		if ( challengeActive ) {
+			challengeSettled.then( function() {
+				submitted = true;
+				form.submit();
+			} );
+			return;
+		}
+
+		var timeout = new Promise( function( resolve ) {
+			setTimeout( function() { resolve( null ); }, 2000 );
+		} );
+
+		Promise.race( [ window.Blackbox.collect(), timeout ] )
+			.then( function( result ) {
+				if ( ( result && result.challenge ) || challengeActive ) {
+					return challengeSettled;
+				}
+			} )
+			.catch( function() {} )
+			.then( function() {
+				submitted = true;
+				form.submit();
+			} );
+	} );
+} )();
+//# sourceURL=blackbox-sdk-js-after
+</script>
+<script id="zxcvbn-async-js-extra">
+var _zxcvbnSettings = {"src":"/wp-includes/js/zxcvbn.min.js"};
+//# sourceURL=zxcvbn-async-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJzTLy/QzcxLzilNSS3WzyrWT87JLEjKTyxK0cvNzNPLKtbRR1OQVViaWlQJpYhSpJubmV6UWJKKS3FVRXJZUp5uYnFlXjJUjX2uraG5ibGhmam5qVkWAL6sO7c='></script>
+<script id="wp-hooks-js" src="/wp-content/plugins/gutenberg-core/v23.3.2/build/scripts/hooks/index.min.js?m=1780625085i&#038;ver=7496969728ca0f95732d"></script>
+<script id="wp-i18n-js" src="/wp-content/plugins/gutenberg-core/v23.3.2/build/scripts/i18n/index.min.js?m=1780625085i&#038;ver=125448662852c5e18937"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="password-strength-meter-js-extra">
+var pwsL10n = {"unknown":"Password strength unknown","short":"Very weak","bad":"Weak","good":"Medium","strong":"Strong","mismatch":"Mismatch"};
+//# sourceURL=password-strength-meter-js-extra
+</script>
+<script id="wp-util-js-extra">
+var _wpUtilSettings = {"ajax":{"url":"/wp-admin/admin-ajax.php"}};
+//# sourceURL=wp-util-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-admin/js/password-strength-meter.min.js,/wp-includes/js/underscore.min.js,/wp-includes/js/wp-util.min.js?m=1774537687j'></script>
+<script id="wp-dom-ready-js" src="/wp-content/plugins/gutenberg-core/v23.3.2/build/scripts/dom-ready/index.min.js?m=1780625236i&#038;ver=a06281ae5cf5500e9317"></script>
+<script id="wp-a11y-js" src="/wp-content/plugins/gutenberg-core/v23.3.2/build/scripts/a11y/index.min.js?m=1780625236i&#038;ver=483af07a6016f640f456"></script>
+<script id="user-profile-js-extra">
+var userProfileL10n = {"user_id":"0","nonce":"4fb9be965b"};
+//# sourceURL=user-profile-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-admin/js/user-profile.min.js?m=1763055075i'></script>
+<script src="https://s1.wp.com/wp-content/js/boomerang-a8c.min.js?v=0.4"></script>
+<script>
+BOOMR.init( {
+	beacon_url: "https://pixel.wp.com/boom.gif",
+	beacon_type: "GET",
+	log: null,
+	a8c_clicks: {
+		'button-primary': {
+			stat: 'wpcom.login.log_in_click',
+			include_page_load: true
+		},
+		'click-register': {
+			stat: 'wpcom.login.register_click',
+			include_page_load: true
+		},
+		'click-backtoblog': {
+			stat: 'wpcom.login.backtoblog_click',
+			include_page_load: true
+		}
+	}
+} );
+</script>
+		</body>
+	</html>
+	

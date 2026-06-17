@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  spring-ai-agent:
+    build: .
+    image: my-dockerhub-user/spring-ai-agent:latest
+    ports:
+      - "8080:8080"
+    environment:
+      # Pass GitHub Token as an environment variable so the 'gh' CLI can authenticate and open PRs
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    volumes:
+      # Mount application.properties as a secret file so you don't bake API keys into the image
+      - ./config/application.properties:/app/config/application.properties
+      # Mount the local git repository so the container can commit changes
+      - ./.git:/app/.git
+      - ./blog_draft.html:/app/blog_draft.html
