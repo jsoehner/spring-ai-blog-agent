@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<methodCall>
-  <methodName>wp.getUsersBlogs</methodName>
-  <params>
-    <param><value><string>snow27063@gmail.com</string></value></param>
-    <param><value><string>m%Q5xa^zf&28EB</string></value></param>
-  </params>
-</methodCall>
