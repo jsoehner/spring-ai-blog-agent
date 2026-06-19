@@ -36,7 +36,8 @@ public class ResearcherController {
         // Pass 1 Client
         this.factGathererClient = chatClientBuilder
                 .defaultSystem("You are an expert security researcher specializing in AI Security. " +
-                        "Use your web crawler tool to cross reference 10 separate articles about the requested topic. " +
+                        "CRITICAL: You MUST use your web crawler tool to cross-reference at least 10 separate articles about the requested topic. " +
+                        "Do not stop or proceed to summarize until you have successfully crawled and read from 10 distinct links. " +
                         "Gather a diverse, well-educated perspective and summarize the findings as a detailed list of bulleted facts.")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .defaultTools(new WebCrawlerConfig())

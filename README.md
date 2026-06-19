@@ -70,7 +70,7 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 
 ## ✨ Features
 - **Asynchronous Decoupling:** Never drop a request. Send as many topics as you want; the agent works through them at its own pace.
-- **Curated Web Crawling:** Pre-configured to search the top industry sites for Mobile Security, Cryptography, AppSec, and AI Security.
+- **Curated Web Crawling:** Pre-configured to search the top industry sites for Mobile Security, Cryptography, AppSec, and AI Security. The researcher is strictly instructed to cross-reference at least 10 distinct articles before drafting to ensure comprehensive coverage and reduce hallucination.
 - **Autonomous Scheduling:** Uses Spring's `@Scheduled` annotation to run completely independently on a strict cron schedule (e.g., every Mon/Thu).
 - **Auto-Pull Requests:** The agent practically contributes to itself! It executes CLI commands to create its own Git branch, commits the generated `.html` files, and opens a GitHub Pull Request for your review.
 - **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
