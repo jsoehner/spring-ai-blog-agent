@@ -85,17 +85,17 @@ Ensure your `.env` or local environment holds your `GITHUB_TOKEN` (required for 
 If you are using private LLMs, ensure they are accessible on your network (e.g., via Ollama).
 
 ### 2. The Single Command Execution
-We've bundled the entire lifecycle into a single, easy-to-use script. This script will pull the latest agent image from Docker Hub (falling back to a local build if necessary), start the entire multi-agent Docker Compose stack, wait for the APIs to initialize, and submit your topic:
+We've bundled the entire lifecycle into a single, easy-to-use script. This script will build the agent image locally from your source code, start the entire multi-agent Docker Compose stack, wait for the APIs to initialize, and submit your topic:
 
 ```bash
 ./run-and-submit.sh "AI code tech debt"
 ```
 
 ### 3. Watching it Work
-Because the system is decoupled, your script will return a success message instantly once the topic is queued. To watch the AI "think" in real-time as it gathers facts and drafts the HTML, simply tail the logs:
+Because the system is decoupled, your script will return a success message instantly once the topic is queued. The script will then automatically tail the logs of all containers in real-time so you can watch the AI "think" as it gathers facts and drafts the HTML:
 
 ```bash
-docker logs -f spring-ai-project-researcher-agent-1
+docker-compose logs -f
 ```
 
 ---

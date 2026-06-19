@@ -8,11 +8,20 @@ if [ -z "$TOPIC" ]; then
   exit 1
 fi
 
-echo "🔄 Attempting to pull the latest image from Docker Hub..."
-docker pull jsoehner/spring-ai-agent:latest || echo "⚠️ Could not pull image. Proceeding with local image/build if necessary."
+# We build the image locally to include any recent code changes
+# docker pull jsoehner/spring-ai-agent:latest || echo "⚠️ Could not pull image. Proceeding with local image/build if necessary."
+
+if docker-compose ps -q > /dev/null 2>&1; then
+  read -p "⚠️ Containers may already be running. Do you want to stop them before starting? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "🛑 Stopping existing containers..."
+    docker-compose down
+  fi
+fi
 
 echo "🚀 Starting containers with docker-compose..."
-docker-compose up -d
+docker-compose up -d --build
 
 echo "⏳ Waiting for Supervisor Agent API to become available..."
 # Try up to 30 times (approx 30 seconds)
@@ -45,8 +54,8 @@ if [ "$api_ready" = true ]; then
   echo "Response: $response"
   echo "Topic: \"$TOPIC\" has been queued."
   echo ""
-  echo "👉 To watch the progress in real-time, run:"
-  echo "   docker logs -f spring-ai-project-researcher-agent-1"
+  echo "👉 Monitoring logs in real-time:"
+  docker-compose logs -f
 else
   echo "❌ Error: Timed out waiting for the Supervisor Agent to start on port 8081."
   exit 1
