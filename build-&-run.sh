@@ -24,7 +24,6 @@ docker run -d \
   --link researcher-agent:researcher-agent \
   -v "$(pwd)/config:/app/config" \
   -v "$(pwd)/.git:/app/.git" \
-  -v "$(pwd)/blog_draft.html:/app/blog_draft.html" \
   jsoehner/spring-ai-agent:latest
 
 echo "Supervisor-agent is running on port 8081, researcher-agent is running internally."

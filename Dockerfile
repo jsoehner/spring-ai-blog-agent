@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk-alpine AS builder
+FROM --platform=linux/arm64 eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 COPY gradlew .
 COPY gradle gradle
@@ -6,7 +6,7 @@ COPY build.gradle settings.gradle ./
 COPY src src
 RUN ./gradlew build -x test
 
-FROM eclipse-temurin:21-jre-alpine
+FROM --platform=linux/arm64 eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Install git and github cli (gh) inside the container so it can commit and open PRs
