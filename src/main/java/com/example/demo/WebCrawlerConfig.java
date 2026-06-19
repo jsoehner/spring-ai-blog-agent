@@ -41,20 +41,27 @@ public class WebCrawlerConfig {
 
     @Tool(description = "Returns a curated list of the top 25 websites for researching Cryptography, Application Security, AI Security, and Mobile Security.")
     public List<String> getTopSecuritySites() {
+        System.out.println("Researcher Agent retrieving top security sites list...");
         return TOP_25_SECURITY_SITES;
     }
 
     @Tool(description = "Crawls a list of websites and extracts their text content. Use this to read the contents of URLs you decide are relevant.")
     public String crawl(List<String> urls) {
+        System.out.println("Researcher Agent starting to crawl " + urls.size() + " URLs...");
         StringBuilder allContent = new StringBuilder();
         for (String url : urls) {
             try {
+                System.out.println("Researcher Agent crawling: " + url);
                 Document doc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 Spring AI Agent")
                         .timeout(5000)
                         .get();
                 // Extract text from the page
                 String text = doc.body().text();
+                String title = doc.title();
+                
+                System.out.println("Researcher Agent extracted title: " + title);
+                System.out.println("Researcher Agent text snippet: " + text.substring(0, Math.min(text.length(), 100)).replace('\n', ' ') + "...");
                 
                 // Limit the text to avoid context overflow for the LLM
                 if (text.length() > 2000) {
@@ -62,6 +69,7 @@ public class WebCrawlerConfig {
                 }
                 allContent.append("Content from ").append(url).append(":\n").append(text).append("\n\n");
             } catch (Exception e) {
+                System.out.println("Researcher Agent failed to crawl: " + url + " - " + e.getMessage());
                 allContent.append("Failed to crawl ").append(url).append(": ").append(e.getMessage()).append("\n\n");
             }
         }

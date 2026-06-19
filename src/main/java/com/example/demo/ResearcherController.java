@@ -36,7 +36,7 @@ public class ResearcherController {
         // Pass 1 Client
         this.factGathererClient = chatClientBuilder
                 .defaultSystem("You are an expert security researcher specializing in AI Security. " +
-                        "Use your web crawler tool to cross reference 5 separate articles about the requested topic. " +
+                        "Use your web crawler tool to cross reference 10 separate articles about the requested topic. " +
                         "Gather a diverse, well-educated perspective and summarize the findings as a detailed list of bulleted facts.")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .defaultTools(new WebCrawlerConfig())
@@ -50,7 +50,7 @@ public class ResearcherController {
                         "Group similar thoughts or subjects together in a tight paragraph. " +
                         "Create no less than 3 and no more than 5 paragraphs and reserve summary points for the last paragraph. " +
                         "CRITICAL: Do NOT generate a main title or H1 heading for the article; start directly with the content or an introductory subheading. " +
-                        "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\\n<h2>...</h2>\\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\\n<p>...</p>\\n<!-- /wp:paragraph -->. Do NOT wrap your response in ```html markdown blocks.")
+                        "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\n<h2>...</h2>\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\n<p>...</p>\n<!-- /wp:paragraph -->. Ensure your HTML is well-formed and do NOT add broken closing tags like </. Do NOT wrap your response in ```html markdown blocks.")
                 .build();
     }
 
@@ -66,6 +66,8 @@ public class ResearcherController {
                     .advisors(a -> a.param("chat_memory_conversation_id", "pass1-" + topic))
                     .call()
                     .content();
+            
+            System.out.println("Gathered facts to be considered for the blog:\n" + facts);
 
             // Pass 2: Write blog post
             System.out.println("Starting Pass 2 (Blog Writing) for: " + topic);

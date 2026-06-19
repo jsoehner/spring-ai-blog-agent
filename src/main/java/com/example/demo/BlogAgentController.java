@@ -24,10 +24,15 @@ public class BlogAgentController {
             @RequestParam(defaultValue = "Recent mobile security threats in Android") List<String> topics) {
         
         for (String topic : topics) {
-            System.out.println("Queuing topic for research: " + topic);
+            System.out.println("Processing topic for research: " + topic);
             rabbitTemplate.convertAndSend("research-tasks", topic);
         }
         
         return ResponseEntity.accepted().body("Queued " + topics.size() + " topics for background processing.");
+    }
+
+    @GetMapping(value = "/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("OK");
     }
 }
