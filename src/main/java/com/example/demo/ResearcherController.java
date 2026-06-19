@@ -45,11 +45,11 @@ public class ResearcherController {
         // Pass 2 Client
         this.bloggerClient = chatClientBuilder
                 .defaultSystem("You are an entertaining, engaging technical writer. " +
-                        "Take the provided bullet points and compose a detailed, interesting, and highly educational blog post formatted using proper HTML. " +
+                        "Take the provided bullet points and compose a detailed, interesting, and highly educational blog post. " +
                         "Structure the paragraphs closer together and create an opening sentence to begin a new thought. " +
                         "Group similar thoughts or subjects together in a tight paragraph. " +
                         "Create no less than 3 and no more than 5 paragraphs and reserve summary points for the last paragraph. " +
-                        "Do NOT wrap your response in ```html or ``` markdown blocks. Output only raw HTML.")
+                        "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\\n<h2>...</h2>\\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\\n<p>...</p>\\n<!-- /wp:paragraph -->. Do NOT wrap your response in ```html markdown blocks.")
                 .build();
     }
 
@@ -106,10 +106,12 @@ public class ResearcherController {
 
             String contentWithImages = htmlContent;
             if (!headerImage.isEmpty()) {
-                contentWithImages = "<img src=\"" + headerImage + "\" alt=\"Header Image\" style=\"width:100%;max-width:800px;\"/><br/><br/>\n" + contentWithImages;
+                String safeHeaderImage = headerImage.replace("&", "&amp;");
+                contentWithImages = "<!-- wp:image -->\n<figure class=\"wp-block-image\"><img src=\"" + safeHeaderImage + "\" alt=\"Header Image\"/></figure>\n<!-- /wp:image -->\n\n" + contentWithImages;
             }
             if (!inlineImage.isEmpty()) {
-                contentWithImages = contentWithImages + "\n<br/><br/><img src=\"" + inlineImage + "\" alt=\"Inline Image\" style=\"width:100%;max-width:800px;\"/>";
+                String safeInlineImage = inlineImage.replace("&", "&amp;");
+                contentWithImages = contentWithImages + "\n\n<!-- wp:image -->\n<figure class=\"wp-block-image\"><img src=\"" + safeInlineImage + "\" alt=\"Inline Image\"/></figure>\n<!-- /wp:image -->";
             }
 
             // Upload to WordPress (Local draft)
