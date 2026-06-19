@@ -3,9 +3,16 @@
 # Build the latest image
 docker build -t jsoehner/spring-ai-agent:latest .
 
-# Stop and remove any existing containers with the same names
-docker stop supervisor-agent researcher-agent spring-ai-project-supervisor-agent-1 spring-ai-project-researcher-agent-1 2>/dev/null || true
-docker rm -f supervisor-agent researcher-agent spring-ai-project-supervisor-agent-1 spring-ai-project-researcher-agent-1 2>/dev/null || true
+# Check for existing containers with the same names
+containers=$(docker ps -aq -f "name=supervisor-agent" -f "name=researcher-agent" -f "name=spring-ai-project-supervisor-agent-1" -f "name=spring-ai-project-researcher-agent-1")
+if [ -n "$containers" ]; then
+  read -p "⚠️ Existing containers found. Do you want to stop and remove them? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "🛑 Stopping and removing existing containers..."
+    docker rm -f $containers 2>/dev/null || true
+  fi
+fi
 
 # Run the researcher container
 docker run -d \

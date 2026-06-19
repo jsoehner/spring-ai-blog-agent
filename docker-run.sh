@@ -3,10 +3,15 @@
 # Pull the latest image from Docker Hub
 docker pull jsoehner/spring-ai-agent:latest
 
-# Stop and remove any existing containers containing the same names
+# Check for existing containers with the same names
 containers=$(docker ps -aq -f "name=supervisor-agent" -f "name=researcher-agent")
 if [ -n "$containers" ]; then
-  docker rm -f $containers 2>/dev/null
+  read -p "⚠️ Existing containers found. Do you want to stop and remove them? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "🛑 Stopping and removing existing containers..."
+    docker rm -f $containers 2>/dev/null
+  fi
 fi
 
 # Run the researcher container

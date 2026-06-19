@@ -19,7 +19,7 @@ public class ImageAgentController {
 
     public ImageAgentController(ChatClient.Builder chatClientBuilder) {
         this.chatClient = chatClientBuilder
-                .defaultSystem("You are an expert image prompt generator. Given a blog post topic or content, generate a highly descriptive visual prompt for an image that represents it. Output ONLY the short image prompt, nothing else.")
+                .defaultSystem("You are an expert image prompt generator. Given a blog post topic or content, generate a highly descriptive visual prompt for a clean, professional, icon-style illustration of a concrete object that represents it. Avoid abstract concepts. Output ONLY the short image prompt, nothing else.")
                 .build();
     }
 
@@ -30,13 +30,13 @@ public class ImageAgentController {
 
         // Generate a visual prompt for the header image
         String headerPromptStr = chatClient.prompt()
-                .user("Generate a short, descriptive visual prompt for a header image for a blog post about: " + topic)
+                .user("Generate a short, descriptive visual prompt for an icon-style header image featuring a concrete object for a blog post about: " + topic)
                 .call()
                 .content();
 
         // Generate a visual prompt for a generic inline image based on content
         String inlinePromptStr = chatClient.prompt()
-                .user("Generate a short, descriptive visual prompt for a secondary inline image related to this content snippet: " + 
+                .user("Generate a short, descriptive visual prompt for a secondary icon-style inline image featuring a concrete object related to this content snippet: " + 
                       (content.length() > 500 ? content.substring(0, 500) : content))
                 .call()
                 .content();

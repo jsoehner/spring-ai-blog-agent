@@ -4,7 +4,7 @@
 
 **A highly robust, multi-agent AI system built to run complex asynchronous tasks utilizing Spring Boot and local/private Large Language Models (LLMs).**
 
-This project demonstrates the true power of scaling robust Java application logic (Spring Boot) and asynchronous event-driven queues (RabbitMQ) with LLMs. By decoupling HTTP requests from long-running inference tasks, it achieves incredible resilience, making it perfect for pairing with powerful frontier models or private, locally-hosted LLMs (like `qwen3.5:9b`).
+This project demonstrates the true power of scaling robust Java application logic (Spring Boot) and asynchronous event-driven queues (RabbitMQ) with LLMs. By decoupling HTTP requests from long-running inference tasks, it achieves incredible resilience, making it perfect for pairing with powerful frontier models or private, locally-hosted LLMs (like `llama3.2:latest`).
 
 ---
 
@@ -64,7 +64,7 @@ graph TD
 ```
 
 ### Why Specialized Agents?
-Complex visual work is delegated to a separate, dedicated **Image Agent** running specific vision models (e.g., `qwen3-vl:latest`). This keeps the **Researcher Agent** focused strictly on language, analysis, and HTML drafting, drastically reducing hallucinations and formatting errors.
+Complex visual work is delegated to a separate, dedicated **Image Agent** running specific vision models (e.g., `qwen3-vl:latest`). This keeps the **Researcher Agent** focused strictly on language, analysis, and HTML drafting, drastically reducing hallucinations and formatting errors. Note that to prevent tool-calling hangs with local models, the pipeline uses the `spring-ai-starter-model-openai` connected to Ollama's OpenAI-compatible `/v1` endpoint.
 
 ---
 
@@ -82,7 +82,7 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 ### 1. Configuration
 Ensure your `.env` or local environment holds your `GITHUB_TOKEN` (required for the agent to open PRs automatically). 
 
-If you are using private LLMs, ensure they are accessible on your network (e.g., via Ollama).
+If you are using private LLMs, ensure they are accessible on your network via their OpenAI compatible API endpoints (e.g., `http://192.168.100.190:11434/v1` for Ollama). Configure this via `spring.ai.openai.base-url` in `application.properties`.
 
 ### 2. The Single Command Execution
 We've bundled the entire lifecycle into a single, easy-to-use script. This script will build the agent image locally from your source code, start the entire multi-agent Docker Compose stack, wait for the APIs to initialize, and submit your topic:
