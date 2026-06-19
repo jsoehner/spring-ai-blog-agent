@@ -3,32 +3,29 @@
 ![AI Agent Architecture](docs/ai_agent_infographic.jpg)
 
 ## 🚀 Overview
-The **Spring AI Autonomous Blog Agent** is a powerful, self-contained AI worker designed to run scheduled background tasks using Spring Boot and local/private Large Language Models (LLMs). 
+The **Spring AI Autonomous Blog Agent** is a powerful, multi-agent AI system designed to run complex asynchronous tasks using Spring Boot and local/private Large Language Models (LLMs). 
 
-Instead of relying on fragile web scrapers or manual intervention, this application operates fully autonomously inside a Docker container. It wakes up on a schedule, conducts extensive cybersecurity research using a curated web crawler, drafts a comprehensive 1,000+ word blog post, and automatically submits the final draft for your review via a **GitHub Pull Request**.
+Operating autonomously inside a Dockerized architecture, it utilizes an asynchronous **RabbitMQ** message bus to decouple request handling from long-running inference tasks. It features a Supervisor Agent that queues research topics, a Researcher Agent that performs a two-pass deep-dive (fact gathering and html synthesis) using a curated web crawler, and an Image Agent that dynamically creates header and inline images using vision models. Finally, the composed output is saved locally or submitted for review.
 
-## 🧠 The Architecture: Frontier Models & Local LLMs
-This agent demonstrates the true power of hooking up robust Java application logic (Spring Boot) directly to an LLM.
+## 🧠 The Architecture: Multi-Agent Microservices
+This system demonstrates the true power of scaling robust Java application logic (Spring Boot) and asynchronous event-driven queues with LLMs.
 
 ```mermaid
 graph TD
-    A["Spring Boot Scheduled Cron"] -->|"Trigger (Mon & Thu)"| B("ChatClient Agent")
-    B -->|"Tool Call"| C["WebCrawlerConfig"]
-    C -->|"Fetch HTML"| D[("Top 25 Security Sites")]
-    D -.->|"Extract Context"| C
-    C -->|"Return Context"| B
-    B -->|"Prompt + Context"| E{"Local/Private LLM"}
-    E -->|"Analyze & Write"| B
-    B -->|"Output HTML"| F["Save to blog_draft.html"]
-    F --> G["Execute Git & GitHub CLI"]
-    G --> H(("Open GitHub Pull Request"))
-    H -->|"Email Notification"| I["Human Reviewer"]
+    A["User / REST Call"] -->|"Submit Topics"| B("Supervisor Agent")
+    B -->|"Publish to Queue"| C[("RabbitMQ Bus")]
+    C -->|"Consume Task"| D("Researcher Agent (Pass 1)")
+    D -->|"WebCrawlerConfig"| E[("Top 25 Security Sites")]
+    D -->|"Bullet-point Summary"| F("Researcher Agent (Pass 2)")
+    F -->|"Synthesize HTML Draft"| G("Image Agent (REST API)")
+    G -->|"Generate Contextual Images"| H["Inject Images into HTML"]
+    H -->|"Save Draft"| I["WordPressTool (Local file)"]
 ```
 
 ### Why This Is Powerful
-* **Total Privacy:** By hooking this agent up to a private LLM (like `llama3.2` running locally via Ollama), you can scrape, parse, and analyze highly sensitive security data without ever sending prompts to a public frontier model.
-* **Agentic Tooling:** The LLM doesn't just generate text; it is provided with Spring AI `@Tool` functions, allowing it to actively request crawls of specific industry-leading websites (like Krebs on Security, OWASP, etc.) on demand.
-* **Human-in-the-Loop Workflow:** Writing directly to production blogs can be dangerous if an AI hallucinates. By integrating the GitHub CLI natively into the agent's logic, it creates a Pull Request branch for every draft. This triggers a standard GitHub email notification, allowing you to peer-review the AI's work just like a human colleague before merging.
+* **Asynchronous Decoupling:** By utilizing RabbitMQ, the Supervisor can instantly accept a large batch of research topics and free up the HTTP thread, while the Researcher Agent processes them sequentially or in parallel without protocol timeouts.
+* **Multi-Pass Reasoning:** The Agent architecture splits complex generation into dedicated steps (Fact Gathering vs Drafting), drastically reducing hallucinations and formatting errors.
+* **Specialized Agent Delegation:** Complex visual work is delegated to a separate, dedicated Image Agent running specific vision models (`qwen3-vl:latest`), keeping the Researcher focused strictly on language and analysis (`qwen3.5:9b`).
 
 ## 🛠️ Features
 - **Curated Web Crawling:** Pre-configured to search the top 25 industry sites for Mobile Security, Cryptography, AppSec, and AI Security.

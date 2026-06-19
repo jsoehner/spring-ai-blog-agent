@@ -1,16 +1,52 @@
 version: '3.8'
 services:
-  spring-ai-agent:
-    build: .
-    image: my-dockerhub-user/spring-ai-agent:latest
+  rabbitmq:
+    image: rabbitmq:3-management
     ports:
-      - "8080:8080"
+      - "5672:5672"
+      - "15672:15672"
     environment:
-      # Pass GitHub Token as an environment variable so the 'gh' CLI can authenticate and open PRs
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  supervisor-agent:
+    build: .
+    image: jsoehner/spring-ai-agent:latest
+    ports:
+      - "8081:8080"
+    environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - SPRING_PROFILES_ACTIVE=supervisor
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - RESEARCHER_URL=http://researcher-agent:8080/research
+      - IMAGE_AGENT_URL=http://image-agent:8080/image
+    depends_on:
+      - rabbitmq
     volumes:
-      # Mount application.properties as a secret file so you don't bake API keys into the image
-      - ./config/application.properties:/app/config/application.properties
-      # Mount the local git repository so the container can commit changes
+      - ./config:/app/config
       - ./.git:/app/.git
       - ./blog_draft.html:/app/blog_draft.html
+
+  researcher-agent:
+    build: .
+    image: jsoehner/spring-ai-agent:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=researcher
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - IMAGE_AGENT_URL=http://image-agent:8080/image
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./config:/app/config
+      - ./blog_draft.html:/app/blog_draft.html
+
+  image-agent:
+    build: .
+    image: jsoehner/spring-ai-agent:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=image-agent
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./config:/app/config

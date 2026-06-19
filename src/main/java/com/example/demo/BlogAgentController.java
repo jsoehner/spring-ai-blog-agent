@@ -1,54 +1,33 @@
 package com.example.demo;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.MediaType;
-import reactor.core.publisher.Flux;
+import org.springframework.context.annotation.Profile;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 @RestController
+@Profile("supervisor")
 public class BlogAgentController {
 
-    private final ChatClient chatClient;
-    private final WordPressTool wordPressTool;
+    private final RabbitTemplate rabbitTemplate;
 
-    public BlogAgentController(ChatClient.Builder chatClientBuilder, WordPressTool wordPressTool) {
-        ChatMemory chatMemory = MessageWindowChatMemory.builder()
-            .chatMemoryRepository(new InMemoryChatMemoryRepository())
-            .maxMessages(100)
-            .build();
-        
-        this.wordPressTool = wordPressTool;
-        this.chatClient = chatClientBuilder
-                .defaultSystem("You are an expert security analyst and blog poster agent. Your task is to research a given subject related to Mobile Security, Cryptography, Application Security, or AI Security, and compose a detailed and engaging blog post formatted using proper HTML. The blog post must contain at least 5 to 10 paragraphs, with each paragraph being 100+ words.")
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .defaultTools(new WebCrawlerConfig())
-                .build();
+    public BlogAgentController(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
-    @GetMapping(value = "/blog", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String blog(
-            @RequestParam(defaultValue = "Recent mobile security threats in Android") String topic,
-            @RequestParam(defaultValue = "blog-1") String chatId) {
+    @GetMapping(value = "/blog")
+    public ResponseEntity<String> blog(
+            @RequestParam(defaultValue = "Recent mobile security threats in Android") List<String> topics) {
         
-        String fullContent = chatClient.prompt()
-                .user("Please research and draft a blog post on the following topic: " + topic)
-                .advisors(a -> a.param("chat_memory_conversation_id", chatId))
-                .call()
-                .content();
-                
-        String wordpressResult = wordPressTool.createDraftPost(new WordPressTool.DraftRequest(topic, fullContent));
+        for (String topic : topics) {
+            System.out.println("Queuing topic for research: " + topic);
+            rabbitTemplate.convertAndSend("research-tasks", topic);
+        }
         
-        return "==========================================\n" +
-               "WORDPRESS UPLOAD STATUS:\n" + 
-               wordpressResult + "\n" +
-               "==========================================\n\n" +
-               "Generated Blog Content:\n\n" + 
-               fullContent;
+        return ResponseEntity.accepted().body("Queued " + topics.size() + " topics for background processing.");
     }
 }
