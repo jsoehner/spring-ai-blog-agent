@@ -56,7 +56,7 @@ public class AutoDraftService {
             "git config --global user.email 'agent@spring-ai.local' && " +
             "git config --global user.name 'Spring AI Agent' && " +
             "git checkout -b %s && " +
-            "git add blog_draft.html && " +
+            "git add blog_draft.html blog_draft_wp.html && " +
             "git commit -m 'Generated new blog draft for %s' && " +
             "git push -u origin %s && " +
             "gh pr create --title 'Review Needed: New Blog Draft for %s' --body 'A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft.'",

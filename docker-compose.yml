@@ -26,6 +26,7 @@ services:
       - ./config:/app/config
       - ./.git:/app/.git
       - ./blog_draft.html:/app/blog_draft.html
+      - ./blog_draft_wp.html:/app/blog_draft_wp.html
 
   researcher-agent:
     build: .
@@ -39,6 +40,7 @@ services:
     volumes:
       - ./config:/app/config
       - ./blog_draft.html:/app/blog_draft.html
+      - ./blog_draft_wp.html:/app/blog_draft_wp.html
 
   image-agent:
     build: .
