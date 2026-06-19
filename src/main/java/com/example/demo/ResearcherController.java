@@ -49,6 +49,7 @@ public class ResearcherController {
                         "Structure the paragraphs closer together and create an opening sentence to begin a new thought. " +
                         "Group similar thoughts or subjects together in a tight paragraph. " +
                         "Create no less than 3 and no more than 5 paragraphs and reserve summary points for the last paragraph. " +
+                        "CRITICAL: Do NOT generate a main title or H1 heading for the article; start directly with the content or an introductory subheading. " +
                         "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\\n<h2>...</h2>\\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\\n<p>...</p>\\n<!-- /wp:paragraph -->. Do NOT wrap your response in ```html markdown blocks.")
                 .build();
     }
