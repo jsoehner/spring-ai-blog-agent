@@ -91,7 +91,12 @@ We've bundled the entire lifecycle into a single, easy-to-use script. This scrip
 ./run-and-submit.sh "AI code tech debt"
 ```
 
-### 3. Watching it Work
+### 3. Alternative Execution Scripts
+If you prefer to start the agent stack without automatically submitting a topic right away, you can use one of the alternative helper scripts:
+- `./build-&-run.sh`: Builds the local Docker image and starts the stack using `docker-compose`.
+- `./docker-run.sh`: Pulls the latest pre-built image and starts the stack using `docker-compose`.
+
+### 4. Watching it Work
 Because the system is decoupled, your script will return a success message instantly once the topic is queued. The script will then automatically tail the logs of all containers in real-time so you can watch the AI "think" as it gathers facts and drafts the HTML:
 
 ```bash
