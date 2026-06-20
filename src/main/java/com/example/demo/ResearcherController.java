@@ -35,9 +35,11 @@ public class ResearcherController {
                 .maxMessages(100)
                 .build();
 
+        ChatClient baseClient = chatClientBuilder.build();
+
         // Pass 1 Client
-        this.factGathererClient = chatClientBuilder
-                .defaultSystem("You are an expert security researcher specializing in AI Security. " +
+        this.factGathererClient = baseClient.mutate()
+                .defaultSystem("You are an expert security researcher specializing in IT Security. " +
                         "First, use your search tool to query for a list of topic-based URLs related to the requested topic. " +
                         "Then, begin parsing the content by crawling the URLs to capture key sentences that include the search terms from the topic. " +
                         "Iterate through until you have successfully parsed content from 10 URLs and captured a large number of key sentences to use in the blog post. " +
@@ -51,7 +53,7 @@ public class ResearcherController {
                 .build();
 
         // Pass 2 Client
-        this.bloggerClient = chatClientBuilder
+        this.bloggerClient = baseClient.mutate()
                 .defaultSystem("You are an entertaining, engaging technical writer. " +
                         "Take the provided bullet points and compose a detailed, interesting, and highly educational blog post. " +
                         "Structure the paragraphs closer together and create an opening sentence to begin a new thought. " +
