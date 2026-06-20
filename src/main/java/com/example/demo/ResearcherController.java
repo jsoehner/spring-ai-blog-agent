@@ -24,6 +24,7 @@ public class ResearcherController {
 
     public ResearcherController(ChatClient.Builder chatClientBuilder,
                                 WordPressTool wordPressTool,
+                                WebCrawlerConfig webCrawlerConfig,
                                 @Value("${IMAGE_AGENT_URL:http://localhost:8080/image}") String imageAgentUrl) {
         this.wordPressTool = wordPressTool;
         this.imageAgentUrl = imageAgentUrl;
@@ -33,20 +34,23 @@ public class ResearcherController {
                 .maxMessages(100)
                 .build();
 
+        ChatClient baseClient = chatClientBuilder.build();
+
         // Pass 1 Client
-        this.factGathererClient = chatClientBuilder
+        this.factGathererClient = baseClient.mutate()
                 .defaultSystem("You are an expert security researcher specializing in AI Security. " +
                         "CRITICAL INSTRUCTIONS:\n" +
                         "1. You MUST use your web crawler tool to cross-reference at least 10 separate articles about the requested topic.\n" +
                         "2. Do not stop or proceed to summarize until you have successfully crawled and read from 10 distinct links.\n" +
                         "3. Parse the returned content and specifically look for sentences that include most of the context provided in the research topic. Extract these highly relevant facts.\n" +
-                        "4. Your final response MUST ONLY be a detailed list of bulleted facts based on your findings. Do NOT include any raw JSON tool calls, reasoning steps, or crawler logs in your final response.")
+                        "4. Your final response MUST ONLY be a detailed list of bulleted facts based on your findings.\n" +
+                        "CRITICAL: You MUST invoke the 'crawl' tool using the native tool calling API. Do NOT print raw JSON tool call blocks (e.g. {\"name\": \"crawl\"...}) in your text output. Wait for the tool to return results before summarizing.")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .defaultTools(new WebCrawlerConfig())
+                .defaultTools(webCrawlerConfig)
                 .build();
 
         // Pass 2 Client
-        this.bloggerClient = chatClientBuilder
+        this.bloggerClient = baseClient.mutate()
                 .defaultSystem("You are an entertaining, engaging technical writer. " +
                         "Take the provided bullet points and compose a detailed, interesting, and highly educational blog post. " +
                         "Structure the paragraphs closer together and create an opening sentence to begin a new thought. " +
@@ -67,7 +71,7 @@ public class ResearcherController {
             System.out.println("Starting Pass 1 (Fact Gathering) for: " + topic);
             String facts = factGathererClient.prompt()
                     .user("Please gather facts about the following topic and summarize them as bullet points: " + topic + 
-                          "\\n\\nRemember to filter the crawled content for sentences that include most of the context of this topic, and output ONLY bullet points with absolutely no JSON or tool call artifacts.")
+                          "\\n\\nRemember to filter the crawled content for sentences that include most of the context of this topic, and output ONLY bullet points. If you need to use the crawl tool, use the native tool calling API. Do NOT output raw JSON.")
                     .advisors(a -> a.param("chat_memory_conversation_id", "pass1-" + topic))
                     .call()
                     .content();

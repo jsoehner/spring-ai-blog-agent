@@ -84,6 +84,8 @@ Ensure your `.env` or local environment holds your `GITHUB_TOKEN` (required for 
 
 If you are using private LLMs, ensure they are accessible on your network via their OpenAI compatible API endpoints (e.g., `http://192.168.100.190:11434/v1` for Ollama). Configure this via `spring.ai.openai.base-url` in `application.properties`.
 
+**Note on Local LLMs and Tool Calling**: When using local LLMs (like `llama3.2` or `qwen` via Ollama) through the OpenAI proxy/endpoint, the model may occasionally output raw JSON blocks for tool calls (e.g., `{"name": "crawl"}`) in the standard text output rather than utilizing the API's native tool-calling features. We have explicitly engineered the prompts within `ResearcherController.java` to enforce the use of the native tool calling API and prohibit raw JSON output. If you experiment with other models, ensure your prompt enforces strict tool-calling adherence.
+
 ### 2. The Single Command Execution
 We've bundled the entire lifecycle into a single, easy-to-use script. This script will build the agent image locally from your source code, start the entire multi-agent Docker Compose stack, wait for the APIs to initialize, and submit your topic:
 
