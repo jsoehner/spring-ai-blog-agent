@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+
 @Component
 @Profile("researcher")
 public class ResearcherController {
@@ -36,9 +38,15 @@ public class ResearcherController {
         // Pass 1 Client
         this.factGathererClient = chatClientBuilder
                 .defaultSystem("You are an expert security researcher specializing in AI Security. " +
-                        "Use your web crawler tool to cross reference 10 separate articles about the requested topic. " +
+                        "First, use your search tool to query for a list of topic-based URLs related to the requested topic. " +
+                        "Then, begin parsing the content by crawling the URLs to capture key sentences that include the search terms from the topic. " +
+                        "Iterate through until you have successfully parsed content from 10 URLs and captured a large number of key sentences to use in the blog post. " +
+                        "You must list any/all of the URLs being used and count until 10 before proceeding to the next phase. " +
                         "Gather a diverse, well-educated perspective and summarize the findings as a detailed list of bulleted facts.")
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultAdvisors(
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                        new SimpleLoggerAdvisor()
+                )
                 .defaultTools(new WebCrawlerConfig())
                 .build();
 
@@ -51,6 +59,7 @@ public class ResearcherController {
                         "Create no less than 3 and no more than 5 paragraphs and reserve summary points for the last paragraph. " +
                         "CRITICAL: Do NOT generate a main title or H1 heading for the article; start directly with the content or an introductory subheading. " +
                         "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\n<h2>...</h2>\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\n<p>...</p>\n<!-- /wp:paragraph -->. Ensure your HTML is well-formed and do NOT add broken closing tags like </. Do NOT wrap your response in ```html markdown blocks.")
+                .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build();
     }
 

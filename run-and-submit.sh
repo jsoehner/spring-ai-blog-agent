@@ -8,11 +8,14 @@ if [ -z "$TOPIC" ]; then
   exit 1
 fi
 
-echo "🔄 Attempting to pull the latest image from Docker Hub..."
-docker pull jsoehner/spring-ai-agent:latest || echo "⚠️ Could not pull image. Proceeding with local image/build if necessary."
+echo "🔄 Building the latest image locally..."
+docker build -t jsoehner/spring-ai-agent:latest .
+
+echo "🧹 Cleaning up any conflicting manual containers..."
+docker rm -f supervisor-agent researcher-agent 2>/dev/null || true
 
 echo "🚀 Starting containers with docker-compose..."
-docker-compose up -d
+docker-compose up --build -d
 
 echo "⏳ Waiting for Supervisor Agent API to become available..."
 # Try up to 30 times (approx 30 seconds)

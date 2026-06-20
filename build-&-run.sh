@@ -3,9 +3,9 @@
 # Build the latest image
 docker build -t jsoehner/spring-ai-agent:latest .
 
-# Stop and remove any existing containers with the same names
-docker stop supervisor-agent researcher-agent spring-ai-project-supervisor-agent-1 spring-ai-project-researcher-agent-1 2>/dev/null || true
-docker rm -f supervisor-agent researcher-agent spring-ai-project-supervisor-agent-1 spring-ai-project-researcher-agent-1 2>/dev/null || true
+# Stop and remove any existing containers
+docker-compose down 2>/dev/null || true
+docker rm -f supervisor-agent researcher-agent 2>/dev/null || true
 
 # Run the researcher container
 docker run -d \

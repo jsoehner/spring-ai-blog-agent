@@ -20,6 +20,7 @@ services:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - RESEARCHER_URL=http://researcher-agent:8080/research
       - IMAGE_AGENT_URL=http://image-agent:8080/image
+      - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
     depends_on:
       - rabbitmq
     volumes:
@@ -35,6 +36,7 @@ services:
       - SPRING_PROFILES_ACTIVE=researcher
       - SPRING_RABBITMQ_HOST=rabbitmq
       - IMAGE_AGENT_URL=http://image-agent:8080/image
+      - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
     depends_on:
       - rabbitmq
     volumes:
@@ -48,6 +50,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=image-agent
       - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
     depends_on:
       - rabbitmq
     volumes:

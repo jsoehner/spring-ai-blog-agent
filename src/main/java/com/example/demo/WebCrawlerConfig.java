@@ -45,6 +45,33 @@ public class WebCrawlerConfig {
         return TOP_25_SECURITY_SITES;
     }
 
+    @Tool(description = "Searches the web for a given topic and returns a list of relevant URLs.")
+    public List<String> searchWeb(String query) {
+        System.out.println("Researcher Agent searching web for: " + query);
+        List<String> urls = new java.util.ArrayList<>();
+        try {
+            Document doc = Jsoup.connect("https://html.duckduckgo.com/html/?q=" + java.net.URLEncoder.encode(query, "UTF-8"))
+                    .userAgent("Mozilla/5.0 Spring AI Agent")
+                    .timeout(5000)
+                    .get();
+            org.jsoup.select.Elements links = doc.select("a.result__url");
+            for (org.jsoup.nodes.Element link : links) {
+                String href = link.attr("href");
+                if (href != null && href.startsWith("http")) {
+                    urls.add(href);
+                }
+            }
+            if (urls.isEmpty()) {
+                System.out.println("Search returned no URLs, falling back to top security sites.");
+                return TOP_25_SECURITY_SITES;
+            }
+        } catch (Exception e) {
+            System.out.println("Researcher Agent failed to search: " + e.getMessage());
+            return TOP_25_SECURITY_SITES;
+        }
+        return urls;
+    }
+
     @Tool(description = "Crawls a list of websites and extracts their text content. Use this to read the contents of URLs you decide are relevant.")
     public String crawl(List<String> urls) {
         System.out.println("Researcher Agent starting to crawl " + urls.size() + " URLs...");
