@@ -36,9 +36,11 @@ public class ResearcherController {
         // Pass 1 Client
         this.factGathererClient = chatClientBuilder
                 .defaultSystem("You are an expert security researcher specializing in AI Security. " +
-                        "CRITICAL: You MUST use your web crawler tool to cross-reference at least 10 separate articles about the requested topic. " +
-                        "Do not stop or proceed to summarize until you have successfully crawled and read from 10 distinct links. " +
-                        "Gather a diverse, well-educated perspective and summarize the findings as a detailed list of bulleted facts.")
+                        "CRITICAL INSTRUCTIONS:\n" +
+                        "1. You MUST use your web crawler tool to cross-reference at least 10 separate articles about the requested topic.\n" +
+                        "2. Do not stop or proceed to summarize until you have successfully crawled and read from 10 distinct links.\n" +
+                        "3. Parse the returned content and specifically look for sentences that include most of the context provided in the research topic. Extract these highly relevant facts.\n" +
+                        "4. Your final response MUST ONLY be a detailed list of bulleted facts based on your findings. Do NOT include any raw JSON tool calls, reasoning steps, or crawler logs in your final response.")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .defaultTools(new WebCrawlerConfig())
                 .build();
@@ -48,10 +50,11 @@ public class ResearcherController {
                 .defaultSystem("You are an entertaining, engaging technical writer. " +
                         "Take the provided bullet points and compose a detailed, interesting, and highly educational blog post. " +
                         "Structure the paragraphs closer together and create an opening sentence to begin a new thought. " +
-                        "Group similar thoughts or subjects together in a tight paragraph. " +
+                        "Group similar thoughts or subjects together in a tight paragraph. Make an effort to create more paragraphs with 3 or more sentences that share the same subject matter. " +
                         "Create no less than 3 and no more than 5 paragraphs and reserve summary points for the last paragraph. " +
                         "CRITICAL: Do NOT generate a main title or H1 heading for the article; start directly with the content or an introductory subheading. " +
-                        "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\n<h2>...</h2>\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\n<p>...</p>\n<!-- /wp:paragraph -->. Ensure your HTML is well-formed and do NOT add broken closing tags like </. Do NOT wrap your response in ```html markdown blocks.")
+                        "CRITICAL: You MUST format your entire output using WordPress Gutenberg block syntax. Wrap every heading in <!-- wp:heading -->\n<h2>...</h2>\n<!-- /wp:heading --> and every paragraph in <!-- wp:paragraph -->\n<p>...</p>\n<!-- /wp:paragraph -->. Ensure your HTML is well-formed and do NOT add broken closing tags like </. Do NOT wrap your response in ```html markdown blocks. " +
+                        "IMPORTANT: If the provided facts contain any raw JSON, tool calls (like '{\"name\": \"crawl\"}'), or system error messages, IGNORE them completely and do not include them in the blog post.")
                 .build();
     }
 
@@ -63,7 +66,8 @@ public class ResearcherController {
             // Pass 1: Gather facts
             System.out.println("Starting Pass 1 (Fact Gathering) for: " + topic);
             String facts = factGathererClient.prompt()
-                    .user("Please gather facts about the following topic and summarize them as bullet points: " + topic)
+                    .user("Please gather facts about the following topic and summarize them as bullet points: " + topic + 
+                          "\\n\\nRemember to filter the crawled content for sentences that include most of the context of this topic, and output ONLY bullet points with absolutely no JSON or tool call artifacts.")
                     .advisors(a -> a.param("chat_memory_conversation_id", "pass1-" + topic))
                     .call()
                     .content();

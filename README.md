@@ -64,7 +64,7 @@ graph TD
 ```
 
 ### Why Specialized Agents?
-Complex visual work is delegated to a separate, dedicated **Image Agent** running specific vision models (e.g., `qwen3-vl:latest`). This keeps the **Researcher Agent** focused strictly on language, analysis, and HTML drafting, drastically reducing hallucinations and formatting errors. Note that to prevent tool-calling hangs with local models, the pipeline uses the `spring-ai-starter-model-openai` connected to Ollama's OpenAI-compatible `/v1` endpoint.
+Complex visual work is delegated to a separate, dedicated **Image Agent** running specific vision models (e.g., `qwen3-vl:latest`). This keeps the **Researcher Agent** focused strictly on language, analysis, and HTML drafting (e.g., crafting well-structured paragraphs with 3 or more sentences for a cohesive narrative), drastically reducing hallucinations and formatting errors. Note that to prevent tool-calling hangs with local models, the pipeline uses the `spring-ai-starter-model-openai` connected to Ollama's OpenAI-compatible `/v1` endpoint.
 
 ---
 
