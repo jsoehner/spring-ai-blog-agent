@@ -3,6 +3,7 @@ package com.example.demo;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,38 +12,13 @@ import java.util.Arrays;
 @Component
 public class WebCrawlerConfig {
 
-    private static final List<String> TOP_25_SECURITY_SITES = Arrays.asList(
-        "https://krebsonsecurity.com",
-        "https://www.schneier.com", // Cryptography
-        "https://www.darkreading.com",
-        "https://threatpost.com",
-        "https://thehackernews.com",
-        "https://www.bleepingcomputer.com",
-        "https://www.wired.com/category/security/",
-        "https://www.csoonline.com",
-        "https://www.securityweek.com",
-        "https://isc.sans.edu",
-        "https://portswigger.net/daily-swig", // AppSec
-        "https://owasp.org/blog/", // AppSec
-        "https://www.infosecurity-magazine.com",
-        "https://www.cyberscoop.com",
-        "https://www.helpnetsecurity.com",
-        "https://nakedsecurity.sophos.com",
-        "https://www.malwarebytes.com/blog",
-        "https://www.troyhunt.com",
-        "https://www.eff.org",
-        "https://googleprojectzero.blogspot.com",
-        "https://www.microsoft.com/en-us/security/blog/",
-        "https://openai.com/research", // AI Security
-        "https://www.anthropic.com/research", // AI Security
-        "https://www.hackerone.com/blog", // AppSec
-        "https://www.bugcrowd.com/blog" // AppSec
-    );
+    @Value("${webcrawler.default.urls:https://en.wikipedia.org/wiki/Main_Page,https://www.bbc.com/news}")
+    private List<String> defaultUrls;
 
-    @Tool(description = "Returns a curated list of the top 25 websites for researching Cryptography, Application Security, AI Security, and Mobile Security.")
-    public List<String> getTopSecuritySites() {
-        System.out.println("Researcher Agent retrieving top security sites list...");
-        return TOP_25_SECURITY_SITES;
+    @Tool(description = "Returns a curated list of default websites for researching topics when web search fails.")
+    public List<String> getDefaultSearchSites() {
+        System.out.println("Researcher Agent retrieving default search sites list...");
+        return defaultUrls;
     }
 
     @Tool(description = "Searches the web for a given topic and returns a list of relevant URLs.")
@@ -62,12 +38,12 @@ public class WebCrawlerConfig {
                 }
             }
             if (urls.isEmpty()) {
-                System.out.println("Search returned no URLs, falling back to top security sites.");
-                return TOP_25_SECURITY_SITES;
+                // System.out.println("Search returned no URLs, falling back to default search sites.");
+                return defaultUrls;
             }
         } catch (Exception e) {
             System.out.println("Researcher Agent failed to search: " + e.getMessage());
-            return TOP_25_SECURITY_SITES;
+            return defaultUrls;
         }
         return urls;
     }
@@ -78,8 +54,12 @@ public class WebCrawlerConfig {
         StringBuilder allContent = new StringBuilder();
         for (String url : urls) {
             try {
-                System.out.println("Researcher Agent crawling: " + url);
-                Document doc = Jsoup.connect(url)
+                String formattedUrl = url;
+                if (!formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
+                    formattedUrl = "https://" + formattedUrl;
+                }
+                System.out.println("Researcher Agent crawling: " + formattedUrl);
+                Document doc = Jsoup.connect(formattedUrl)
                         .userAgent("Mozilla/5.0 Spring AI Agent")
                         .timeout(5000)
                         .get();

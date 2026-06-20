@@ -17,3 +17,6 @@ spring.ai.openai.client.timeout=10m
 spring.ai.ollama.base-url=http://192.168.100.190:11434
 logging.level.org.springframework.ai=DEBUG
 spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration
+
+# Default URLs for the WebCrawler Agent when a search returns no results
+# webcrawler.default.urls=https://en.wikipedia.org/wiki/Main_Page,https://www.bbc.com/news

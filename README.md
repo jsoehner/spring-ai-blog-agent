@@ -79,19 +79,54 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 
 ## 🛠️ Setup & Installation
 
-### 1. Configuration
-Ensure your `.env` or local environment holds your `GITHUB_TOKEN` (required for the agent to open PRs automatically). 
+### 1. Using Pre-built Container Images
+You don't need to build the application locally. Pre-built, multi-platform (`amd64` and `arm64`) images are automatically published to both Docker Hub and the GitHub Container Registry (GHCR).
 
-If you are using private LLMs, ensure they are accessible on your network (e.g., via Ollama).
+**Docker Hub:**
+```bash
+docker pull jsoehner/spring-ai-agent:latest
+```
 
-### 2. The Single Command Execution
-We've bundled the entire lifecycle into a single, easy-to-use script. This script will pull the latest agent image from Docker Hub (falling back to a local build if necessary), start the entire multi-agent Docker Compose stack, wait for the APIs to initialize, and submit your topic:
+**GitHub Container Registry (GHCR):**
+```bash
+docker pull ghcr.io/jsoehner/spring-ai-blog-agent:latest
+```
+
+### 2. Configuration & Settings Location
+The primary settings for the agents are controlled through environment variables injected into the containers. The easiest way to configure these is by modifying the `docker-compose.yml` file.
+
+Inside `docker-compose.yml`, you will find `environment:` blocks for each agent (`supervisor-agent`, `researcher-agent`, `image-agent`). Ensure your `.env` or local environment holds your `GITHUB_TOKEN` (required for the agent to open PRs automatically).
+
+### 3. LLM Configuration Options
+You can configure the system to use different LLM providers by adjusting the environment variables. Here are the available options depending on your setup:
+
+#### Option A: Local LLM via Ollama (Default)
+If you are running Ollama locally, use the native Ollama auto-configuration.
+- **Variable:** `SPRING_AI_OLLAMA_BASE_URL=http://<your-ip>:11434`
+- **Gotcha:** Do *not* append `/v1` when using the native Ollama integration.
+
+#### Option B: Local LLM via Open-WebUI
+If you are routing requests through an Open-WebUI instance.
+- **Variable:** `SPRING_AI_OPENAI_BASE_URL=http://<your-ip>:8080/api`
+- **Gotcha:** You *must* append `/api` to the Open-WebUI base URL. Spring AI appends the rest automatically. Omitting `/api` hits the web frontend and causes a `405 Method Not Allowed`.
+
+#### Option C: Local LLM via OpenAI Starter pointing to Ollama
+If you prefer to use the Spring AI OpenAI starter to communicate directly with Ollama.
+- **Variable:** `SPRING_AI_OPENAI_BASE_URL=http://<your-ip>:11434/v1`
+- **Gotcha:** You *must* explicitly include `/v1` in the URL, otherwise you will receive a `404 Not Found` error.
+
+> [!WARNING]
+> **Dependency Conflict:** If your `build.gradle` includes both `spring-ai-starter-model-ollama` and `spring-ai-starter-model-openai`, Spring will fail to start due to ambiguous `ChatModel` beans. You **must** disable one of the auto-configurations in your `docker-compose.yml` environment block. For example: 
+> `SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration`
+
+### 4. Running the Application
+Once your `docker-compose.yml` is configured with your desired LLM endpoints and your `GITHUB_TOKEN`, you can start the system using the provided script. This script automatically pulls the latest image, starts the RabbitMQ/Agent stack, and submits your topic:
 
 ```bash
 ./run-and-submit.sh "AI code tech debt"
 ```
 
-### 3. Watching it Work
+### 5. Watching it Work
 Because the system is decoupled, your script will return a success message instantly once the topic is queued. To watch the AI "think" in real-time as it gathers facts and drafts the HTML, simply tail the logs:
 
 ```bash
