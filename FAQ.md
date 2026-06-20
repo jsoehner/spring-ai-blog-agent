@@ -53,3 +53,11 @@ spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.O
 **Cause:** You set the base URL to use a hostname (like `open-webui`) that is not resolvable within the Docker network where the agent is running.
 
 **Solution:** Use the explicit IP address of the host machine running the LLM (e.g., `http://192.168.100.190:8080/api`).
+
+### 6. Spring AI throws `404: 404` NotFoundException when pointing to Ollama's OpenAI API
+**Symptom:** You attempt to use Ollama's OpenAI-compatible endpoint by setting `spring.ai.openai.base-url=http://192.168.100.190:11434` and get a `404 Not Found` error.
+
+**Cause:** Starting with version 2.0.0, Spring AI utilizes the official OpenAI Java Client. By default, the official client expects the base URL to include the `/v1` path segment. If you omit it, the client appends `/chat/completions` directly to port 11434, which is not a valid endpoint on Ollama.
+
+**Solution:** Append `/v1` to the end of your Ollama base URL.
+*Correct:* `spring.ai.openai.base-url=http://192.168.100.190:11434/v1`

@@ -2,7 +2,7 @@ spring.application.name=spring-ai-project
 
 # OpenAI API Key (Required for Spring AI ChatClient)
 spring.ai.openai.api-key=YOUR_OPENAI_API_KEY_HERE
-spring.ai.openai.base-url=http://192.168.100.190:11434
+spring.ai.openai.base-url=http://192.168.100.190:11434/v1
 spring.ai.openai.chat.options.model=llama3.2:latest
 
 # WordPress Blog Poster Agent Configuration
