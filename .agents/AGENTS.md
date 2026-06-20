@@ -1,0 +1,8 @@
+## Spring AI Best Practices & Gotchas
+
+* **ChatClient.Builder Mutability:** Spring AI `ChatClient.Builder` instances are mutable. Do NOT reuse the same builder instance to configure multiple clients by calling `.defaultSystem(...)`, as it will overwrite the configuration for all clients. Instead, call `.build()` to create a base `ChatClient`, and then use `.mutate()` to branch off separate configurations.
+* **Open-WebUI Base URL:** When pointing Spring AI to Open-WebUI, append `/api` to the base URL (e.g., `http://<ip>:8080/api`). Spring AI automatically appends `/v1/chat/completions`, and omitting `/api` will result in a `405 Method Not Allowed` error because it hits the web frontend.
+* **Ollama Base URL:** When using the Spring AI OpenAI starter to point directly to Ollama, ensure the base URL explicitly includes `/v1` (e.g., `http://<ip>:11434/v1`). Failing to include `/v1` results in a `404 Not Found` error.
+* **ChatModel Conflicts:** Do not include both `spring-ai-starter-model-ollama` and `spring-ai-starter-model-openai` dependencies without disabling auto-configuration for one of them (e.g. `spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration`). Otherwise, Spring will throw an `UnsatisfiedDependencyException` due to ambiguous `ChatModel` beans.
+* **Spring AI 2.0.0 Naming:** Starting with Spring AI 2.0.0, dependencies require the `-model-` segment (e.g., `spring-ai-starter-model-openai` instead of `spring-ai-starter-openai`).
+* **Docker Networking:** Avoid using hostnames like `open-webui` in your configuration unless they are explicitly resolvable in the Docker network. Prefer explicit IP addresses (e.g., `192.168.100.190`).
