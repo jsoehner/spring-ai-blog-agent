@@ -8,3 +8,6 @@
 
 ### Changed
 - **Blogger Prompt**: Updated the `BLOGGER_PROMPT` to enforce better sentence structure, requiring a noun and verb in sentences, opening paragraphs with new topics, and avoiding excessive adjectives and adverbs to prevent run-on sentences.
+- **Blogger Prompt**: Added explicit instructions on punctuation usage, encouraging the LLM to use commas for changing sentence flows and to break up long sentences for better readability.
+- **Blogger Prompt**: Removed explicit newline characters (`\n`) from WordPress Gutenberg block syntax and image insertions to prevent unwanted carriage returns in the generated HTML output.
+- **WordPress Tool**: Removed extra carriage returns (`\n\n`) appended after the main title generation in the final drafts.

@@ -19,13 +19,13 @@ public class WordPressTool {
         try {
             File file = new File("blog_draft.html");
             try (FileWriter writer = new FileWriter(file)) {
-                writer.write("<h1>" + request.title() + "</h1>\n\n");
+                writer.write("<h1>" + request.title() + "</h1>");
                 writer.write(request.content());
             }
             
             File wpFile = new File("blog_draft_wp.html");
             try (FileWriter wpWriter = new FileWriter(wpFile)) {
-                wpWriter.write("<h1>" + request.title() + "</h1>\n\n");
+                wpWriter.write("<h1>" + request.title() + "</h1>");
                 wpWriter.write(request.content());
             }
             return "Successfully saved draft locally to " + file.getAbsolutePath() + " and " + wpFile.getAbsolutePath() + ".\nYou can now open this file in your browser or text editor and paste it directly into WordPress!";
