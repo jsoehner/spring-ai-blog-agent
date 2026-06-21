@@ -74,7 +74,7 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **Autonomous Scheduling:** Uses Spring's `@Scheduled` annotation to run completely independently on a strict cron schedule (e.g., every Mon/Thu).
 - **Auto-Pull Requests:** The agent practically contributes to itself! It executes CLI commands to create its own Git branch, commits the generated `.html` files, and opens a GitHub Pull Request for your review.
 - **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
-- **Dynamic File Generation:** Automatically saves HTML drafts locally with filenames matching the requested topic (e.g., `ai-code-tech-debt.html`). To ensure these files are synced to your host machine when running in Docker, save them to the mounted `/app/output/` directory.
+- **Dynamic File Generation:** Automatically saves HTML drafts to the `output/` directory with filenames matching the requested topic (e.g., `output/ai-code-tech-debt.html`). These files are automatically synced to your host machine when running via Docker.
 - **Local Application Logging:** Keeps a clean, overwritten `request-activity.log` tracing all agent interactions on every application start via a custom Logback configuration.
 - **Agent Security Guardrails:** Enforces strict execution boundaries utilizing an [Open Policy Agent (OPA) sidecar](INTEGRATION_README.md) and Spring AOP to prevent unauthorized file access, network calls, or dangerous command execution.
 - **Automated Workflows:** Includes generic GitHub Actions for nightly dependency updates and security scanning (SAST, Secrets, SCA) to maintain a secure and up-to-date repository.

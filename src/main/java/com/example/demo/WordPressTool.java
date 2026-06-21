@@ -15,8 +15,8 @@ public class WordPressTool {
     @Tool(description = "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.")
     public String createDraftPost(DraftRequest request) {
         String baseName = request.title().replaceAll("\\s+", "-").toLowerCase();
-        String fileName = baseName + ".html";
-        String wpFileName = baseName + "_wp.html";
+        String fileName = "output/" + baseName + ".html";
+        String wpFileName = "output/" + baseName + "_wp.html";
 
         System.out.println("WordPressTool: Saving draft locally to " + fileName + " and " + wpFileName + "! Title: " + request.title());
         
@@ -32,7 +32,8 @@ public class WordPressTool {
                 wpWriter.write("<h1>" + request.title() + "</h1>");
                 wpWriter.write(request.content());
             }
-            return "Successfully saved draft locally to " + file.getAbsolutePath() + " and " + wpFile.getAbsolutePath() + ".\nYou can now open this file in your browser or text editor and paste it directly into WordPress!";
+            System.out.println("Saved blog post to local file: " + fileName);
+            return "Successfully saved draft locally to " + file.getAbsolutePath() + " and " + wpFile.getAbsolutePath() + ".\nYou can now open this file in your browser or text editor and paste it directly into WordPress!\nSaved blog post to local file: " + fileName;
         } catch (IOException e) {
             return "Failed to save draft locally: " + e.getMessage();
         }
