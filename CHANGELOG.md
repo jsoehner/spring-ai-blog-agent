@@ -5,6 +5,7 @@
 - **CI/CD**: Implemented generic GitHub Actions workflows for nightly dependency updates and security scanning (Gitleaks, Semgrep, Trivy).
 
 ### Fixed
+- **Security**: Fixed unchecked generic cast compiler warnings in `OpaClient.java` by replacing raw `Map` responses with type-safe DTO classes (`OpaResponse` and `OpaResult`).
 - **Web Crawler**: Added automatic protocol prepend (`https://`) to malformed URLs in the `crawl` method to prevent `MalformedURLException` and improve crawler reliability.
 - **Logging**: Suppressed noisy `MethodToolCallback` JSON conversion warnings and associated stack traces by setting the logger level to `ERROR` in `application.properties`.
 - **Logging**: Disabled the console output for "Search returned no URLs, falling back to default search sites" in `WebCrawlerConfig.java`.

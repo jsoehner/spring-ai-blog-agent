@@ -24,6 +24,30 @@ public class OpaClient {
         this.opaUrl = opaUrl;
     }
 
+    public static class OpaResponse {
+        private OpaResult result;
+
+        public OpaResult getResult() {
+            return result;
+        }
+
+        public void setResult(OpaResult result) {
+            this.result = result;
+        }
+    }
+
+    public static class OpaResult {
+        private boolean allow;
+
+        public boolean isAllow() {
+            return allow;
+        }
+
+        public void setAllow(boolean allow) {
+            this.allow = allow;
+        }
+    }
+
     public boolean evaluatePolicy(Map<String, Object> requestInput) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -34,13 +58,10 @@ public class OpaClient {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(opaUrl, entity, Map.class);
-            Map<String, Object> resultBody = response.getBody();
-            if (resultBody != null && resultBody.containsKey("result")) {
-                Map<String, Object> result = (Map<String, Object>) resultBody.get("result");
-                if (result.containsKey("allow")) {
-                    return (Boolean) result.get("allow");
-                }
+            ResponseEntity<OpaResponse> response = restTemplate.postForEntity(opaUrl, entity, OpaResponse.class);
+            OpaResponse resultBody = response.getBody();
+            if (resultBody != null && resultBody.getResult() != null) {
+                return resultBody.getResult().isAllow();
             }
         } catch (Exception e) {
             // Log error
