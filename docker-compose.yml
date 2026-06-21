@@ -22,6 +22,7 @@ services:
       - IMAGE_AGENT_URL=http://image-agent:8080/image
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
+      - SPRING_AI_OPENAI_API_KEY=dummy
       - OPA_URL=http://opa:8181/v1/data/agent/main
     depends_on:
       - rabbitmq
@@ -40,6 +41,7 @@ services:
       - IMAGE_AGENT_URL=http://image-agent:8080/image
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
+      - SPRING_AI_OPENAI_API_KEY=dummy
       - OPA_URL=http://opa:8181/v1/data/agent/main
     depends_on:
       - rabbitmq
@@ -56,6 +58,7 @@ services:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
+      - SPRING_AI_OPENAI_API_KEY=dummy
       - OPA_URL=http://opa:8181/v1/data/agent/main
     depends_on:
       - rabbitmq
