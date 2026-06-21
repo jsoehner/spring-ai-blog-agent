@@ -7,6 +7,7 @@ This project integrates the `agent-security-bundle` as a Git Submodule to enforc
 1. **OPA Sidecar Container**: The OPA engine runs as a separate service inside our `docker-compose.yml`. It loads the Rego policies natively and exposes an HTTP API on port `8181`.
 2. **Spring AOP Enforcement**: We utilize Spring AOP (`spring-boot-starter-aop`) to wrap all methods annotated with `@Tool` (Spring AI's tool annotation). 
 3. **Evaluation**: Whenever an agent attempts to invoke a tool, the AOP aspect (`OpaGuardrailAspect.java`) intercepts the call, marshals the tool name and arguments, and queries the OPA sidecar (`OpaClient.java`). If OPA returns `deny`, a `SecurityException` is thrown, blocking the tool execution and alerting the agent.
+4. **Topic Filtering**: OPA is also directly invoked by the `BlogAgentController` to validate incoming blog topics (using `agent_topics.rego`) before they are placed onto the background messaging queues, rejecting inappropriate subjects.
 
 ## Components Created
 
