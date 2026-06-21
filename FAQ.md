@@ -61,3 +61,10 @@ spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.O
 
 **Solution:** Append `/v1` to the end of your Ollama base URL.
 *Correct:* `spring.ai.openai.base-url=http://192.168.100.190:11434/v1`
+
+### 7. Files saved by the agent in Docker aren't appearing locally
+**Symptom:** The agent successfully generates a file (like a blog draft) and saves it to `/app/blog.html`, but you don't see it on your local machine.
+
+**Cause:** The root `/app/` directory inside the Docker container is not mounted to your local host. Only specific subdirectories (like `/app/config/` and `/app/output/`) are mapped via volumes in `docker-compose.yml`.
+
+**Solution:** Instruct the agent or update your code to save output files to `/app/output/` instead of `/app/`. They will immediately appear in the `./output/` directory on your local machine.

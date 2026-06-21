@@ -11,7 +11,7 @@ services:
 
   supervisor-agent:
     build: .
-    image: jsoehner/spring-ai-agent:latest
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
     ports:
       - "8081:8080"
     environment:
@@ -29,12 +29,12 @@ services:
     volumes:
       - ./config:/app/config
       - ./.git:/app/.git
-      - ./blog_draft.html:/app/blog_draft.html
-      - ./blog_draft_wp.html:/app/blog_draft_wp.html
+      - ./request-activity.log:/app/request-activity.log
+      - ./output:/app/output
 
   researcher-agent:
     build: .
-    image: jsoehner/spring-ai-agent:latest
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
     environment:
       - SPRING_PROFILES_ACTIVE=researcher
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -47,12 +47,12 @@ services:
       - rabbitmq
     volumes:
       - ./config:/app/config
-      - ./blog_draft.html:/app/blog_draft.html
-      - ./blog_draft_wp.html:/app/blog_draft_wp.html
+      - ./request-activity.log:/app/request-activity.log
+      - ./output:/app/output
 
   image-agent:
     build: .
-    image: jsoehner/spring-ai-agent:latest
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
     environment:
       - SPRING_PROFILES_ACTIVE=image-agent
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -64,6 +64,8 @@ services:
       - rabbitmq
     volumes:
       - ./config:/app/config
+      - ./request-activity.log:/app/request-activity.log
+      - ./output:/app/output
 
   opa:
     image: openpolicyagent/opa:latest-debug
@@ -78,3 +80,12 @@ services:
     volumes:
       - ./security-policies/opa-guardrails/data/config.json:/policies/config.json
       - ./security-policies/opa-guardrails/policies:/policies/policies
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
