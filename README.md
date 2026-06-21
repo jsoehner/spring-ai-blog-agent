@@ -130,6 +130,11 @@ Once your `docker-compose.yml` is configured with your desired LLM endpoints and
 ./run-and-submit.sh "AI code tech debt"
 ```
 
+> **Note:** If the script times out waiting for the Supervisor Agent API, the pre-built image might be outdated. Append the `--build` flag to force it to use your local source code:
+> ```bash
+> ./run-and-submit.sh --build "AI code tech debt"
+> ```
+
 ### 5. Watching it Work
 Because the system is decoupled, your script will return a success message instantly once the topic is queued. To watch the AI "think" in real-time as it gathers facts and drafts the HTML, simply tail the logs:
 

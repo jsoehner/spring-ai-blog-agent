@@ -68,3 +68,13 @@ spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.O
 **Cause:** The root `/app/` directory inside the Docker container is not mounted to your local host. Only specific subdirectories (like `/app/config/` and `/app/output/`) are mapped via volumes in `docker-compose.yml`.
 
 **Solution:** Instruct the agent or update your code to save output files to `/app/output/` instead of `/app/`. They will immediately appear in the `./output/` directory on your local machine.
+
+### 8. `run-and-submit.sh` times out waiting for the Supervisor API (404 Not Found)
+**Symptom:** When running `./run-and-submit.sh "<topic>"`, the script hangs on `⏳ Waiting for Supervisor Agent API to become available...` and eventually fails. Checking the logs reveals a `404 Not Found` for the `/actuator/health` endpoint.
+
+**Cause:** By default, the script pulls a pre-built Docker image from `ghcr.io` which may be outdated and missing the proper Actuator endpoint configurations. However, your local codebase might have these correctly configured in `build.gradle` and `application.properties`.
+
+**Solution:** Force the script to build the image from your local source code instead of pulling the remote image by appending the `--build` flag:
+```bash
+./run-and-submit.sh --build "Your topic here"
+```
