@@ -12,7 +12,7 @@ import java.util.Arrays;
 @Component
 public class WebCrawlerConfig {
 
-    @Value("${webcrawler.default.urls:https://en.wikipedia.org/wiki/Main_Page,https://www.bbc.com/news}")
+    @Value("${webcrawler.default.urls:https://thehackernews.com/,https://www.bleepingcomputer.com/,https://www.schneier.com/,https://krebsonsecurity.com/,https://haveibeenpwned.com/,https://www.identitytheft.gov/,https://www.virustotal.com/,https://owasp.org/,https://www.cisa.gov/,https://staysafeonline.org/}")
     private List<String> defaultUrls;
 
     @Tool(description = "Returns a curated list of default websites for researching topics when web search fails.")

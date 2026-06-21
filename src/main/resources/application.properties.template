@@ -19,4 +19,4 @@ logging.level.org.springframework.ai=DEBUG
 spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration
 
 # Default URLs for the WebCrawler Agent when a search returns no results
-# webcrawler.default.urls=https://en.wikipedia.org/wiki/Main_Page,https://www.bbc.com/news
+# webcrawler.default.urls=https://thehackernews.com/,https://www.bleepingcomputer.com/,https://www.schneier.com/,https://krebsonsecurity.com/,https://haveibeenpwned.com/,https://www.identitytheft.gov/,https://www.virustotal.com/,https://owasp.org/,https://www.cisa.gov/,https://staysafeonline.org/
