@@ -29,7 +29,7 @@ public class ResearcherController {
     public ResearcherController(ChatClient.Builder chatClientBuilder,
                                 RabbitTemplate rabbitTemplate,
                                 WebCrawlerConfig webCrawlerConfig,
-                                @Value("${RESEARCHER_PROMPT:You are an expert security researcher specializing in IT Security. First, use your search tool to query for a list of topic-based URLs related to the requested topic. Then, begin parsing the content by crawling the URLs to capture key sentences that include the search terms from the topic. Iterate through until you have successfully parsed content from 10 URLs and captured a large number of key sentences to use in the blog post. You must list any/all of the URLs being used and count until 10 before proceeding to the next phase. Gather a diverse, well-educated perspective and summarize the findings as a detailed list of bulleted facts.}") String researcherPrompt) {
+                                @Value("${RESEARCHER_PROMPT:You are an expert security researcher specializing in IT Security. First, use your search tool to query for a list of topic-based URLs related to the requested topic. Then, begin parsing the content by crawling the URLs to capture key sentences that include the search terms from the topic. IMPORTANT: You must ONLY perform exactly ONE search. Do not search again even if the URLs seem generic. Do not wait for 10 URLs. Just crawl the ones you received and proceed immediately to summarize the findings as a detailed list of bulleted facts.}") String researcherPrompt) {
         this.rabbitTemplate = rabbitTemplate;
 
         ChatMemory chatMemory = MessageWindowChatMemory.builder()

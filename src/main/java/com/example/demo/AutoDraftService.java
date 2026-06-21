@@ -51,16 +51,19 @@ public class AutoDraftService {
     }
 
     private void openPullRequest(String topic) throws Exception {
+        String baseName = ("New Draft: " + topic).replaceAll("\\s+", "-").toLowerCase();
+        String fileName = baseName + ".html";
+        String wpFileName = baseName + "_wp.html";
         String branchName = "draft-" + System.currentTimeMillis();
         String script = String.format(
             "git config --global user.email 'agent@spring-ai.local' && " +
             "git config --global user.name 'Spring AI Agent' && " +
             "git checkout -b %s && " +
-            "git add blog_draft.html blog_draft_wp.html && " +
+            "git add %s %s && " +
             "git commit -m 'Generated new blog draft for %s' && " +
             "git push -u origin %s && " +
             "gh pr create --title 'Review Needed: New Blog Draft for %s' --body 'A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft.'",
-            branchName, topic, branchName, topic
+            branchName, fileName, wpFileName, topic, branchName, topic
         );
 
         ProcessBuilder pb = new ProcessBuilder("bash", "-c", script);

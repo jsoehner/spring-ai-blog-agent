@@ -14,16 +14,20 @@ public class WordPressTool {
 
     @Tool(description = "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.")
     public String createDraftPost(DraftRequest request) {
-        System.out.println("WordPressTool: Saving draft locally to blog_draft.html and blog_draft_wp.html! Title: " + request.title());
+        String baseName = request.title().replaceAll("\\s+", "-").toLowerCase();
+        String fileName = baseName + ".html";
+        String wpFileName = baseName + "_wp.html";
+
+        System.out.println("WordPressTool: Saving draft locally to " + fileName + " and " + wpFileName + "! Title: " + request.title());
         
         try {
-            File file = new File("blog_draft.html");
+            File file = new File(fileName);
             try (FileWriter writer = new FileWriter(file)) {
                 writer.write("<h1>" + request.title() + "</h1>");
                 writer.write(request.content());
             }
             
-            File wpFile = new File("blog_draft_wp.html");
+            File wpFile = new File(wpFileName);
             try (FileWriter wpWriter = new FileWriter(wpFile)) {
                 wpWriter.write("<h1>" + request.title() + "</h1>");
                 wpWriter.write(request.content());

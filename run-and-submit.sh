@@ -1,9 +1,15 @@
 #!/bin/bash
 
+BUILD=false
+if [ "$1" = "--build" ]; then
+  BUILD=true
+  shift
+fi
+
 TOPIC=$1
 
 if [ -z "$TOPIC" ]; then
-  echo "Usage: ./run-and-submit.sh \"<blog_topic>\""
+  echo "Usage: ./run-and-submit.sh [--build] \"<blog_topic>\""
   echo "Example: ./run-and-submit.sh \"AI code tech debt\""
   exit 1
 fi
@@ -19,12 +25,12 @@ else
   docker-compose down 2>/dev/null || true
   docker rm -f supervisor-agent researcher-agent 2>/dev/null || true
 
-  if [ -n "$(git status --porcelain src/)" ]; then
-    echo "🛠️ Local changes detected in src/. Building local image instead of pulling..."
+  if [ "$BUILD" = true ]; then
+    echo "🛠️ Building local image instead of pulling..."
     docker-compose up -d --build
   else
-    echo "🔄 Pulling the latest image from Docker Hub..."
-    docker pull jsoehner/spring-ai-agent:latest
+    echo "🔄 Pulling the latest image from ghcr.io..."
+    docker pull ghcr.io/jsoehner/spring-ai-blog-agent:latest
     echo "🚀 Starting containers with docker-compose..."
     docker-compose up -d
   fi
@@ -35,7 +41,7 @@ else
   api_ready=false
 
   while [ $attempt -le $max_attempts ]; do
-    if curl -s http://localhost:8081/health > /dev/null; then
+    if curl -sf http://localhost:8081/actuator/health > /dev/null; then
       api_ready=true
       break
     fi

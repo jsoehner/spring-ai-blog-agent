@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'supervisor-agent'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['supervisor-agent:8080']
+
+  - job_name: 'researcher-agent'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['researcher-agent:8080']
+
+  - job_name: 'image-agent'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['image-agent:8080']
