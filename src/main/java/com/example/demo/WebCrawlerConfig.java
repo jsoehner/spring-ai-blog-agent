@@ -23,22 +23,30 @@ public class WebCrawlerConfig {
 
     @Tool(description = "Searches the web for a given topic and returns a list of relevant URLs.")
     public List<String> searchWeb(String query) {
-        System.out.println("Researcher Agent searching web for: " + query);
+        System.out.println("Researcher Agent searching Wikipedia for: " + query);
         List<String> urls = new java.util.ArrayList<>();
         try {
-            Document doc = Jsoup.connect("https://html.duckduckgo.com/html/?q=" + java.net.URLEncoder.encode(query, "UTF-8"))
+            String url = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + 
+                         java.net.URLEncoder.encode(query, "UTF-8") + "&utf8=&format=json";
+            
+            Document doc = Jsoup.connect(url)
+                    .ignoreContentType(true)
                     .userAgent("Mozilla/5.0 Spring AI Agent")
                     .timeout(5000)
                     .get();
-            org.jsoup.select.Elements links = doc.select("a.result__url");
-            for (org.jsoup.nodes.Element link : links) {
-                String href = link.attr("href");
-                if (href != null && href.startsWith("http")) {
-                    urls.add(href);
-                }
+                    
+            String json = doc.body().text();
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            com.fasterxml.jackson.databind.JsonNode rootNode = mapper.readTree(json);
+            com.fasterxml.jackson.databind.JsonNode searchResults = rootNode.path("query").path("search");
+            
+            for (com.fasterxml.jackson.databind.JsonNode node : searchResults) {
+                String title = node.path("title").asText().replace(" ", "_");
+                urls.add("https://en.wikipedia.org/wiki/" + java.net.URLEncoder.encode(title, "UTF-8"));
             }
+            
             if (urls.isEmpty()) {
-                // System.out.println("Search returned no URLs, falling back to default search sites.");
+                System.out.println("Search returned no URLs, falling back to default search sites.");
                 return defaultUrls;
             }
         } catch (Exception e) {
