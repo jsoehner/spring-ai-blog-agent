@@ -78,3 +78,14 @@ spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.O
 ```bash
 ./run-and-submit.sh --build "Your topic here"
 ```
+
+### 9. Application crashes on startup with `java.io.FileNotFoundException: request-activity.log (Is a directory)`
+**Symptom:** When running `docker-compose up`, the Supervisor Agent immediately exits. The logs show Logback failing to open `request-activity.log` because it "Is a directory".
+
+**Cause:** You mapped `request-activity.log` as a file volume in `docker-compose.yml`, but the file did not exist on your host machine before running Docker Compose. Docker assumes missing host paths are directories and automatically creates an empty folder in its place.
+
+**Solution:** Remove the directory and create an empty file:
+```bash
+rm -rf request-activity.log
+touch request-activity.log
+```
