@@ -58,3 +58,16 @@ services:
       - rabbitmq
     volumes:
       - ./config:/app/config
+
+  opa:
+    image: openpolicyagent/opa:latest-debug
+    ports:
+      - "8181:8181"
+    command:
+      - "run"
+      - "--server"
+      - "--log-level=debug"
+      - "/policies"
+    volumes:
+      - ./security-policies/opa-guardrails/data/config.json:/policies/config.json
+      - ./security-policies/opa-guardrails/policies:/policies/policies
