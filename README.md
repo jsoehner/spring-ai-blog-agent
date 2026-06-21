@@ -74,6 +74,7 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **Autonomous Scheduling:** Uses Spring's `@Scheduled` annotation to run completely independently on a strict cron schedule (e.g., every Mon/Thu).
 - **Auto-Pull Requests:** The agent practically contributes to itself! It executes CLI commands to create its own Git branch, commits the generated `.html` files, and opens a GitHub Pull Request for your review.
 - **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
+- **Automated Workflows:** Includes generic GitHub Actions for nightly dependency updates and security scanning (SAST, Secrets, SCA) to maintain a secure and up-to-date repository.
 
 ---
 

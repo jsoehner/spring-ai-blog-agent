@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- **CI/CD**: Implemented generic GitHub Actions workflows for nightly dependency updates and security scanning (Gitleaks, Semgrep, Trivy).
+
 ### Fixed
 - **Web Crawler**: Added automatic protocol prepend (`https://`) to malformed URLs in the `crawl` method to prevent `MalformedURLException` and improve crawler reliability.
 - **Logging**: Suppressed noisy `MethodToolCallback` JSON conversion warnings and associated stack traces by setting the logger level to `ERROR` in `application.properties`.

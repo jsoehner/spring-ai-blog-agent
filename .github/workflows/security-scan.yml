@@ -1,0 +1,103 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: read
+  issues: write
+  actions: write
+
+jobs:
+  security-assessment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Secret Scanning (Gitleaks)
+        id: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
+        with:
+          args: detect --report-format json --report-path gitleaks-report.json --verbose --redact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: SAST Scanning (Semgrep)
+        id: semgrep
+        continue-on-error: true
+        run: |
+          pip install semgrep
+          semgrep scan --config auto --json -o semgrep-results.json
+
+      - name: Container & FS Scanning (Trivy)
+        id: trivy
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true
+        env:
+          TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db:2
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'json'
+          output: 'trivy-results.json'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Parse scan reports
+        if: ${{ always() }}
+        run: node .github/scripts/parse-findings.js
+
+      - name: Notify on security findings
+        if: ${{ always() && (steps.gitleaks.outcome == 'failure' || steps.semgrep.outcome == 'failure' || steps.trivy.outcome == 'failure') }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runId = context.runId;
+            
+            let body = `The security scan workflow detected potential findings in the codebase.\n\n`;
+            body += `Please review the workflow run logs for details: https://github.com/${owner}/${repo}/actions/runs/${runId}\n\n`;
+            
+            if (fs.existsSync('findings-table.md')) {
+              body += fs.readFileSync('findings-table.md', 'utf8');
+            } else {
+              body += `**Failed Scan Steps:**\n`;
+              if ('${{ steps.gitleaks.outcome }}' === 'failure') body += `- Secret Scanning (Gitleaks)\n`;
+              if ('${{ steps.semgrep.outcome }}' === 'failure') body += `- SAST Scanning (Semgrep)\n`;
+              if ('${{ steps.trivy.outcome }}' === 'failure') body += `- Container & FS Scanning (Trivy)\n`;
+            }
+            
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title: 'Security Scan: Findings Detected',
+              body: body,
+              assignees: ['jsoehner'],
+              labels: ['security', 'automated-scan']
+            });
+
+            // Trigger Automated Dependency Update
+            console.log('Triggering automated dependency update workflow...');
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner,
+                repo,
+                workflow_id: 'nightly-dependency-update.yml',
+                ref: context.ref || 'main'
+              });
+              console.log('Successfully triggered dependency update workflow.');
+            } catch (error) {
+              console.error('Failed to trigger dependency update workflow:', error);
+            }
