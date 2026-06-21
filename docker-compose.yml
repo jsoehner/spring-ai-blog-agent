@@ -67,6 +67,7 @@ services:
       - "run"
       - "--server"
       - "--log-level=debug"
+      - "--v0-compatible"
       - "/policies"
     volumes:
       - ./security-policies/opa-guardrails/data/config.json:/policies/config.json

@@ -122,7 +122,7 @@ If you prefer to use the Spring AI OpenAI starter to communicate directly with O
 > `SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration`
 
 ### 4. Running the Application
-Once your `docker-compose.yml` is configured with your desired LLM endpoints and your `GITHUB_TOKEN`, you can start the system using the provided script. This script automatically pulls the latest image, starts the RabbitMQ/Agent stack, and submits your topic:
+Once your `docker-compose.yml` is configured with your desired LLM endpoints and your `GITHUB_TOKEN`, you can start the system using the provided script. This script intelligently builds a local image if it detects uncommitted changes in your `src/` directory, otherwise it falls back to pulling the latest prebuilt image. It also checks if all containers are already operational and skips the environment restart if they are:
 
 ```bash
 ./run-and-submit.sh "AI code tech debt"
