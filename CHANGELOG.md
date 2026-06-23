@@ -16,6 +16,7 @@
 - **Output Files**: Updated `WordPressTool.java` to automatically save generated HTML blog drafts to the `output/` directory so they are visible on the local host machine when using Docker volumes.
 
 ### Changed
+- **Researcher Agent**: Upgraded the fact-gathering pass to use structured JSON output via `BeanOutputConverter`. Included an automated retry mechanism to self-correct schema validation and parsing errors.
 - **Blogger Prompt**: Updated the `BLOGGER_PROMPT` to enforce better sentence structure, requiring a noun and verb in sentences, opening paragraphs with new topics, and avoiding excessive adjectives and adverbs to prevent run-on sentences.
 - **Blogger Prompt**: Added explicit instructions on punctuation usage, encouraging the LLM to use commas for changing sentence flows and to break up long sentences for better readability.
 - **Blogger Prompt**: Removed explicit newline characters (`\n`) from WordPress Gutenberg block syntax and image insertions to prevent unwanted carriage returns in the generated HTML output.
