@@ -37,6 +37,7 @@ jobs:
 
       - name: Build and Verify
         run: |
+          cp src/main/resources/application.properties.template src/main/resources/application.properties || true
           ./gradlew clean build
 
       - name: Clean generated artifacts from branch
