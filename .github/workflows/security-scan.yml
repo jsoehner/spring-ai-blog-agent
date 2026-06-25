@@ -18,16 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Secret Scanning (Gitleaks)
         id: gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         continue-on-error: true
-        with:
-          args: detect --report-format json --report-path gitleaks-report.json --verbose --redact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
