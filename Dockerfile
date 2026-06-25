@@ -17,4 +17,8 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 # We will run the Spring Boot app on port 8080
 EXPOSE 8080
 
+# Create a non-root user to run the app
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

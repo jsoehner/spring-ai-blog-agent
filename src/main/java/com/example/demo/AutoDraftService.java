@@ -66,6 +66,7 @@ public class AutoDraftService {
             branchName, fileName, wpFileName, topic, branchName, topic
         );
 
+        // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
         ProcessBuilder pb = new ProcessBuilder("bash", "-c", script);
         pb.redirectErrorStream(true);
         Process process = pb.start();

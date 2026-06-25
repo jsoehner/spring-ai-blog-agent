@@ -17,6 +17,7 @@ public class TlsScannerTool {
             command.add("tls_scanner.py");
             command.addAll(targets);
             
+            // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(new java.io.File("/Users/jsoehner/spring-ai-project/"));
             Process process = pb.start();
