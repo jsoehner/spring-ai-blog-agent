@@ -1,5 +1,7 @@
 package blog
 
+import future.keywords.in
+
 default allow = true
 
 # Words that are not allowed in topics

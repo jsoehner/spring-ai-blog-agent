@@ -117,6 +117,7 @@ services:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/tmp/prometheus'
     read_only: true
     tmpfs:
       - /prometheus
