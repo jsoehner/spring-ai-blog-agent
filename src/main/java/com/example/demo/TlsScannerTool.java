@@ -19,7 +19,7 @@ public class TlsScannerTool {
             
             // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new java.io.File("/Users/jsoehner/spring-ai-project/"));
+            pb.directory(new java.io.File("."));
             Process process = pb.start();
             
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

@@ -89,3 +89,24 @@ spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.O
 rm -rf request-activity.log
 touch request-activity.log
 ```
+
+### 10. Spring AI ChatModel beans ambiguity in test context
+**Symptom:** Running local tests (e.g. `./gradlew test`) fails with `NoUniqueBeanDefinitionException` during Spring application context loading.
+
+**Cause:** The project includes both `spring-ai-starter-model-ollama` and `spring-ai-starter-model-openai` starters. When tests run, Spring tries to auto-configure both chat models, leaving the container unable to uniquely resolve a single `ChatModel` bean.
+
+**Solution:** Provide a dedicated test configuration file `src/test/resources/application.properties` that disables the unused chat model auto-configuration (e.g., `spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration`) and sets dummy API keys.
+
+### 11. OPA path authorization failing on tool objects (e.g., WriteRequest)
+**Symptom:** OPA policies fail to authorize file writes, throwing a `SecurityException`, even when writing to an allowed path (like `/tmp`).
+
+**Cause:** In `OpaGuardrailAspect.java`, path extraction for `writeFile` was using `args[0].toString()`. Since the first parameter is a `WriteRequest` record, this evaluated to `"WriteRequest[absolutePath=/tmp/..., content=...]"` which failed simple prefix checks in `agent_files.rego`.
+
+**Solution:** Safely typecast the argument to `WriteRequest` inside the aspect and extract the raw path field (`writeRequest.absolutePath()`).
+
+### 12. AutoDraftService Git PR creation failing with untracked files
+**Symptom:** The automated PR creation process in `AutoDraftService.java` fails with a git error during branch staging.
+
+**Cause:** The service was adding files to git from the root directory, while `WordPressTool.java` actually saved them under `output/`. Furthermore, `output/` is ignored by `.gitignore`, causing git to ignore these files by default.
+
+**Solution:** Correct the path mapping in the git command to use the `output/` directory, and add the force flag (`git add -f`) to ensure the ignored files are staged correctly.

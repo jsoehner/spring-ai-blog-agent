@@ -22,12 +22,18 @@ public class WordPressTool {
         
         try {
             File file = new File(fileName);
+            if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
             try (FileWriter writer = new FileWriter(file)) {
                 writer.write("<h1>" + request.title() + "</h1>");
                 writer.write(request.content());
             }
             
             File wpFile = new File(wpFileName);
+            if (wpFile.getParentFile() != null && !wpFile.getParentFile().exists()) {
+                wpFile.getParentFile().mkdirs();
+            }
             try (FileWriter wpWriter = new FileWriter(wpFile)) {
                 wpWriter.write("<h1>" + request.title() + "</h1>");
                 wpWriter.write(request.content());

@@ -36,9 +36,12 @@ public class OpaGuardrailAspect {
         if ("writeFile".equals(toolName) || "readFile".equals(toolName)) {
             input.put("resource_type", "file");
             if (args.length > 0) {
-                // If it's a WriteRequest record or similar, you may need to extract the path.
-                // Assuming arg[0] could be a string path or a record containing the path.
-                String path = args[0].toString();
+                String path;
+                if (args[0] instanceof com.example.demo.CodeTools.WriteRequest writeRequest) {
+                    path = writeRequest.absolutePath();
+                } else {
+                    path = args[0].toString();
+                }
                 request.put("path", path);
                 request.put("action", "writeFile".equals(toolName) ? "write" : "read");
             }

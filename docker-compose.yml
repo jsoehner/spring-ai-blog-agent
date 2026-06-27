@@ -102,6 +102,7 @@ services:
     volumes:
       - ./security-policies/opa-guardrails/data/config.json:/policies/config.json
       - ./security-policies/opa-guardrails/policies:/policies/policies
+      - ./policy.rego:/policies/policy.rego
     read_only: true
     tmpfs:
       - /tmp
