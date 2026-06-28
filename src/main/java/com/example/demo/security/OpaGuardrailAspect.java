@@ -29,6 +29,7 @@ public class OpaGuardrailAspect {
         
         Map<String, Object> request = new HashMap<>();
         request.put("action", toolName);
+        request.put("tool_name", toolName);
         request.put("arguments", args);
         input.put("request", request);
 

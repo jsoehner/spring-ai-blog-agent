@@ -1,0 +1,3 @@
+# Gitleaks ignore file
+# Ignore historical generic api key finding in login_test2.txt from initial commit
+d057dbe4e80ef1e75b8c294cdd2f5de68ad56ee1:login_test2.txt:generic-api-key:127
