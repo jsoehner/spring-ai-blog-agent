@@ -56,12 +56,10 @@ public class BlogAgentController {
         
         for (String topic : topics) {
             Map<String, Object> input = new HashMap<>();
-            input.put("resource_type", "topic");
-            Map<String, Object> request = new HashMap<>();
-            request.put("topic", topic);
-            input.put("request", request);
+            input.put("topic", topic);
 
-            if (!opaClient.evaluatePolicy(input)) {
+            String topicOpaUrl = opaClient.getOpaUrl().replace("/agent/main", "/blog");
+            if (!opaClient.evaluatePolicy(topicOpaUrl, input)) {
                 System.out.println("Topic rejected by OPA policy: " + topic);
                 continue;
             }
@@ -134,10 +132,24 @@ public class BlogAgentController {
             System.out.println(result);
 
             // Save to local file
-            String filename = topic.replaceAll("\\s+", "-").toLowerCase() + ".html";
+            // Sanitize filename to prevent path traversal
+            String safeBaseName = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
+            String filename = safeBaseName.replaceAll("\\s+", "-").toLowerCase() + ".html";
             try {
-                java.nio.file.Files.writeString(java.nio.file.Paths.get(filename), contentWithImages);
-                System.out.println("Saved blog post to local file: " + filename);
+                java.nio.file.Path baseDir = java.nio.file.Paths.get("output").toAbsolutePath().normalize();
+                java.nio.file.Path targetFile = baseDir.resolve(filename).normalize();
+                
+                if (!targetFile.startsWith(baseDir)) {
+                    throw new SecurityException("Path traversal attempt detected!");
+                }
+                
+                // Create output directory if it does not exist
+                if (!java.nio.file.Files.exists(baseDir)) {
+                    java.nio.file.Files.createDirectories(baseDir);
+                }
+                
+                java.nio.file.Files.writeString(targetFile, contentWithImages);
+                System.out.println("Saved blog post to local file: " + targetFile.toString());
             } catch (Exception e) {
                 System.err.println("Failed to save local blog post file: " + e.getMessage());
             }

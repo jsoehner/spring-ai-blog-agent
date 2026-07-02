@@ -89,3 +89,40 @@ spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.O
 rm -rf request-activity.log
 touch request-activity.log
 ```
+
+### 10. Spring AI ChatModel beans ambiguity in test context
+**Symptom:** Running local tests (e.g. `./gradlew test`) fails with `NoUniqueBeanDefinitionException` during Spring application context loading.
+
+**Cause:** The project includes both `spring-ai-starter-model-ollama` and `spring-ai-starter-model-openai` starters. When tests run, Spring tries to auto-configure both chat models, leaving the container unable to uniquely resolve a single `ChatModel` bean.
+
+**Solution:** Provide a dedicated test configuration file `src/test/resources/application.properties` that disables the unused chat model auto-configuration (e.g., `spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration`) and sets dummy API keys.
+
+### 11. OPA path authorization failing on tool objects (e.g., WriteRequest)
+**Symptom:** OPA policies fail to authorize file writes, throwing a `SecurityException`, even when writing to an allowed path (like `/tmp`).
+
+**Cause:** In `OpaGuardrailAspect.java`, path extraction for `writeFile` was using `args[0].toString()`. Since the first parameter is a `WriteRequest` record, this evaluated to `"WriteRequest[absolutePath=/tmp/..., content=...]"` which failed simple prefix checks in `agent_files.rego`.
+
+**Solution:** Safely typecast the argument to `WriteRequest` inside the aspect and extract the raw path field (`writeRequest.absolutePath()`).
+
+### 12. AutoDraftService Git PR creation failing with untracked files
+**Symptom:** The automated PR creation process in `AutoDraftService.java` fails with a git error during branch staging.
+
+**Cause:** The service was adding files to git from the root directory, while `WordPressTool.java` actually saved them under `output/`. Furthermore, `output/` is ignored by `.gitignore`, causing git to ignore these files by default.
+
+**Solution:** Correct the path mapping in the git command to use the `output/` directory, and add the force flag (`git add -f`) to ensure the ignored files are staged correctly.
+
+### 13. OPA container exiting on startup due to parser error (topic rejections)
+**Symptom:** The OPA container exits immediately on startup with a parser error pointing to the `some ... in ...` syntax in `policy.rego`. When attempting to process blog topics, the supervisor-agent prints:
+`Topic rejected by OPA policy: <topic>`
+`Error calling OPA server: I/O error on POST request for "http://opa:8181/v1/data/blog": opa`
+
+**Cause:** OPA was started with the `--v0-compatible` flag. Under this configuration, the `in` keyword (e.g. `some word in banned_words` in `policy.rego`) is not enabled by default, causing compilation failure and container crash. When the supervisor-agent tries to connect to OPA, it receives a connection failure and defaults to a fail-safe deny, rejecting all topics.
+
+**Solution:** Add the explicit import statement `import future.keywords.in` at the top of [policy.rego](file:///Users/jsoehner/spring-ai-blog-agent/policy.rego) (or any other affected `.rego` files) to enable the modern keyword syntax.
+
+### 14. Prometheus container crashing on startup in read-only environment
+**Symptom:** The Prometheus container logs show `panic: Unable to create mmap-ed active query log` and the container exits with code `2`.
+
+**Cause:** The docker-compose setup configures the Prometheus container with `read_only: true` and mounts `/prometheus` as a `tmpfs` volume. Since the container runs as user `nobody` (UID `65534`), it does not have write access to the root-owned `tmpfs` mounted at `/prometheus`, causing it to crash when attempting to create directories/files.
+
+**Solution:** Configure the Prometheus service in [docker-compose.yml](file:///Users/jsoehner/spring-ai-blog-agent/docker-compose.yml) to write its runtime TSDB data to `/tmp/prometheus` using the `--storage.tsdb.path=/tmp/prometheus` option. Since `/tmp` is a world-writable tmpfs, this succeeds.

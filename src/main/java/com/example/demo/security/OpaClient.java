@@ -47,7 +47,15 @@ public class OpaClient {
         }
     }
 
+    public String getOpaUrl() {
+        return opaUrl;
+    }
+
     public boolean evaluatePolicy(Map<String, Object> requestInput) {
+        return evaluatePolicy(this.opaUrl, requestInput);
+    }
+
+    public boolean evaluatePolicy(String url, Map<String, Object> requestInput) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -57,7 +65,7 @@ public class OpaClient {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         try {
-            ResponseEntity<OpaResponse> response = restTemplate.postForEntity(opaUrl, entity, OpaResponse.class);
+            ResponseEntity<OpaResponse> response = restTemplate.postForEntity(url, entity, OpaResponse.class);
             OpaResponse resultBody = response.getBody();
             if (resultBody != null && resultBody.getResult() != null) {
                 return resultBody.getResult().isAllow();
