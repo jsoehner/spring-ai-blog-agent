@@ -47,7 +47,7 @@ jobs:
 
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         continue-on-error: true
         env:
           PR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
