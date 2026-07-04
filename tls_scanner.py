@@ -21,6 +21,8 @@ def get_tls_audit(target_url):
     
     try:
         result = subprocess.run(cmd, input=b"Q", capture_output=True, timeout=12)
+        if result.returncode != 0:
+            raise RuntimeError(f"openssl failed with exit code {result.returncode}")
         output = result.stdout.decode('utf-8', errors='ignore') + result.stderr.decode('utf-8', errors='ignore')
         
         # Regex to capture all Issuer strings explicitly
