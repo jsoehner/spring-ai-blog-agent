@@ -44,33 +44,6 @@ services:
     security_opt:
       - no-new-privileges:true
 
-  issue-agent:
-    build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
-    ports:
-      - "8082:8080"
-    environment:
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - SPRING_PROFILES_ACTIVE=issue-agent
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
-      - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration
-      - SPRING_AI_OPENAI_API_KEY=dummy
-      - OPA_URL=http://opa:8181/v1/data/agent/main
-    depends_on:
-      - rabbitmq
-    volumes:
-      - ./config:/app/config
-      - ./.git:/app/.git
-      - ./src:/app/src
-      - ./build.gradle:/app/build.gradle
-      - ./settings.gradle:/app/settings.gradle
-      - ./request-activity.log:/app/request-activity.log
-      - ./output:/app/output
-    tmpfs:
-      - /tmp
-    security_opt:
-      - no-new-privileges:true
 
   researcher-agent:
     build: .
