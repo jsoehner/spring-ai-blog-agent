@@ -36,36 +36,97 @@ public class IssueAgentController {
     @GetMapping("/issue/create-pr")
     public ResponseEntity<Map<String, String>> createPrGet(
             @RequestParam String issueRef,
+            @RequestParam(required = false) String repository,
             @RequestParam(defaultValue = "main") String baseBranch) {
-        return handleCreatePr(issueRef, baseBranch);
+        return handleCreatePr(issueRef, repository, baseBranch);
     }
 
     @PostMapping("/issue/create-pr")
     public ResponseEntity<Map<String, String>> createPrPost(
             @RequestParam String issueRef,
+            @RequestParam(required = false) String repository,
             @RequestParam(defaultValue = "main") String baseBranch) {
-        return handleCreatePr(issueRef, baseBranch);
+        return handleCreatePr(issueRef, repository, baseBranch);
     }
 
-    private ResponseEntity<Map<String, String>> handleCreatePr(String issueRef, String baseBranch) {
-        System.out.println("Issue Agent triggered for issue: " + issueRef + " on branch: " + baseBranch);
+    private ResponseEntity<Map<String, String>> handleCreatePr(String issueRef, String repository, String baseBranch) {
+        System.out.println("Issue Agent triggered for issue: " + issueRef + ", repo parameter: " + repository + ", base branch: " + baseBranch);
         
         Map<String, String> response = new HashMap<>();
         try {
-            // Trigger the AI ChatClient prompt
-            String promptUserMessage = String.format(
-                "Please resolve the GitHub issue: '%s'. The base branch is '%s'.", 
-                issueRef, baseBranch
-            );
+            String resolvedIssueRef = issueRef;
+            String owner = null;
+            String repo = null;
+            String issueNum = null;
 
-            String result = chatClient.prompt()
-                    .user(promptUserMessage)
-                    .call()
-                    .content();
+            if (issueRef.contains("/")) {
+                String[] parts = issueRef.split("/");
+                if (parts.length >= 4 && "issues".equals(parts[2])) {
+                    owner = parts[0];
+                    repo = parts[1];
+                    issueNum = parts[3];
+                } else if (parts.length == 3) {
+                    owner = parts[0];
+                    repo = parts[1];
+                    issueNum = parts[2];
+                    resolvedIssueRef = owner + "/" + repo + "/issues/" + issueNum;
+                }
+            } else if (repository != null && repository.contains("/")) {
+                String[] parts = repository.split("/");
+                owner = parts[0];
+                repo = parts[1];
+                issueNum = issueRef;
+                resolvedIssueRef = owner + "/" + repo + "/issues/" + issueNum;
+            }
 
-            response.put("status", "success");
-            response.put("message", result);
-            return ResponseEntity.ok(response);
+            if (owner == null || repo == null) {
+                try {
+                    String remoteUrl = issueAgentTools.getLocalGitRemote();
+                    if (remoteUrl.contains("github.com")) {
+                        String ownerRepo = "";
+                        if (remoteUrl.startsWith("https://")) {
+                            ownerRepo = remoteUrl.substring(remoteUrl.indexOf("github.com/") + 11);
+                        } else if (remoteUrl.startsWith("git@github.com:")) {
+                            ownerRepo = remoteUrl.substring(remoteUrl.indexOf("git@github.com:") + 15);
+                        }
+                        if (ownerRepo.endsWith(".git")) {
+                            ownerRepo = ownerRepo.substring(0, ownerRepo.length() - 4);
+                        }
+                        String[] parts = ownerRepo.split("/");
+                        owner = parts[0];
+                        repo = parts[1];
+                    }
+                } catch (Exception e) {
+                    owner = "jsoehner";
+                    repo = "spring-ai-blog-agent";
+                }
+                issueNum = issueRef;
+                resolvedIssueRef = owner + "/" + repo + "/issues/" + issueNum;
+            }
+
+            System.out.println("Setting up repository: " + owner + "/" + repo + " on base branch: " + baseBranch);
+            java.nio.file.Path repoPath = issueAgentTools.setupRepository(owner, repo, baseBranch);
+            
+            // Set current repo root in ThreadLocal
+            issueAgentTools.setCurrentRepoRoot(repoPath);
+            try {
+                // Trigger the AI ChatClient prompt
+                String promptUserMessage = String.format(
+                    "Please resolve the GitHub issue: '%s'. The base branch is '%s'.", 
+                    resolvedIssueRef, baseBranch
+                );
+
+                String result = chatClient.prompt()
+                        .user(promptUserMessage)
+                        .call()
+                        .content();
+
+                response.put("status", "success");
+                response.put("message", result);
+                return ResponseEntity.ok(response);
+            } finally {
+                issueAgentTools.clearCurrentRepoRoot();
+            }
 
         } catch (Exception e) {
             System.err.println("Error processing issue " + issueRef + ": " + e.getMessage());

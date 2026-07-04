@@ -22,9 +22,74 @@ import java.util.Map;
 public class IssueAgentTools {
 
     private final RestTemplate restTemplate;
+    private final ThreadLocal<Path> currentRepoRoot = ThreadLocal.withInitial(() -> Paths.get(".").toAbsolutePath().normalize());
+
+    public void setCurrentRepoRoot(Path path) {
+        this.currentRepoRoot.set(path);
+    }
+
+    public void clearCurrentRepoRoot() {
+        this.currentRepoRoot.remove();
+    }
+
+    public Path getCurrentRepoRoot() {
+        return this.currentRepoRoot.get();
+    }
 
     public IssueAgentTools(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    public String getLocalGitRemote() throws Exception {
+        return runSystemCommandInDir("git remote get-url origin", Paths.get(".").toAbsolutePath().normalize()).trim();
+    }
+
+    public Path setupRepository(String owner, String repo, String baseBranch) {
+        try {
+            Path targetDir = Paths.get("build/cloned-repos/" + owner + "/" + repo).toAbsolutePath().normalize();
+            Files.createDirectories(targetDir);
+
+            String token = System.getenv("GITHUB_TOKEN");
+            String remoteUrl = "https://github.com/" + owner + "/" + repo + ".git";
+            if (token != null && !token.isEmpty()) {
+                remoteUrl = "https://x-access-token:" + token + "@github.com/" + owner + "/" + repo + ".git";
+            }
+
+            if (Files.exists(targetDir.resolve(".git"))) {
+                System.out.println("Repository already exists. Updating " + owner + "/" + repo);
+                runSystemCommandInDir("git clean -fdx", targetDir);
+                runSystemCommandInDir("git checkout " + baseBranch, targetDir);
+                runSystemCommandInDir("git pull origin " + baseBranch, targetDir);
+            } else {
+                System.out.println("Cloning repository " + owner + "/" + repo);
+                Path parent = targetDir.getParent();
+                Files.createDirectories(parent);
+                runSystemCommandInDir("git clone " + remoteUrl + " " + repo, parent);
+                runSystemCommandInDir("git checkout " + baseBranch, targetDir);
+            }
+            return targetDir;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to setup repository: " + e.getMessage(), e);
+        }
+    }
+
+    private String runSystemCommandInDir(String command, Path dir) throws Exception {
+        ProcessBuilder pb = new ProcessBuilder("sh", "-c", command);
+        pb.directory(dir.toFile());
+        pb.redirectErrorStream(true);
+        Process process = pb.start();
+        StringBuilder output = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+        }
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw new RuntimeException("Command '" + command + "' failed in " + dir + " with exit code " + exitCode + ". Output: " + output);
+        }
+        return output.toString();
     }
 
     public record PullRequestRequest(
@@ -78,7 +143,7 @@ public class IssueAgentTools {
     @Tool(description = "Lists files and subdirectories in the specified path (relative to the repository root). Use empty string '' or '.' to list the root directory.")
     public String listDirectory(String relativePath) {
         try {
-            Path root = Paths.get(".").toAbsolutePath().normalize();
+            Path root = getCurrentRepoRoot();
             Path target = root.resolve(relativePath == null ? "" : relativePath).toAbsolutePath().normalize();
             
             if (!target.startsWith(root)) {
@@ -109,7 +174,7 @@ public class IssueAgentTools {
     @Tool(description = "Finds files recursively under the repository matching a specific name pattern (e.g., '*.java', 'pom.xml').")
     public String findFiles(String pattern) {
         try {
-            Path root = Paths.get(".").toAbsolutePath().normalize();
+            Path root = getCurrentRepoRoot();
             List<String> matches = new ArrayList<>();
             
             String globPattern = pattern.toLowerCase()
@@ -139,7 +204,7 @@ public class IssueAgentTools {
     @Tool(description = "Reads the contents of a text/source file from the local repository. Input is the relative path (e.g. 'src/main/java/App.java').")
     public String readFile(String relativePath) {
         try {
-            Path root = Paths.get(".").toAbsolutePath().normalize();
+            Path root = getCurrentRepoRoot();
             Path target = root.resolve(relativePath).toAbsolutePath().normalize();
             
             if (!target.startsWith(root)) {
@@ -159,7 +224,7 @@ public class IssueAgentTools {
     @Tool(description = "Writes or overwrites a file with the provided content. Use this to save code changes, apply bug fixes, or create new files. Input requires the relative file path and the complete new content of the file.")
     public String writeFile(String relativePath, String content) {
         try {
-            Path root = Paths.get(".").toAbsolutePath().normalize();
+            Path root = getCurrentRepoRoot();
             Path target = root.resolve(relativePath).toAbsolutePath().normalize();
             
             if (!target.startsWith(root)) {
@@ -181,7 +246,7 @@ public class IssueAgentTools {
     @Tool(description = "Searches for a text pattern or term in all files in the repository (excluding build and version control directories).")
     public String grepSearch(String term) {
         try {
-            Path root = Paths.get(".").toAbsolutePath().normalize();
+            Path root = getCurrentRepoRoot();
             StringBuilder sb = new StringBuilder();
             int matchCount = 0;
             
@@ -280,6 +345,7 @@ public class IssueAgentTools {
 
     private String runSystemCommand(String command) throws Exception {
         ProcessBuilder pb = new ProcessBuilder("sh", "-c", command);
+        pb.directory(getCurrentRepoRoot().toFile());
         pb.redirectErrorStream(true);
         Process process = pb.start();
         
