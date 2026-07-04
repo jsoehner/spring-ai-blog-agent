@@ -78,7 +78,6 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **Local Application Logging:** Keeps a clean, overwritten `request-activity.log` tracing all agent interactions on every application start via a custom Logback configuration.
 - **Agent Security Guardrails:** Enforces strict execution boundaries utilizing an [Open Policy Agent (OPA) sidecar](INTEGRATION_README.md) and Spring AOP to prevent unauthorized file access, network calls, or dangerous command execution.
 - **Automated Workflows:** Includes generic GitHub Actions for nightly dependency updates and security scanning (SAST, Secrets, SCA) to maintain a secure and up-to-date repository.
-- **Autonomous Issue Agent:** Actively processes GitHub issues, analyzes code, applies changes, and automatically opens a Pull Request with a proposed fix, matching the design of `clover0/issue-agent`.
 
 ---
 
@@ -143,24 +142,10 @@ Because the system is decoupled, your script will return a success message insta
 docker logs -f spring-ai-project-researcher-agent-1
 ```
 
-### 6. Using the Autonomous Issue Agent
-A dedicated service `issue-agent` runs on port `8082` (mapped to port `8080` internally). This agent is specifically designed to autonomously solve GitHub issues in the style of `clover0/issue-agent`. It has direct read/write access to the repository's `./src` folder and is not run as read-only.
+### 6. Autonomous Issue Agent (Moved)
+The Autonomous Issue Agent has been extracted from this project into its own standalone repository to allow targeting any of your GitHub repositories. 
 
-To trigger the Issue Agent to resolve a specific issue and automatically submit a Pull Request, send a POST or GET request to:
-```bash
-curl -X POST "http://localhost:8082/issue/create-pr?issueRef=clover0/example-repository/issues/123"
-```
-Or trigger it with a custom base branch:
-```bash
-curl -X POST "http://localhost:8082/issue/create-pr?issueRef=clover0/example-repository/issues/123&baseBranch=main"
-```
-
-The agent will:
-1. Fetch the issue description from GitHub.
-2. Locate the relevant source files using the `findFiles` and `grepSearch` tools.
-3. Read the code using the `readFile` tool.
-4. Modify the code and save its fixes using `writeFile`.
-5. Automate Git commit, push, and submit a Pull Request via `submitPullRequest`.
+Please refer to the new project at `gh-issue-agent` on your local filesystem for standalone setup and usage.
 
 ---
 
