@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TlsScannerTool {
 
     @Tool(description = "Runs a TLS/PQC audit scan on a list of target domains or URLs, and returns the scan results. The agent MUST summarize these results before sharing the output with the user.")
@@ -15,6 +18,7 @@ public class TlsScannerTool {
             List<String> command = new ArrayList<>();
             command.add("python3");
             command.add("tls_scanner.py");
+            command.add("--");
             command.addAll(targets);
             
             // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
