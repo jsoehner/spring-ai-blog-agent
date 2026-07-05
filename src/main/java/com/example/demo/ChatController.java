@@ -13,8 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatController {
 
     private final ChatClient chatClient;
+    private final WebCrawlerConfig webCrawlerConfig;
+    private final StockPriceTool stockPriceTool;
+    private final ImageTools imageTools;
+    private final CodeTools codeTools;
+    private final TlsScannerTool tlsScannerTool;
 
-    public ChatController(ChatClient.Builder chatClientBuilder) {
+    public ChatController(ChatClient.Builder chatClientBuilder,
+                          WebCrawlerConfig webCrawlerConfig,
+                          StockPriceTool stockPriceTool,
+                          ImageTools imageTools,
+                          CodeTools codeTools,
+                          TlsScannerTool tlsScannerTool) {
+        this.webCrawlerConfig = webCrawlerConfig;
+        this.stockPriceTool = stockPriceTool;
+        this.imageTools = imageTools;
+        this.codeTools = codeTools;
+        this.tlsScannerTool = tlsScannerTool;
+
         // 1. Initialize an in-memory repository and window memory strategy
         ChatMemory chatMemory = MessageWindowChatMemory.builder()
             .chatMemoryRepository(new InMemoryChatMemoryRepository())
@@ -22,7 +38,7 @@ public class ChatController {
             .build();
         
         // 2. Build the ChatClient and register the Memory Advisor using the builder
-        this.chatClient = chatClientBuilder
+        this.chatClient = chatClientBuilder.build().mutate()
                 .defaultSystem("You are an expert code reviewer. You review code and provide feedback. You support Java, Python, and Go.")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
@@ -37,7 +53,7 @@ public class ChatController {
                 .user(message)
                 // 3. Pass the chatId so the advisor knows which conversation history to use
                 .advisors(a -> a.param("chat_memory_conversation_id", chatId))
-                .tools(new WebCrawlerConfig(), new StockPriceTool(), new ImageTools(), new CodeTools(), new TlsScannerTool())
+                .tools(webCrawlerConfig, stockPriceTool, imageTools, codeTools, tlsScannerTool)
                 .call()
                 .content();
     }

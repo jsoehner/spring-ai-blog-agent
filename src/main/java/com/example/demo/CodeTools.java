@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CodeTools {
 
     @Tool(description = "Reads the contents of a source code file or text file from the local filesystem. Input is the absolute file path.")

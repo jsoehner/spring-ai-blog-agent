@@ -14,6 +14,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ImageTools {
 
     @Tool(description = "Scans a directory for images and extracts their EXIF metadata (Date Taken, GPS Coordinates). Returns a catalog of images to help suggest a descriptive folder name. Input is an absolute directory path.")
