@@ -18,7 +18,7 @@ public class ImageAgentController {
     private final ChatClient chatClient;
 
     public ImageAgentController(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder
+        this.chatClient = chatClientBuilder.build().mutate()
                 .defaultSystem("You are an expert image prompt generator. Given a blog post topic or content, generate a highly descriptive visual prompt for an image that represents it. Output ONLY the short image prompt, nothing else.")
                 .build();
     }

@@ -19,7 +19,7 @@ public class AutoDraftService {
 
     public AutoDraftService(ChatClient.Builder chatClientBuilder, WordPressTool wordPressTool, WebCrawlerConfig webCrawlerConfig) {
         this.wordPressTool = wordPressTool;
-        this.chatClient = chatClientBuilder
+        this.chatClient = chatClientBuilder.build().mutate()
                 .defaultSystem("You are an expert security analyst and blog poster agent. Your task is to research a given subject related to Mobile Security, Cryptography, Application Security, or AI Security, and compose a detailed and engaging blog post formatted using proper HTML. The blog post must contain at least 5 to 10 paragraphs, with each paragraph being 100+ words.")
                 .defaultTools(webCrawlerConfig)
                 .build();
@@ -51,7 +51,9 @@ public class AutoDraftService {
     }
 
     private void openPullRequest(String topic) throws Exception {
-        String baseName = ("New Draft: " + topic).replaceAll("\\s+", "-").toLowerCase();
+        // Sanitize topic to prevent command injection
+        String safeTopic = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
+        String baseName = ("New Draft: " + safeTopic).replaceAll("\\s+", "-").toLowerCase();
         String fileName = "output/" + baseName + ".html";
         String wpFileName = "output/" + baseName + "_wp.html";
         String branchName = "draft-" + System.currentTimeMillis();
@@ -63,7 +65,7 @@ public class AutoDraftService {
             "git commit -m 'Generated new blog draft for %s' && " +
             "git push -u origin %s && " +
             "gh pr create --title 'Review Needed: New Blog Draft for %s' --body 'A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft.'",
-            branchName, fileName, wpFileName, topic, branchName, topic
+            branchName, fileName, wpFileName, safeTopic, branchName, safeTopic
         );
 
         // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
