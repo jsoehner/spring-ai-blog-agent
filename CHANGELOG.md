@@ -5,6 +5,14 @@
 - **CI/CD**: Implemented generic GitHub Actions workflows for nightly dependency updates and security scanning (Gitleaks, Semgrep, Trivy).
 
 ### Fixed
+- **Security**: Hardened [OpaGuardrailAspect.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/security/OpaGuardrailAspect.java) against path traversal attacks by normalizing target file paths before OPA policy evaluation.
+- **Security**: Sanitized blog post titles and restricted output file resolution in [WordPressTool.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/WordPressTool.java) to prevent writing files outside of the output directory.
+- **Security**: Added target option termination (`--`) in [TlsScannerTool.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/TlsScannerTool.java) to prevent command-line option/argument injection.
+- **Security**: Implemented DNS and IP address range checks in [WebCrawlerConfig.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/WebCrawlerConfig.java) to block loopback and private/local network crawling (SSRF prevention).
+- **Security**: Added input format validation to ticker parameters in [StockPriceTool.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/StockPriceTool.java).
+- **Security**: Sanitized topic names in [AutoDraftService.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/AutoDraftService.java) to prevent command injection during automatic pull request generation.
+- **Architecture**: Fixed `ChatClient.Builder` pollution across agent controllers/services by using builder mutation via `.mutate()`.
+- **Architecture**: Refactored [ChatController.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/ChatController.java) to use Spring dependency injection for tools, preventing `NullPointerException`s from unconfigured `@Value` fields.
 - **Deployment**: Updated `run-and-submit.sh` to check for local changes in the `src/` directory and intelligently build a local Docker image instead of unconditionally pulling from Docker Hub.
 - **Deployment**: Added health checks in `run-and-submit.sh` to determine if all expected containers are operational, skipping the Docker initialization phase to quickly submit topics directly to the queue.
 - **Security**: Added `--v0-compatible` flag to the OPA container command in `docker-compose.yml` to resolve Rego v1 parsing errors caused by the latest debug image enforcing stricter syntax rules.
