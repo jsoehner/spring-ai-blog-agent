@@ -14,9 +14,19 @@ public class WordPressTool {
 
     @Tool(description = "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.")
     public String createDraftPost(DraftRequest request) {
-        String baseName = request.title().replaceAll("\\s+", "-").toLowerCase();
-        String fileName = "output/" + baseName + ".html";
-        String wpFileName = "output/" + baseName + "_wp.html";
+        // Sanitize title to prevent path traversal
+        String safeBaseName = request.title().replaceAll("[^a-zA-Z0-9\\s-]", "").strip().replaceAll("\\s+", "-").toLowerCase();
+        
+        java.nio.file.Path baseDir = java.nio.file.Paths.get("output").toAbsolutePath().normalize();
+        java.nio.file.Path fileTarget = baseDir.resolve(safeBaseName + ".html").normalize();
+        java.nio.file.Path wpFileTarget = baseDir.resolve(safeBaseName + "_wp.html").normalize();
+        
+        if (!fileTarget.startsWith(baseDir) || !wpFileTarget.startsWith(baseDir)) {
+            throw new SecurityException("Path traversal attempt detected!");
+        }
+        
+        String fileName = fileTarget.toString();
+        String wpFileName = wpFileTarget.toString();
 
         System.out.println("WordPressTool: Saving draft locally to " + fileName + " and " + wpFileName + "! Title: " + request.title());
         
