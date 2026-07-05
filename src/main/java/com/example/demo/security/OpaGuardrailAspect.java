@@ -43,7 +43,15 @@ public class OpaGuardrailAspect {
                 } else {
                     path = args[0].toString();
                 }
-                request.put("path", path);
+                
+                // Securely normalize the path before sending it to OPA to prevent path traversal bypass
+                try {
+                    String normalizedPath = java.nio.file.Paths.get(path).toAbsolutePath().normalize().toString();
+                    request.put("path", normalizedPath);
+                } catch (Exception e) {
+                    request.put("path", path);
+                }
+                
                 request.put("action", "writeFile".equals(toolName) ? "write" : "read");
             }
         }
