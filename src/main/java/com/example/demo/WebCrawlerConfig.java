@@ -56,6 +56,33 @@ public class WebCrawlerConfig {
         return urls;
     }
 
+    private boolean isSafeUrl(String urlString) {
+        try {
+            java.net.URI uri = new java.net.URI(urlString);
+            String scheme = uri.getScheme();
+            if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
+                return false;
+            }
+            String host = uri.getHost();
+            if (host == null || host.isEmpty()) {
+                return false;
+            }
+            java.net.InetAddress[] addresses = java.net.InetAddress.getAllByName(host);
+            for (java.net.InetAddress addr : addresses) {
+                if (addr.isLoopbackAddress() || 
+                    addr.isLinkLocalAddress() || 
+                    addr.isSiteLocalAddress() || 
+                    addr.isMulticastAddress() ||
+                    addr.getHostAddress().equals("0.0.0.0")) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Tool(description = "Crawls a list of websites and extracts their text content. Use this to read the contents of URLs you decide are relevant.")
     public String crawl(List<String> urls) {
         System.out.println("Researcher Agent starting to crawl " + urls.size() + " URLs...");
@@ -65,6 +92,11 @@ public class WebCrawlerConfig {
                 String formattedUrl = url;
                 if (!formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
                     formattedUrl = "https://" + formattedUrl;
+                }
+                if (!isSafeUrl(formattedUrl)) {
+                    System.out.println("Skipping unsafe URL (potential SSRF): " + formattedUrl);
+                    allContent.append("Failed to crawl ").append(url).append(": Access denied for local or non-public address.\n\n");
+                    continue;
                 }
                 System.out.println("Researcher Agent crawling: " + formattedUrl);
                 Document doc = Jsoup.connect(formattedUrl)
