@@ -149,6 +149,18 @@ Please refer to the new project at `gh-issue-agent` on your local filesystem for
 
 ---
 
+## 📐 Architecture Decisions (ADRs) & Agent Skills
+
+### Architecture Decision Records (ADRs)
+We capture architectural and security-related decisions systematically using ADRs. You can find them in the [docs/decisions/](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/) folder:
+- **[ADR-0001: Security Hardening and Dependency Injection Refactoring](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0001-security-hardening-and-dependency-injection.md)** — Outlines the path traversal protections, SSRF mitigation, TLS option separation, ChatClient builder mutate adjustments, and Spring Dependency Injection configurations implemented to secure and clean the codebase.
+
+### Agent Skills
+We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:
+- **[docker-expert](file:///Users/jsoehner/spring-ai-blog-agent/.agents/skills/docker-expert)** — Equips agents with container optimization, multi-stage build patterns, runtime execution analysis, and security hardening expertise.
+
+---
+
 ## ⚠️ Gotchas & Troubleshooting
 
 Here are a few common issues and best practices to keep in mind when working with this project:

@@ -14,3 +14,8 @@
 * **Local Application Logging:** To maintain an ephemeral local activity log, configure a `logback-spring.xml` file with a `FileAppender` pointing to `request-activity.log` and set `<append>false</append>` so the log is freshly overwritten on each application restart rather than appending infinitely.
   **Gotcha:** When mapping this log file (or any single file) as a volume in `docker-compose.yml`, you **must** ensure the file exists on the host machine first (e.g. `touch request-activity.log`). If it does not exist, Docker will automatically create it as a directory, which will cause Logback to crash on application startup.
 * **Local File Output Naming:** When saving generated artifacts (like blog posts) locally, standardize the filename by using the topic string, replacing spaces with hyphens, and converting to lowercase (e.g., `topic.replaceAll("\\s+", "-").toLowerCase() + ".html"`).
+
+## Agent Skills
+
+* **docker-expert:** Equipped to optimize Dockerfiles, perform multi-stage builds, harden container security, and analyze runtime execution issues. It utilizes local tools (Glob, Grep, Read) for static analysis and validates configurations using `docker-compose config`.
+
