@@ -5,12 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.springframework.ai.tool.annotation.Tool;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class StockPriceTool {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Tool(description = "Fetches the current stock price and 52-week trending (high/low) for a given Canadian stock on the Toronto Stock Exchange (TSE/TSX). Input should be the ticker symbol (e.g. SHOP, RY, TD).")
     public String getStockPrice(String ticker) {
+        if (ticker == null || !ticker.matches("^[a-zA-Z0-9\\.]+$")) {
+            return "Error: Invalid ticker symbol format. Only alphanumeric characters and dots are allowed.";
+        }
+        
         // Yahoo Finance uses .TO suffix for Toronto Stock Exchange
         if (!ticker.toUpperCase().endsWith(".TO")) {
             ticker = ticker.toUpperCase() + ".TO";
