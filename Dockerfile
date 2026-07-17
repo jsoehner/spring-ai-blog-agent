@@ -3,8 +3,12 @@ WORKDIR /app
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle settings.gradle ./
+
+# Cache dependencies
+RUN ./gradlew dependencies --no-daemon || true
+
 COPY src src
-RUN ./gradlew build -x test
+RUN ./gradlew build -x test --no-daemon
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
@@ -12,7 +16,7 @@ WORKDIR /app
 # Install git and github cli (gh) inside the container so it can commit and open PRs
 RUN apk add --no-cache git github-cli
 
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder --chown=spring:spring /app/build/libs/*.jar app.jar
 
 # We will run the Spring Boot app on port 8080
 EXPOSE 8080

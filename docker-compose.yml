@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -15,6 +14,11 @@ services:
       - /tmp
     security_opt:
       - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   supervisor-agent:
     build: .
@@ -32,7 +36,22 @@ services:
       - SPRING_AI_OPENAI_API_KEY=dummy
       - OPA_URL=http://opa:8181/v1/data/agent/main
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     volumes:
       - ./config:/app/config
       - ./.git:/app/.git
@@ -57,7 +76,22 @@ services:
       - SPRING_AI_OPENAI_API_KEY=dummy
       - OPA_URL=http://opa:8181/v1/data/agent/main
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     volumes:
       - ./config:/app/config
       - ./request-activity.log:/app/request-activity.log
@@ -79,7 +113,22 @@ services:
       - SPRING_AI_OPENAI_API_KEY=dummy
       - OPA_URL=http://opa:8181/v1/data/agent/main
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     volumes:
       - ./config:/app/config
       - ./request-activity.log:/app/request-activity.log
