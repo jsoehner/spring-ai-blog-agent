@@ -147,6 +147,25 @@ The Autonomous Issue Agent has been extracted from this project into its own sta
 
 Please refer to the new project at `gh-issue-agent` on your local filesystem for standalone setup and usage.
 
+### 7. Dependency Updates & Local Docker Verification
+To keep dependencies secure and up-to-date, we scan the codebase using the `com.github.ben-manes.versions` plugin and apply necessary overrides. To verify and test dependency updates locally within the multi-agent container environment:
+1. Rebuild the application containers:
+   ```bash
+   docker compose build
+   ```
+2. Start the services locally:
+   ```bash
+   docker compose up -d
+   ```
+3. Monitor startup logs of the supervisor agent to verify correct initialization:
+   ```bash
+   docker compose logs supervisor-agent
+   ```
+4. Stop and clean up the containers once verification is complete:
+   ```bash
+   docker compose down
+   ```
+
 ---
 
 ## 📐 Architecture Decisions (ADRs) & Agent Skills
