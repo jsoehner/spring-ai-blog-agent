@@ -33,7 +33,7 @@ public class ImageTools {
         StringBuilder result = new StringBuilder("Image Catalog for " + directoryPath + ":\n");
         int count = 0;
 
-        try (Stream<Path> paths = Files.walk(startPath)) {
+        try (Stream<Path> paths = Files.walk(startPath, 3)) {
             List<Path> imageFiles = paths.filter(Files::isRegularFile)
                     .filter(p -> {
                         String name = p.toString().toLowerCase();
@@ -95,7 +95,7 @@ public class ImageTools {
             }
 
             int count = 0;
-            try (Stream<Path> paths = Files.walk(sourcePath)) {
+            try (Stream<Path> paths = Files.walk(sourcePath, 3)) {
                 List<Path> imageFiles = paths.filter(Files::isRegularFile)
                     .filter(p -> {
                         String name = p.toString().toLowerCase();
