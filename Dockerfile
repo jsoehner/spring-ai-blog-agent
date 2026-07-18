@@ -13,16 +13,17 @@ RUN ./gradlew build -x test --no-daemon
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Install git and github cli (gh) inside the container so it can commit and open PRs
-RUN apk add --no-cache git github-cli
+# Create a non-root user to run the app
+RUN addgroup -S spring && adduser -S spring -G spring
+
+# Install git, github cli (gh), python3, and requests inside the container
+RUN apk add --no-cache git github-cli python3 py3-requests
 
 COPY --from=builder --chown=spring:spring /app/build/libs/*.jar app.jar
 
 # We will run the Spring Boot app on port 8080
 EXPOSE 8080
 
-# Create a non-root user to run the app
-RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

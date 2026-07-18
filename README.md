@@ -171,8 +171,8 @@ To keep dependencies secure and up-to-date, we scan the codebase using the `com.
 ## 📐 Architecture Decisions (ADRs) & Agent Skills
 
 ### Architecture Decision Records (ADRs)
-We capture architectural and security-related decisions systematically using ADRs. You can find them in the [docs/decisions/](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/) folder:
 - **[ADR-0001: Security Hardening and Dependency Injection Refactoring](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0001-security-hardening-and-dependency-injection.md)** — Outlines the path traversal protections, SSRF mitigation, TLS option separation, ChatClient builder mutate adjustments, and Spring Dependency Injection configurations implemented to secure and clean the codebase.
+- **[ADR-0002: Mitigating DNS Rebinding SSRF and Aligning Project Rules](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0002-mitigating-dns-rebinding-ssrf-and-aligning-project-rules.md)** — Documents the resolutions for DNS Rebinding, SSRF in Python scripts, Docker image layer build sequence, and aligning prompt/filename patterns with the project rules.
 
 ### Agent Skills
 We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:

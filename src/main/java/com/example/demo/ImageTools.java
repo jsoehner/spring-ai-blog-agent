@@ -21,7 +21,11 @@ public class ImageTools {
 
     @Tool(description = "Scans a directory for images and extracts their EXIF metadata (Date Taken, GPS Coordinates). Returns a catalog of images to help suggest a descriptive folder name. Input is an absolute directory path.")
     public String scanImageMetadata(String directoryPath) {
-        Path startPath = Paths.get(directoryPath);
+        Path startPath = Paths.get(directoryPath).toAbsolutePath().normalize();
+        Path baseDir = Paths.get(".").toAbsolutePath().normalize();
+        if (!startPath.startsWith(baseDir)) {
+            return "Error: Path traversal attempt detected! Directory must be inside the application workspace.";
+        }
         if (!Files.exists(startPath) || !Files.isDirectory(startPath)) {
             return "Directory not found: " + directoryPath;
         }
@@ -75,12 +79,15 @@ public class ImageTools {
 
     @Tool(description = "Creates a new folder and moves all images from a source directory into the new folder. Input should be the original source directory and the desired absolute target directory (e.g. /path/to/2024_Paris_Trip).")
     public String moveImages(MoveRequest request) {
-        Path sourcePath = Paths.get(request.sourceDirectory());
+        Path sourcePath = Paths.get(request.sourceDirectory()).toAbsolutePath().normalize();
+        Path targetPath = Paths.get(request.targetDirectory()).toAbsolutePath().normalize();
+        Path baseDir = Paths.get(".").toAbsolutePath().normalize();
+        if (!sourcePath.startsWith(baseDir) || !targetPath.startsWith(baseDir)) {
+            return "Error: Path traversal attempt detected! Directories must be inside the application workspace.";
+        }
         if (!Files.exists(sourcePath) || !Files.isDirectory(sourcePath)) {
             return "Source directory not found: " + request.sourceDirectory();
         }
-
-        Path targetPath = Paths.get(request.targetDirectory());
         
         try {
             if (!Files.exists(targetPath)) {

@@ -34,12 +34,14 @@ public class OpaGuardrailAspect {
         input.put("request", request);
 
         // Specific handling for file writes based on agent_files.rego
-        if ("writeFile".equals(toolName) || "readFile".equals(toolName)) {
+        if ("writeFile".equals(toolName) || "readFile".equals(toolName) || "scanImageMetadata".equals(toolName) || "moveImages".equals(toolName)) {
             input.put("resource_type", "file");
             if (args.length > 0) {
                 String path;
                 if (args[0] instanceof com.example.demo.CodeTools.WriteRequest writeRequest) {
                     path = writeRequest.absolutePath();
+                } else if (args[0] instanceof com.example.demo.ImageTools.MoveRequest moveRequest) {
+                    path = moveRequest.sourceDirectory();
                 } else {
                     path = args[0].toString();
                 }
@@ -52,7 +54,7 @@ public class OpaGuardrailAspect {
                     request.put("path", path);
                 }
                 
-                request.put("action", "writeFile".equals(toolName) ? "write" : "read");
+                request.put("action", ("writeFile".equals(toolName) || "moveImages".equals(toolName)) ? "write" : "read");
             }
         }
 

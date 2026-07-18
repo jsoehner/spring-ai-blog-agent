@@ -20,7 +20,7 @@ public class AutoDraftService {
     public AutoDraftService(ChatClient.Builder chatClientBuilder, WordPressTool wordPressTool, WebCrawlerConfig webCrawlerConfig) {
         this.wordPressTool = wordPressTool;
         this.chatClient = chatClientBuilder.build().mutate()
-                .defaultSystem("You are an expert security analyst and blog poster agent. Your task is to research a given subject related to Mobile Security, Cryptography, Application Security, or AI Security, and compose a detailed and engaging blog post formatted using proper HTML. The blog post must contain at least 5 to 10 paragraphs, with each paragraph being 100+ words.")
+                .defaultSystem("You are an expert security analyst and blog poster agent. Your task is to research a given subject related to Mobile Security, Cryptography, Application Security, or AI Security, and compose a detailed and engaging blog post formatted using proper HTML. The blog post must contain at least 5 to 10 paragraphs, with each paragraph being 100+ words. CRITICAL: Do NOT bold the first sentence of your paragraphs, and do NOT separate the opening sentence from the rest of the paragraph; integrate it naturally into the same paragraph block.")
                 .defaultTools(webCrawlerConfig)
                 .build();
     }
@@ -40,7 +40,7 @@ public class AutoDraftService {
                     .content();
 
             // Save the draft locally
-            wordPressTool.createDraftPost(new WordPressTool.DraftRequest("New Draft: " + randomTopic, content));
+            wordPressTool.createDraftPost(new WordPressTool.DraftRequest(randomTopic, content));
 
             // Execute git and gh commands to open a PR
             openPullRequest(randomTopic);
@@ -53,7 +53,7 @@ public class AutoDraftService {
     private void openPullRequest(String topic) throws Exception {
         // Sanitize topic to prevent command injection
         String safeTopic = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
-        String baseName = ("New Draft: " + safeTopic).replaceAll("\\s+", "-").toLowerCase();
+        String baseName = safeTopic.replaceAll("\\s+", "-").toLowerCase();
         String fileName = "output/" + baseName + ".html";
         String wpFileName = "output/" + baseName + "_wp.html";
         String branchName = "draft-" + System.currentTimeMillis();

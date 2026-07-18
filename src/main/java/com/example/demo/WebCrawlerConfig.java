@@ -12,6 +12,15 @@ import java.util.Arrays;
 @Component
 public class WebCrawlerConfig {
 
+    static {
+        // Mitigate DNS Rebinding attacks by forcing JVM to cache DNS resolutions for at least 30 seconds
+        try {
+            java.security.Security.setProperty("networkaddress.cache.ttl", "30");
+        } catch (Exception e) {
+            System.err.println("Warning: Failed to set networkaddress.cache.ttl: " + e.getMessage());
+        }
+    }
+
     @Value("${webcrawler.default.urls:https://thehackernews.com/,https://www.bleepingcomputer.com/,https://www.schneier.com/,https://krebsonsecurity.com/,https://haveibeenpwned.com/,https://www.identitytheft.gov/,https://www.virustotal.com/,https://owasp.org/,https://www.cisa.gov/,https://staysafeonline.org/}")
     private List<String> defaultUrls;
 

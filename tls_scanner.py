@@ -7,9 +7,33 @@ import sys
 import csv
 import requests
 
+import socket
+import ipaddress
+
+def is_safe_host(hostname):
+    try:
+        # Resolve all IP addresses for the hostname
+        ips = socket.getaddrinfo(hostname, None)
+        for ip in ips:
+            ip_str = ip[4][0]
+            ip_obj = ipaddress.ip_address(ip_str)
+            if (ip_obj.is_loopback or 
+                ip_obj.is_private or 
+                ip_obj.is_link_local or 
+                ip_obj.is_multicast or 
+                ip_obj.is_reserved or
+                ip_str == "0.0.0.0"):
+                return False
+        return True
+    except Exception:
+        return False
+
 def get_final_url(url):
     formatted_url = url if url.startswith(('http://', 'https://')) else 'https://' + url
     try:
+        hostname = formatted_url.split('//')[-1].split('/')[0].split(':')[0]
+        if not is_safe_host(hostname):
+            return formatted_url
         response = requests.get(formatted_url, timeout=5, allow_redirects=True)
         return response.url
     except Exception:
@@ -17,6 +41,8 @@ def get_final_url(url):
 
 def get_tls_audit(target_url):
     hostname = target_url.split('//')[-1].split('/')[0].split(':')[0]
+    if not is_safe_host(hostname):
+        return {"PQC": False, "Issuer": "Unsafe Host", "Protocol": "Unsafe Host", "Group": "Unsafe Host", "Cipher": "Unsafe Host"}
     cmd = ["openssl", "s_client", "-connect", f"{hostname}:443", "-servername", hostname, "-showcerts"]
     
     try:
