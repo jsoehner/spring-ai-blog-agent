@@ -32,17 +32,17 @@ graph TD
     Script["./run-and-submit.sh"]:::user
     Cron["Scheduled Cron (MON/THU)"]:::user
 
-    Supervisor["Supervisor Agent\n(Spring Boot REST API)"]:::api
-    RabbitMQ[("RabbitMQ Bus\n(Async Decoupling)")]:::queue
+    Supervisor["Supervisor Agent<br/>(Spring Boot REST API)"]:::api
+    RabbitMQ[("RabbitMQ Bus<br/>(Async Decoupling)")]:::queue
 
-    Researcher["Researcher Agent\n(Language & Logic Model)"]:::agent
-    Crawler["Curated Web Crawler\n(Top 25 Security Sites)"]:::action
+    Researcher["Researcher Agent<br/>(Language & Logic Model)"]:::agent
+    Crawler["Curated Web Crawler<br/>(Top 25 Security Sites)"]:::action
     
-    ImageAgent["Image Agent\n(Vision Model API)"]:::agent
+    ImageAgent["Image Agent<br/>(Vision Model API)"]:::agent
     
-    Draft["blog_draft.html\n(Local Save)"]:::action
-    WP_Draft["blog_draft_wp.html\n(WordPress Save)"]:::action
-    GitHub["Auto GitHub PR\n(Review & Merge)"]:::action
+    Draft["blog_draft.html<br/>(Local Save)"]:::action
+    WP_Draft["blog_draft_wp.html<br/>(WordPress Save)"]:::action
+    GitHub["Auto GitHub PR<br/>(Review & Merge)"]:::action
 
     %% Edges
     User -->|Submit Topic| Supervisor
