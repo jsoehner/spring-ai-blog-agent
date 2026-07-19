@@ -1,6 +1,6 @@
 # 🤖 Spring AI Autonomous Blog Agent
 
-![License](https://img.shields.io/badge/License-MIT-blue.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.x-brightgreen.svg) ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.x-brightgreen.svg) ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange.svg)
 
 **A highly robust, multi-agent AI system built to run complex asynchronous tasks utilizing Spring Boot and local/private Large Language Models (LLMs).**
 
