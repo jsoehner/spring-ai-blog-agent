@@ -27,13 +27,12 @@ jobs:
         id: gitleaks
         uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
         continue-on-error: true
-        with:
-          args: detect --report-format json --report-path gitleaks-report.json --verbose --redact
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ARGS: "detect --report-path=gitleaks-report.json --report-format=json --redact --verbose"
 
       - name: Upload Gitleaks Report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
           name: gitleaks-report
@@ -57,7 +56,7 @@ jobs:
           semgrep scan --config auto --json -o semgrep-results.json
 
       - name: Upload Semgrep Report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
           name: semgrep-results
@@ -88,7 +87,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Upload Trivy Report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
           name: trivy-results
@@ -107,19 +106,19 @@ jobs:
           fetch-depth: 0
 
       - name: Download Gitleaks Report
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         continue-on-error: true
         with:
           name: gitleaks-report
 
       - name: Download Semgrep Report
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         continue-on-error: true
         with:
           name: semgrep-results
 
       - name: Download Trivy Report
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         continue-on-error: true
         with:
           name: trivy-results
@@ -140,7 +139,7 @@ jobs:
 
       - name: Notify on security findings
         if: ${{ steps.check-findings.outputs.has_findings == 'true' || needs.gitleaks.result == 'failure' || needs.semgrep.result == 'failure' || needs.trivy.result == 'failure' }}
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
