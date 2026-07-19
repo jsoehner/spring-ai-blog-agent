@@ -59,7 +59,7 @@ services:
       - ./output:/app/output
     read_only: true
     tmpfs:
-      - /tmp
+      - /tmp:exec
     security_opt:
       - no-new-privileges:true
 
@@ -98,7 +98,7 @@ services:
       - ./output:/app/output
     read_only: true
     tmpfs:
-      - /tmp
+      - /tmp:exec
     security_opt:
       - no-new-privileges:true
 
@@ -135,7 +135,7 @@ services:
       - ./output:/app/output
     read_only: true
     tmpfs:
-      - /tmp
+      - /tmp:exec
     security_opt:
       - no-new-privileges:true
 

@@ -98,7 +98,7 @@ class BlogAgentControllerTest {
 
         String payload = "{\"topic\":\"../../traversal-test\",\"facts\":\"Some facts here\"}";
         
-        blogAgentController.processSupervisorTask(payload);
+        blogAgentController.processSupervisorTask(payload).join();
 
         Path resolvedPath = Paths.get("output", "traversal-test.html").toAbsolutePath().normalize();
         assertTrue(Files.exists(resolvedPath), "File should be saved in normalized path under output directory");

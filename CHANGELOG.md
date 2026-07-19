@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 ### Added
+- **CI/CD**: Implemented a custom `update-dependencies.py` Python script that dynamically queries Maven Central metadata and automatically updates version definitions in `build.gradle` inside the nightly workflow.
+
+### Fixed
+- **Testing**: Fixed JUnit test assertion in `TlsScannerToolTest.java` to accept `Unsafe Host` alongside `Failed` for invalid domains to align with new SSRF-prevention logic, resolving nightly workflow failures.
+
+### Changed
+- **CI/CD**: Parallelized the security scanning workflow jobs (Gitleaks, Semgrep, Trivy) to run concurrently on separate runner instances and upload reports as build artifacts for downstream reporting.
+- **Architecture**: Optimized the Supervisor Agent `processSupervisorTask` to execute asynchronously using `CompletableFuture.runAsync()`, immediately freeing up RabbitMQ listener threads to increase system throughput.
 - **CI/CD**: Implemented generic GitHub Actions workflows for nightly dependency updates and security scanning (Gitleaks, Semgrep, Trivy).
 
 ### Fixed

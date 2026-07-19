@@ -14,7 +14,8 @@ permissions:
   actions: write
 
 jobs:
-  security-assessment:
+  gitleaks:
+    name: Secret Scanning
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -31,12 +32,46 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload Gitleaks Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+          retention-days: 1
+
+  semgrep:
+    name: SAST Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
       - name: SAST Scanning (Semgrep)
         id: semgrep
         continue-on-error: true
         run: |
           pip install semgrep
           semgrep scan --config auto --json -o semgrep-results.json
+
+      - name: Upload Semgrep Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: semgrep-results
+          path: semgrep-results.json
+          retention-days: 1
+
+  trivy:
+    name: Dependency SCA Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Container & FS Scanning (Trivy)
         id: trivy
@@ -52,12 +87,59 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
 
+      - name: Upload Trivy Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-results
+          path: trivy-results.json
+          retention-days: 1
+
+  reporting:
+    name: Compile Findings & Dispatch
+    needs: [gitleaks, semgrep, trivy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download Gitleaks Report
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: gitleaks-report
+
+      - name: Download Semgrep Report
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: semgrep-results
+
+      - name: Download Trivy Report
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: trivy-results
+
       - name: Parse scan reports
-        if: ${{ always() }}
         run: node .github/scripts/parse-findings.js
 
+      - name: Check for findings
+        id: check-findings
+        run: |
+          if [ -f findings-table.md ]; then
+            echo "has_findings=true" >> $GITHUB_OUTPUT
+            echo "Findings detected!"
+          else
+            echo "has_findings=false" >> $GITHUB_OUTPUT
+            echo "No findings detected."
+          fi
+
       - name: Notify on security findings
-        if: ${{ always() && (steps.gitleaks.outcome == 'failure' || steps.semgrep.outcome == 'failure' || steps.trivy.outcome == 'failure') }}
+        if: ${{ steps.check-findings.outputs.has_findings == 'true' || needs.gitleaks.result == 'failure' || needs.semgrep.result == 'failure' || needs.trivy.result == 'failure' }}
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -73,10 +155,10 @@ jobs:
             if (fs.existsSync('findings-table.md')) {
               body += fs.readFileSync('findings-table.md', 'utf8');
             } else {
-              body += `**Failed Scan Steps:**\n`;
-              if ('${{ steps.gitleaks.outcome }}' === 'failure') body += `- Secret Scanning (Gitleaks)\n`;
-              if ('${{ steps.semgrep.outcome }}' === 'failure') body += `- SAST Scanning (Semgrep)\n`;
-              if ('${{ steps.trivy.outcome }}' === 'failure') body += `- Container & FS Scanning (Trivy)\n`;
+              body += `**Failed Scan Jobs:**\n`;
+              if ('${{ needs.gitleaks.result }}' === 'failure') body += `- Secret Scanning (Gitleaks) failed/errored\n`;
+              if ('${{ needs.semgrep.result }}' === 'failure') body += `- SAST Scanning (Semgrep) failed/errored\n`;
+              if ('${{ needs.trivy.result }}' === 'failure') body += `- Container & FS Scanning (Trivy) failed/errored\n`;
             }
             
             await github.rest.issues.create({

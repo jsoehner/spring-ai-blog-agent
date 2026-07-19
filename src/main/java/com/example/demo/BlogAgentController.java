@@ -71,92 +71,94 @@ public class BlogAgentController {
     }
 
     @RabbitListener(queuesToDeclare = @Queue("supervisor-tasks"))
-    public void processSupervisorTask(String jsonPayload) {
-        try {
-            Map<String, String> payload = objectMapper.readValue(jsonPayload, new TypeReference<Map<String, String>>() {});
-            String topic = payload.get("topic");
-            String facts = payload.get("facts");
-            System.out.println("Supervisor Agent received compiled facts for topic: " + topic);
-
-            // Pass 2: Write blog post
-            System.out.println("Starting Pass 2 (Blog Writing/Grammar Check) for: " + topic);
-            String htmlContent = bloggerClient.prompt()
-                    .user("Here are the gathered facts:\n" + facts + "\n\nPlease perform grammatical corrections and organize the content into the HTML blog post.")
-                    .advisors(a -> a.param("chat_memory_conversation_id", "pass2-" + topic))
-                    .call()
-                    .content();
-
-            htmlContent = htmlContent.trim();
-            if (htmlContent.startsWith("```html")) {
-                htmlContent = htmlContent.substring(7);
-            }
-            if (htmlContent.endsWith("```")) {
-                htmlContent = htmlContent.substring(0, htmlContent.length() - 3);
-            }
-            htmlContent = htmlContent.trim();
-
-            // Delegate to Image Agent
-            System.out.println("Delegating image generation to: " + imageAgentUrl);
-            Map<String, String> imageRequest = new HashMap<>();
-            imageRequest.put("topic", topic);
-            imageRequest.put("content", htmlContent);
-
-            String imageUrls = "";
+    public java.util.concurrent.CompletableFuture<Void> processSupervisorTask(String jsonPayload) {
+        return java.util.concurrent.CompletableFuture.runAsync(() -> {
             try {
-                imageUrls = restTemplate.postForObject(imageAgentUrl, imageRequest, String.class);
-            } catch (Exception e) {
-                System.err.println("Failed to fetch images: " + e.getMessage());
-            }
+                Map<String, String> payload = objectMapper.readValue(jsonPayload, new TypeReference<Map<String, String>>() {});
+                String topic = payload.get("topic");
+                String facts = payload.get("facts");
+                System.out.println("Supervisor Agent received compiled facts for topic: " + topic);
 
-            String headerImage = "";
-            String inlineImage = "";
-            if (imageUrls != null && !imageUrls.isEmpty()) {
-                String[] urls = imageUrls.split("\n");
-                headerImage = urls.length > 0 ? urls[0] : "";
-                inlineImage = urls.length > 1 ? urls[1] : "";
-            }
+                // Pass 2: Write blog post
+                System.out.println("Starting Pass 2 (Blog Writing/Grammar Check) for: " + topic);
+                String htmlContent = bloggerClient.prompt()
+                        .user("Here are the gathered facts:\n" + facts + "\n\nPlease perform grammatical corrections and organize the content into the HTML blog post.")
+                        .advisors(a -> a.param("chat_memory_conversation_id", "pass2-" + topic))
+                        .call()
+                        .content();
 
-            String contentWithImages = htmlContent;
-            if (!headerImage.isEmpty()) {
-                String safeHeaderImage = headerImage.replace("&", "&amp;");
-                contentWithImages = "<!-- wp:image --><figure class=\"wp-block-image\"><img src=\"" + safeHeaderImage + "\" alt=\"Header Image\"/></figure><!-- /wp:image -->\n" + contentWithImages;
-            }
-            if (!inlineImage.isEmpty()) {
-                String safeInlineImage = inlineImage.replace("&", "&amp;");
-                contentWithImages = contentWithImages + "\n<!-- wp:image --><figure class=\"wp-block-image\"><img src=\"" + safeInlineImage + "\" alt=\"Inline Image\"/></figure><!-- /wp:image -->";
-            }
-
-            // Upload to WordPress (Local draft)
-            System.out.println("Uploading draft to WordPress for topic: " + topic);
-            String result = wordPressTool.createDraftPost(new WordPressTool.DraftRequest(topic, contentWithImages));
-            System.out.println(result);
-
-            // Save to local file
-            // Sanitize filename to prevent path traversal
-            String safeBaseName = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
-            String filename = safeBaseName.replaceAll("\\s+", "-").toLowerCase() + ".html";
-            try {
-                java.nio.file.Path baseDir = java.nio.file.Paths.get("output").toAbsolutePath().normalize();
-                java.nio.file.Path targetFile = baseDir.resolve(filename).normalize();
-                
-                if (!targetFile.startsWith(baseDir)) {
-                    throw new SecurityException("Path traversal attempt detected!");
+                htmlContent = htmlContent.trim();
+                if (htmlContent.startsWith("```html")) {
+                    htmlContent = htmlContent.substring(7);
                 }
-                
-                // Create output directory if it does not exist
-                if (!java.nio.file.Files.exists(baseDir)) {
-                    java.nio.file.Files.createDirectories(baseDir);
+                if (htmlContent.endsWith("```")) {
+                    htmlContent = htmlContent.substring(0, htmlContent.length() - 3);
                 }
-                
-                java.nio.file.Files.writeString(targetFile, contentWithImages);
-                System.out.println("Saved blog post to local file: " + targetFile.toString());
-            } catch (Exception e) {
-                System.err.println("Failed to save local blog post file: " + e.getMessage());
-            }
+                htmlContent = htmlContent.trim();
 
-        } catch (Exception e) {
-            System.err.println("Error processing supervisor task: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Delegate to Image Agent
+                System.out.println("Delegating image generation to: " + imageAgentUrl);
+                Map<String, String> imageRequest = new HashMap<>();
+                imageRequest.put("topic", topic);
+                imageRequest.put("content", htmlContent);
+
+                String imageUrls = "";
+                try {
+                    imageUrls = restTemplate.postForObject(imageAgentUrl, imageRequest, String.class);
+                } catch (Exception e) {
+                    System.err.println("Failed to fetch images: " + e.getMessage());
+                }
+
+                String headerImage = "";
+                String inlineImage = "";
+                if (imageUrls != null && !imageUrls.isEmpty()) {
+                    String[] urls = imageUrls.split("\n");
+                    headerImage = urls.length > 0 ? urls[0] : "";
+                    inlineImage = urls.length > 1 ? urls[1] : "";
+                }
+
+                String contentWithImages = htmlContent;
+                if (!headerImage.isEmpty()) {
+                    String safeHeaderImage = headerImage.replace("&", "&amp;");
+                    contentWithImages = "<!-- wp:image --><figure class=\"wp-block-image\"><img src=\"" + safeHeaderImage + "\" alt=\"Header Image\"/></figure><!-- /wp:image -->\n" + contentWithImages;
+                }
+                if (!inlineImage.isEmpty()) {
+                    String safeInlineImage = inlineImage.replace("&", "&amp;");
+                    contentWithImages = contentWithImages + "\n<!-- wp:image --><figure class=\"wp-block-image\"><img src=\"" + safeInlineImage + "\" alt=\"Inline Image\"/></figure><!-- /wp:image -->";
+                }
+
+                // Upload to WordPress (Local draft)
+                System.out.println("Uploading draft to WordPress for topic: " + topic);
+                String result = wordPressTool.createDraftPost(new WordPressTool.DraftRequest(topic, contentWithImages));
+                System.out.println(result);
+
+                // Save to local file
+                // Sanitize filename to prevent path traversal
+                String safeBaseName = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
+                String filename = safeBaseName.replaceAll("\\s+", "-").toLowerCase() + ".html";
+                try {
+                    java.nio.file.Path baseDir = java.nio.file.Paths.get("output").toAbsolutePath().normalize();
+                    java.nio.file.Path targetFile = baseDir.resolve(filename).normalize();
+                    
+                    if (!targetFile.startsWith(baseDir)) {
+                        throw new SecurityException("Path traversal attempt detected!");
+                    }
+                    
+                    // Create output directory if it does not exist
+                    if (!java.nio.file.Files.exists(baseDir)) {
+                        java.nio.file.Files.createDirectories(baseDir);
+                    }
+                    
+                    java.nio.file.Files.writeString(targetFile, contentWithImages);
+                    System.out.println("Saved blog post to local file: " + targetFile.toString());
+                } catch (Exception e) {
+                    System.err.println("Failed to save local blog post file: " + e.getMessage());
+                }
+
+            } catch (Exception e) {
+                System.err.println("Error processing supervisor task: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
     }
 }

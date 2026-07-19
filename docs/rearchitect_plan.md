@@ -36,6 +36,14 @@ Below is the track of identified architecture and security issues. During planni
 * **Status**: 🔴 CLOSED (Resolved)
 * **Relevance**: Resolved by resolving hostnames and validating IP addresses against private/loopback ranges in `tls_scanner.py`.
 
+### [Issue-07] Ineffective Nightly Dependency Update Command
+* **Status**: 🔴 CLOSED (Resolved)
+* **Relevance**: Resolved by implementing a custom `update-dependencies.py` script that dynamically queries Maven Central for the latest stable versions of Spring Boot, Spring AI, and other libraries and edits `build.gradle` directly.
+
+### [Issue-08] Multi-Agent Blocking Calls & Sequential Security Scans
+* **Status**: 🔴 CLOSED (Resolved)
+* **Relevance**: Resolved by parallelizing security scan jobs in GitHub Actions and making the Supervisor Agent's RabbitMQ message listener asynchronous via `CompletableFuture.runAsync()`.
+
 ### [Issue-06] Structural Egress Isolation for Web Crawlers (Most Relevant Architectural Target)
 * **Status**: 🟢 ACTIVE (Prioritized)
 * **Relevance**: **Highly Relevant.** Even with JVM DNS cache pinning and Python-level IP checks, the crawler code runs in the same container space as the agent orchestrator. A malicious website returning malformed text or exploit payloads could compromise the agent runtime environment.

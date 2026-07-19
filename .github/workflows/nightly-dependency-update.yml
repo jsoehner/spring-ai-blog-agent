@@ -33,7 +33,7 @@ jobs:
 
       - name: Update dependencies
         run: |
-          ./gradlew dependencies --refresh-dependencies
+          python3 .github/scripts/update-dependencies.py
 
       - name: Build and Verify
         run: |

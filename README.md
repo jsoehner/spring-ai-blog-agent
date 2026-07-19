@@ -76,8 +76,8 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
 - **Dynamic File Generation:** Automatically saves HTML drafts to the `output/` directory with filenames matching the requested topic (e.g., `output/ai-code-tech-debt.html`). These files are automatically synced to your host machine when running via Docker.
 - **Local Application Logging:** Keeps a clean, overwritten `request-activity.log` tracing all agent interactions on every application start via a custom Logback configuration.
-- **Agent Security Guardrails:** Enforces strict execution boundaries utilizing an [Open Policy Agent (OPA) sidecar](INTEGRATION_README.md) and Spring AOP to prevent unauthorized file access, network calls, or dangerous command execution.
-- **Automated Workflows:** Includes generic GitHub Actions for nightly dependency updates and security scanning (SAST, Secrets, SCA) to maintain a secure and up-to-date repository.
+- **Automated Workflows:** Features parallelized GitHub Actions workflows for security scanning (Gitleaks, Semgrep, Trivy running concurrently to reduce latency) and nightly dependency updates (driven by a custom Python script that queries Maven Central metadata and writes updates to `build.gradle` automatically).
+- **High-Throughput Asynchronous Coordination:** The Supervisor Agent utilizes non-blocking `CompletableFuture` execution for message listening, preventing threads from blocking on slow external tasks (like image generation) and allowing concurrent task processing.
 
 ---
 
@@ -139,7 +139,7 @@ Once your `docker-compose.yml` is configured with your desired LLM endpoints and
 Because the system is decoupled, your script will return a success message instantly once the topic is queued. To watch the AI "think" in real-time as it gathers facts and drafts the HTML, simply tail the logs:
 
 ```bash
-docker logs -f spring-ai-project-researcher-agent-1
+docker compose logs -f researcher-agent
 ```
 
 ### 6. Autonomous Issue Agent (Moved)
@@ -173,6 +173,7 @@ To keep dependencies secure and up-to-date, we scan the codebase using the `com.
 ### Architecture Decision Records (ADRs)
 - **[ADR-0001: Security Hardening and Dependency Injection Refactoring](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0001-security-hardening-and-dependency-injection.md)** — Outlines the path traversal protections, SSRF mitigation, TLS option separation, ChatClient builder mutate adjustments, and Spring Dependency Injection configurations implemented to secure and clean the codebase.
 - **[ADR-0002: Mitigating DNS Rebinding SSRF and Aligning Project Rules](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0002-mitigating-dns-rebinding-ssrf-and-aligning-project-rules.md)** — Documents the resolutions for DNS Rebinding, SSRF in Python scripts, Docker image layer build sequence, and aligning prompt/filename patterns with the project rules.
+- **[ADR-0003: Workflow and Agent Coordination Optimization](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0003-workflow-and-agent-coordination-optimization.md)** — Explains the parallelization of security scans in GitHub Actions, dynamic dependency updates querying Maven Central, and converting Supervisor task processing to asynchronous CompletableFuture coordination.
 
 ### Agent Skills
 We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:
@@ -184,6 +185,7 @@ We maintain specialized agent skills inside the `.agents/skills/` directory. New
 
 Here are a few common issues and best practices to keep in mind when working with this project:
 
+- **Asynchronous Unit Tests & CompletableFuture:** When wrapping RabbitMQ listener methods or controller actions in asynchronous execution (`CompletableFuture.runAsync`), the main thread will return immediately. Ensure your JUnit tests call `.join()` on the returned Future before verifying assertions (e.g. checking file creation) to avoid race conditions and false successes.
 - **GitHub Actions & Node 24:** When a GitHub Action runner complains about Node 20 deprecation, simply injecting `setup-node` does not fix third-party actions. You MUST bump the major version of the affected actions (e.g., `actions/checkout@v7`, `peter-evans/create-pull-request@v8`) for native Node 24 support.
 - **Spring AI ChatModel Conflicts:** Do not include both `spring-ai-starter-model-ollama` and `spring-ai-starter-model-openai` dependencies without disabling auto-configuration for one of them (e.g., `spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration`). Otherwise, Spring will throw an `UnsatisfiedDependencyException` due to ambiguous `ChatModel` beans.
 - **Docker Volume Mapping for Logs:** When mapping a single log file (like `request-activity.log`) as a volume in `docker-compose.yml`, you **must** ensure the file exists on the host machine first. If it does not exist, Docker will automatically create it as a directory, which will cause Logback to crash on startup.
@@ -191,6 +193,10 @@ Here are a few common issues and best practices to keep in mind when working wit
   - When using the Spring AI OpenAI starter pointing directly to Ollama, ensure the base URL explicitly includes `/v1`.
   - When pointing to Open-WebUI, append `/api` to the base URL, or else it will hit the web frontend and result in a `405 Method Not Allowed` error.
 - **Spring AI `ChatClient.Builder`:** The `ChatClient.Builder` instances are mutable. Do NOT reuse the same builder instance to configure multiple clients by calling `.defaultSystem(...)`, as it will overwrite the configuration for all clients. Call `.build()` to create a base `ChatClient`, and then use `.mutate()` to branch off separate configurations.
+- **Docker Networking:** Avoid using hostnames like `open-webui` in your configuration unless they are explicitly resolvable in the Docker network. Prefer explicit IP addresses (e.g., `192.168.100.190`).
+- **Spring AI 2.0.0 Naming:** Starting with Spring AI 2.0.0, dependencies require the `-model-` segment (e.g., `spring-ai-starter-model-openai` instead of `spring-ai-starter-openai`).
+- **Search Tool Fallbacks:** When implementing web search tools for AI agents (like the Researcher Agent), prefer using open APIs (like the Wikipedia API) instead of scraping search engines (e.g., DuckDuckGo) as they aggressively block automated requests. Additionally, ensure the fallback `webcrawler.default.urls` contains a solid list of generic security-related URLs.
+- **Local File Output Naming:** When saving generated HTML blog posts locally, standardize the filename by using the topic string, replacing spaces with hyphens, and converting to lowercase (e.g., `topic.replaceAll("\\s+", "-").toLowerCase() + ".html"`).
 
 ---
 
