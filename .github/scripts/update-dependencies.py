@@ -36,14 +36,26 @@ def parse_version(v_str):
     return (digits, is_stable, suffix_parts)
 
 def get_latest_version(group, artifact, current_version):
+    # Validate group and artifact to prevent SSRF or directory traversal
+    if not re.match(r'^[a-zA-Z0-9.\-_]+$', group) or not re.match(r'^[a-zA-Z0-9.\-_]+$', artifact):
+        print(f"[-] Invalid characters in group/artifact: {group}:{artifact}")
+        return None
+
     group_path = group.replace('.', '/')
     url = f"https://repo1.maven.org/maven2/{group_path}/{artifact}/maven-metadata.xml"
+    
+    # Ensure the URL is strictly targeting Maven Central
+    if not url.startswith("https://repo1.maven.org/maven2/"):
+        print(f"[-] Blocked unsafe URL: {url}")
+        return None
+
     try:
+        # nosec B310: url is validated to start with https://repo1.maven.org/maven2/
         req = urllib.request.Request(
             url, 
             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
         )
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=10) as response:  # nosec
             xml_data = response.read()
         root = ET.fromstring(xml_data)
         
