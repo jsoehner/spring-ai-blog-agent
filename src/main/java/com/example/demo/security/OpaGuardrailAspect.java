@@ -51,7 +51,7 @@ public class OpaGuardrailAspect {
                     String normalizedPath = java.nio.file.Paths.get(path).toAbsolutePath().normalize().toString();
                     request.put("path", normalizedPath);
                 } catch (Exception e) {
-                    request.put("path", path);
+                    throw new SecurityException("Failed to normalize path: " + path);
                 }
                 
                 request.put("action", ("writeFile".equals(toolName) || "moveImages".equals(toolName)) ? "write" : "read");

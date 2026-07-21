@@ -72,7 +72,7 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **Asynchronous Decoupling:** Never drop a request. Send as many topics as you want; the agent works through them at its own pace.
 - **Curated Web Crawling:** Pre-configured to search the top industry sites for Mobile Security, Cryptography, AppSec, and AI Security.
 - **Autonomous Scheduling:** Uses Spring's `@Scheduled` annotation to run completely independently on a strict cron schedule (e.g., every Mon/Thu).
-- **Auto-Pull Requests:** The agent practically contributes to itself! It executes CLI commands to create its own Git branch, commits the generated `.html` files, and opens a GitHub Pull Request for your review.
+- **Security Hardening:** Implemented robust protections against Path Traversal (via OPA guardrails), SSRF (via DNS/IP range validation), and Command Injection (via option separators and strict input sanitization).
 - **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
 - **Dynamic File Generation:** Automatically saves HTML drafts to the `output/` directory with filenames matching the requested topic (e.g., `output/ai-code-tech-debt.html`). These files are automatically synced to your host machine when running via Docker.
 - **Local Application Logging:** Keeps a clean, overwritten `request-activity.log` tracing all agent interactions on every application start via a custom Logback configuration.

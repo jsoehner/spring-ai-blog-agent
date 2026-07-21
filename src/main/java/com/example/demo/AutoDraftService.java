@@ -51,8 +51,11 @@ public class AutoDraftService {
     }
 
     private void openPullRequest(String topic) throws Exception {
-        // Sanitize topic to prevent command injection
+        // Sanitize topic to prevent command injection and enforce length limits
         String safeTopic = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
+        if (safeTopic.length() > 100) {
+            throw new IllegalArgumentException("Topic is too long. Maximum length is 100 characters.");
+        }
         String baseName = safeTopic.replaceAll("\\s+", "-").toLowerCase();
         String fileName = "output/" + baseName + ".html";
         String wpFileName = "output/" + baseName + "_wp.html";

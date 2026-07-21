@@ -19,6 +19,8 @@
 - **Security**: Implemented DNS and IP address range checks in [WebCrawlerConfig.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/WebCrawlerConfig.java) to block loopback and private/local network crawling (SSRF prevention).
 - **Security**: Added input format validation to ticker parameters in [StockPriceTool.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/StockPriceTool.java).
 - **Security**: Sanitized topic names in [AutoDraftService.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/AutoDraftService.java) to prevent command injection during automatic pull request generation.
+- **Security**: Refined path normalization in `OpaGuardrailAspect.java` to fail-closed by throwing a `SecurityException` if a path cannot be normalized, preventing bypasses of the OPA guardrail.
+- **Security**: Enforced strict length limits on sanitized topics in `AutoDraftService.java` to prevent potential command-line argument overflow or buffer issues in downstream shell scripts.
 - **Architecture**: Fixed `ChatClient.Builder` pollution across agent controllers/services by using builder mutation via `.mutate()`.
 - **Architecture**: Refactored [ChatController.java](file:///Users/jsoehner/spring-ai-blog-agent/src/main/java/com/example/demo/ChatController.java) to use Spring dependency injection for tools, preventing `NullPointerException`s from unconfigured `@Value` fields.
 - **Deployment**: Updated `run-and-submit.sh` to check for local changes in the `src/` directory and intelligently build a local Docker image instead of unconditionally pulling from Docker Hub.
