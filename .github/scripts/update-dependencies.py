@@ -50,12 +50,12 @@ def get_latest_version(group, artifact, current_version):
         return None
 
     try:
-        # nosec B310: url is validated to start with https://repo1.maven.org/maven2/
+        # nosemgrep: urllib-ssrf-or-lfi
         req = urllib.request.Request(
             url, 
             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
         )
-        with urllib.request.urlopen(req, timeout=10) as response:  # nosec
+        with urllib.request.urlopen(req, timeout=10) as response:  # nosemgrep: urllib-ssrf-or-lfi
             xml_data = response.read()
         root = ET.fromstring(xml_data)
         
