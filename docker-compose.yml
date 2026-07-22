@@ -55,7 +55,7 @@ services:
     volumes:
       - ./config:/app/config
       - ./.git:/app/.git
-      - ./request-activity.log:/app/request-activity.log
+      - logging_data:/app/request-activity.log
       - ./output:/app/output
     read_only: true
     tmpfs:
@@ -94,7 +94,7 @@ services:
       start_period: 40s
     volumes:
       - ./config:/app/config
-      - ./request-activity.log:/app/request-activity.log
+      - logging_data:/app/request-activity.log
       - ./output:/app/output
     read_only: true
     tmpfs:
@@ -131,7 +131,7 @@ services:
       start_period: 40s
     volumes:
       - ./config:/app/config
-      - ./request-activity.log:/app/request-activity.log
+      - logging_data:/app/request-activity.log
       - ./output:/app/output
     read_only: true
     tmpfs:
@@ -174,3 +174,7 @@ services:
       - /tmp
     security_opt:
       - no-new-privileges:true
+
+volumes:
+  logging_data:
+    driver: local

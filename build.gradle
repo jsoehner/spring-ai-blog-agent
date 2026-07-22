@@ -27,7 +27,6 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.1'
 	implementation 'org.aspectj:aspectjweaver:1.9.25.1'
 	implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
-	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 	implementation 'org.jsoup:jsoup:1.22.2'
 	implementation 'com.drewnoakes:metadata-extractor:2.20.0'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
