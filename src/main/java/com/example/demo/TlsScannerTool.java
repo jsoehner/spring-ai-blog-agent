@@ -19,12 +19,19 @@ public class TlsScannerTool {
             command.add("python3");
             command.add("tls_scanner.py");
             command.add("--");
-            command.addAll(targets);
+            for (String target : targets) {
+                if (target != null && target.matches("^(http|https)://[\\w.-]+(:\\d+)?(/\\w*)?$")) {
+                    command.add(target);
+                } else {
+                    System.err.println("Skipping invalid target: " + target);
+                }
+            }
             
             // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(new java.io.File("."));
             Process process = pb.start();
+
             
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder output = new StringBuilder();

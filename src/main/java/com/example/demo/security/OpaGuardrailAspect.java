@@ -26,6 +26,7 @@ public class OpaGuardrailAspect {
         // Build generic OPA input (customize this mapping based on the specific policy needs)
         Map<String, Object> input = new HashMap<>();
         input.put("resource_type", "tool");
+        input.put("topic", request.getOrDefault("topic", "default_topic"));
         
         Map<String, Object> request = new HashMap<>();
         request.put("action", toolName);

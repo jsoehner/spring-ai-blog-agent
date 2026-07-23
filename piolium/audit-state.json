@@ -1,0 +1,57 @@
+{
+	"audits": [
+		{
+			"audit_id": "2026-07-23T22:09:31.996Z",
+			"mode": "balanced",
+			"started_at": "2026-07-23T22:09:31.996Z",
+			"completed_at": "2026-07-23T23:03:43.541Z",
+			"status": "failed",
+			"phases": {
+				"L1": {
+					"status": "failed",
+					"attempt": 6,
+					"max_attempts": 6,
+					"started_at": "2026-07-23T22:09:32.070Z",
+					"heartbeat_at": "2026-07-23T23:03:42.565Z",
+					"last_event_at": "2026-07-23T23:03:42.565Z",
+					"run_id": "l1-2026-07-23T22-09-31-996Z-a6-5823a1d0",
+					"error": "Failed after 5 retries: No API key found for llama-server=http://127.0.0.1:8080.\n\nUse /login to log into a provider via OAuth or API key. See:\n  C:\\Users\\jsoehner\\AppData\\Roaming\\npm\\node_modules\\@earendil-works\\pi-coding-agent\\docs\\providers.md\n  C:\\Users\\jsoehner\\AppData\\Roaming\\npm\\node_modules\\@earendil-works\\pi-coding-agent\\docs\\models.md",
+					"artifacts": [
+						"C:\\Users\\jsoehner\\spring-ai-blog-agent\\piolium\\tmp\\piolium\\runs\\l1-2026-07-23T22-09-31-996Z-a6-5823a1d0\\transcript.jsonl"
+					],
+					"last_error": "No API key found for llama-server=http://127.0.0.1:8080.\n\nUse /login to log into a provider via OAuth or API key. See:\n  C:\\Users\\jsoehner\\AppData\\Roaming\\npm\\node_modules\\@earendil-works\\pi-coding-agent\\docs\\providers.md\n  C:\\Users\\jsoehner\\AppData\\Roaming\\npm\\node_modules\\@earendil-works\\pi-coding-agent\\docs\\models.md",
+					"completed_at": "2026-07-23T23:03:43.537Z"
+				},
+				"L2": {
+					"status": "pending"
+				},
+				"L3": {
+					"status": "pending"
+				},
+				"L4": {
+					"status": "pending"
+				},
+				"L5": {
+					"status": "pending"
+				},
+				"L6": {
+					"status": "pending"
+				},
+				"L6b": {
+					"status": "pending"
+				},
+				"L6c": {
+					"status": "pending"
+				},
+				"L7": {
+					"status": "pending"
+				}
+			},
+			"agent_sdk": "pi",
+			"commit": "41d3c9aa6a4ad4bfb9a2a44cbc325b67fd76611d",
+			"branch": "main",
+			"repository": "jsoehner/spring-ai-blog-agent",
+			"history_available": true
+		}
+	]
+}

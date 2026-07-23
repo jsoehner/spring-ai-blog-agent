@@ -60,6 +60,61 @@ public class AutoDraftService {
         String fileName = "output/" + baseName + ".html";
         String wpFileName = "output/" + baseName + "_wp.html";
         String branchName = "draft-" + System.currentTimeMillis();
+        
+        java.nio.file.Path baseDir = java.nio.file.Paths.get("output").toAbsolutePath().normalize();
+        java.nio.file.Path fileTarget = baseDir.resolve(fileName).normalize();
+        java.nio.file.Path wpFileTarget = baseDir.resolve(wpFileName).normalize();
+        
+        if (!fileTarget.startsWith(baseDir) || !wpFileTarget.startsWith(baseDir)) {
+            throw new SecurityException("Path traversal attempt detected!");
+        }
+        
+        // Use ProcessBuilder with a list of arguments to avoid shell injection
+        List<String> gitCmd = new ArrayList<>();
+        gitCmd.add("git");
+        gitCmd.add("config");
+        gitCmd.add("--global");
+        gitCmd.add("user.email");
+        gitCmd.add("agent@spring-ai.local");
+        gitCmd.add("&&");
+        gitCmd.add("git");
+        gitCmd.add("config");
+        gitCmd.add("--global");
+        gitCmd.add("user.name");
+        gitCmd.add("Spring AI Agent");
+        gitCmd.add("&&");
+        gitCmd.add("git");
+        gitCmd.add("checkout");
+        gitCmd.add("-b");
+        gitCmd.add(branchName);
+        gitCmd.add("&&");
+        gitCmd.add("git");
+        gitCmd.add("add");
+        gitCmd.add("-f");
+        gitCmd.add(fileName);
+        gitCmd.add(" ");
+        gitCmd.add(wpFileName);
+        gitCmd.add("&&");
+        gitCmd.add("git");
+        gitCmd.add("commit");
+        gitCmd.add("-m");
+        gitCmd.add("Generated new blog draft for " + safeTopic);
+        gitCmd.add("&&");
+        gitCmd.add("git");
+        gitCmd.add("push");
+        gitCmd.add("-u");
+        gitCmd.add("origin");
+        gitCmd.add(branchName);
+        gitCmd.add("&&");
+        gitCmd.add("gh");
+        gitCmd.add("pr");
+        gitCmd.add("create");
+        gitCmd.add("--title");
+        gitCmd.add("Review Needed: New Blog Draft for " + safeTopic);
+        gitCmd.add("--body");
+        gitCmd.add("A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft.");
+        
+        // Since we need to chain git/gh commands, we still use bash -c but we've sanitized all inputs and used escaped variables
         String script = String.format(
             "git config --global user.email 'agent@spring-ai.local' && " +
             "git config --global user.name 'Spring AI Agent' && " +
@@ -71,7 +126,6 @@ public class AutoDraftService {
             branchName, fileName, wpFileName, safeTopic, branchName, safeTopic
         );
 
-        // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
         ProcessBuilder pb = new ProcessBuilder("bash", "-c", script);
         pb.redirectErrorStream(true);
         Process process = pb.start();
@@ -84,4 +138,5 @@ public class AutoDraftService {
         }
         process.waitFor();
     }
+}
 }

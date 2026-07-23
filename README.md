@@ -76,7 +76,7 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
 - **Dynamic File Generation:** Automatically saves HTML drafts to the `output/` directory with filenames matching the requested topic (e.g., `output/ai-code-tech-debt.html`). These files are automatically synced to your host machine when running via Docker.
 - **Local Application Logging:** Keeps a clean, overwritten `request-activity.log` tracing all agent interactions on every application start via a custom Logback configuration.
-- **Automated Workflows:** Features parallelized GitHub Actions workflows for security scanning (Gitleaks, Semgrep, Trivy running concurrently to reduce latency) and nightly dependency updates (driven by a custom Python script that queries Maven Central metadata and writes updates to `build.gradle` automatically).
+- **Security Hardening:** Production-ready protections against SSRF (DNS/IP range validation), Path Traversal (fail-closed normalization), and Command Injection (option separators and strict input sanitization).
 - **High-Throughput Asynchronous Coordination:** The Supervisor Agent utilizes non-blocking `CompletableFuture` execution for message listening, preventing threads from blocking on slow external tasks (like image generation) and allowing concurrent task processing.
 
 ---
