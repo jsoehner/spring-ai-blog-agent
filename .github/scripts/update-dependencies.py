@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import re
-import urllib.request
+import requests
 import xml.etree.ElementTree as ET
 import os
 
@@ -50,13 +50,13 @@ def get_latest_version(group, artifact, current_version):
         return None
 
     try:
-        # nosemgrep: urllib-ssrf-or-lfi
-        req = urllib.request.Request(
-            url, 
-            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        response = requests.get(
+            url,
+            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
+            timeout=10
         )
-        with urllib.request.urlopen(req, timeout=10) as response:  # nosemgrep: urllib-ssrf-or-lfi
-            xml_data = response.read()
+        response.raise_for_status()
+        xml_data = response.content
         root = ET.fromstring(xml_data)
         
         # Collect all versions

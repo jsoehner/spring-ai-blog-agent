@@ -69,74 +69,30 @@ public class AutoDraftService {
             throw new SecurityException("Path traversal attempt detected!");
         }
         
-        // Use ProcessBuilder with a list of arguments to avoid shell injection
-        List<String> gitCmd = new ArrayList<>();
-        gitCmd.add("git");
-        gitCmd.add("config");
-        gitCmd.add("--global");
-        gitCmd.add("user.email");
-        gitCmd.add("agent@spring-ai.local");
-        gitCmd.add("&&");
-        gitCmd.add("git");
-        gitCmd.add("config");
-        gitCmd.add("--global");
-        gitCmd.add("user.name");
-        gitCmd.add("Spring AI Agent");
-        gitCmd.add("&&");
-        gitCmd.add("git");
-        gitCmd.add("checkout");
-        gitCmd.add("-b");
-        gitCmd.add(branchName);
-        gitCmd.add("&&");
-        gitCmd.add("git");
-        gitCmd.add("add");
-        gitCmd.add("-f");
-        gitCmd.add(fileName);
-        gitCmd.add(" ");
-        gitCmd.add(wpFileName);
-        gitCmd.add("&&");
-        gitCmd.add("git");
-        gitCmd.add("commit");
-        gitCmd.add("-m");
-        gitCmd.add("Generated new blog draft for " + safeTopic);
-        gitCmd.add("&&");
-        gitCmd.add("git");
-        gitCmd.add("push");
-        gitCmd.add("-u");
-        gitCmd.add("origin");
-        gitCmd.add(branchName);
-        gitCmd.add("&&");
-        gitCmd.add("gh");
-        gitCmd.add("pr");
-        gitCmd.add("create");
-        gitCmd.add("--title");
-        gitCmd.add("Review Needed: New Blog Draft for " + safeTopic);
-        gitCmd.add("--body");
-        gitCmd.add("A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft.");
         
-        // Since we need to chain git/gh commands, we still use bash -c but we've sanitized all inputs and used escaped variables
-        String script = String.format(
-            "git config --global user.email 'agent@spring-ai.local' && " +
-            "git config --global user.name 'Spring AI Agent' && " +
-            "git checkout -b %s && " +
-            "git add -f %s %s && " +
-            "git commit -m 'Generated new blog draft for %s' && " +
-            "git push -u origin %s && " +
-            "gh pr create --title 'Review Needed: New Blog Draft for %s' --body 'A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft.'",
-            branchName, fileName, wpFileName, safeTopic, branchName, safeTopic
-        );
+        runCommand(List.of("git", "config", "--global", "user.email", "agent@spring-ai.local"));
+        runCommand(List.of("git", "config", "--global", "user.name", "Spring AI Agent"));
+        runCommand(List.of("git", "checkout", "-b", branchName));
+        runCommand(List.of("git", "add", "-f", fileName, wpFileName));
+        runCommand(List.of("git", "commit", "-m", "Generated new blog draft for " + safeTopic));
+        runCommand(List.of("git", "push", "-u", "origin", branchName));
+        runCommand(List.of("gh", "pr", "create", "--title", "Review Needed: New Blog Draft for " + safeTopic, "--body", "A new draft has been automatically generated and is ready for review. Please merge this PR to approve the draft."));
+    }
 
-        ProcessBuilder pb = new ProcessBuilder("bash", "-c", script);
+    private void runCommand(List<String> cmd) throws Exception {
+        ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
         Process process = pb.start();
-        
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println("GitHub PR Output: " + line);
             }
         }
-        process.waitFor();
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            System.err.println("Command failed with exit code " + exitCode + ": " + String.join(" ", cmd));
+        }
     }
 }
 }
