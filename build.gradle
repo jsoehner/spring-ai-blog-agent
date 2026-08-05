@@ -9,8 +9,9 @@ buildscript {
 
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.1'
+	id 'org.springframework.boot' version '4.1.0'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.github.ben-manes.versions' version '0.54.0'
 }
 
 group = 'com.example'
@@ -36,8 +37,8 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'org.aspectj:aspectjweaver:1.9.25.1'
 	implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
-	implementation 'org.jsoup:jsoup:1.22.2'
-	implementation 'com.drewnoakes:metadata-extractor:2.20.0'
+	implementation 'org.jsoup:jsoup:1.23.1'
+	implementation 'com.drewnoakes:metadata-extractor:2.21.0'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
@@ -56,14 +57,12 @@ tasks.named('test') {
 }
 
 // Use the plugin from the buildscript classpath
-apply plugin: 'org.owasp.dependency-check'
+apply plugin: 'org.owasp.dependencycheck'
 
 dependencyCheck {
 	autoUpdate = false
-	nvdData_path = "build/nvd-data"
-	reports {
-		html.enabled = true
-		html.outputDirectory = 'build/reports/dependency-check'
-	}
+	data.directory = "build/nvd-data"
+	outputDirectory = "build/reports/dependency-check"
+	format = "HTML"
 	suppressionFile = 'config/dependency-check-suppression.xml'
 }

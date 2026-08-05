@@ -23,15 +23,14 @@ public class OpaGuardrailAspect {
         String toolName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
 
-        // Build generic OPA input (customize this mapping based on the specific policy needs)
-        Map<String, Object> input = new HashMap<>();
-        input.put("resource_type", "tool");
-        input.put("topic", request.getOrDefault("topic", "default_topic"));
-        
         Map<String, Object> request = new HashMap<>();
         request.put("action", toolName);
         request.put("tool_name", toolName);
         request.put("arguments", args);
+
+        Map<String, Object> input = new HashMap<>();
+        input.put("resource_type", "tool");
+        input.put("topic", request.getOrDefault("topic", "default_topic"));
         input.put("request", request);
 
         // Specific handling for file writes based on agent_files.rego

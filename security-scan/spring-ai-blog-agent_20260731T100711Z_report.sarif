@@ -1,0 +1,868 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Agentic SAST",
+          "version": "1.1.0",
+          "rules": [
+            {
+              "id": "CWE-829: Inclusion of Functionality from Untrusted Control Sphere",
+              "name": "CWE-829: Inclusion of Functionality from Untrusted Control Sphere",
+              "shortDescription": {
+                "text": "Inclusion of Functionality from Untrusted Control Sphere"
+              }
+            },
+            {
+              "id": "CWE-287: Improper Authentication",
+              "name": "CWE-287: Improper Authentication",
+              "shortDescription": {
+                "text": "Improper Authentication"
+              }
+            },
+            {
+              "id": "CWE-78: Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+              "name": "CWE-78: Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+              "shortDescription": {
+                "text": "Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)"
+              }
+            },
+            {
+              "id": "CWE-285: Improper Authorization",
+              "name": "CWE-285: Improper Authorization",
+              "shortDescription": {
+                "text": "Improper Authorization"
+              }
+            },
+            {
+              "id": "CWE-73: External Control of File Name or Path",
+              "name": "CWE-73: External Control of File Name or Path",
+              "shortDescription": {
+                "text": "External Control of File Name or Path"
+              }
+            },
+            {
+              "id": "CWE-494",
+              "name": "CWE-494"
+            },
+            {
+              "id": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+              "name": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+              "shortDescription": {
+                "text": "Exposure of Sensitive Information to an Unauthorized Actor"
+              }
+            },
+            {
+              "id": "CWE-20: Improper Input Validation",
+              "name": "CWE-20: Improper Input Validation",
+              "shortDescription": {
+                "text": "Improper Input Validation"
+              }
+            },
+            {
+              "id": "CWE-74: Improper Neutralization of Special Elements in Output (Injection)",
+              "name": "CWE-74: Improper Neutralization of Special Elements in Output (Injection)",
+              "shortDescription": {
+                "text": "Improper Neutralization of Special Elements in Output (Injection)"
+              }
+            },
+            {
+              "id": "CWE-1236: Improper Neutralization of Formula Elements in a CSV File",
+              "name": "CWE-1236: Improper Neutralization of Formula Elements in a CSV File",
+              "shortDescription": {
+                "text": "Improper Neutralization of Formula Elements in a CSV File"
+              }
+            },
+            {
+              "id": "CWE-209: Generation of Error Message Containing Sensitive Information",
+              "name": "CWE-209: Generation of Error Message Containing Sensitive Information",
+              "shortDescription": {
+                "text": "Generation of Error Message Containing Sensitive Information"
+              }
+            }
+          ],
+          "supportedTaxonomies": [
+            {
+              "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+            }
+          ]
+        }
+      },
+      "taxonomies": [
+        {
+          "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3",
+          "name": "CWE",
+          "organization": "MITRE",
+          "shortDescription": {
+            "text": "The MITRE Common Weakness Enumeration"
+          },
+          "informationUri": "https://cwe.mitre.org/",
+          "taxa": [
+            {
+              "id": "CWE-20",
+              "helpUri": "https://cwe.mitre.org/data/definitions/20.html",
+              "name": "Improper Input Validation",
+              "shortDescription": {
+                "text": "Improper Input Validation"
+              }
+            },
+            {
+              "id": "CWE-73",
+              "helpUri": "https://cwe.mitre.org/data/definitions/73.html",
+              "name": "External Control of File Name or Path",
+              "shortDescription": {
+                "text": "External Control of File Name or Path"
+              }
+            },
+            {
+              "id": "CWE-74",
+              "helpUri": "https://cwe.mitre.org/data/definitions/74.html",
+              "name": "Improper Neutralization of Special Elements in Output (Injection)",
+              "shortDescription": {
+                "text": "Improper Neutralization of Special Elements in Output (Injection)"
+              }
+            },
+            {
+              "id": "CWE-78",
+              "helpUri": "https://cwe.mitre.org/data/definitions/78.html",
+              "name": "Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+              "shortDescription": {
+                "text": "Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)"
+              }
+            },
+            {
+              "id": "CWE-200",
+              "helpUri": "https://cwe.mitre.org/data/definitions/200.html",
+              "name": "Exposure of Sensitive Information to an Unauthorized Actor",
+              "shortDescription": {
+                "text": "Exposure of Sensitive Information to an Unauthorized Actor"
+              }
+            },
+            {
+              "id": "CWE-209",
+              "helpUri": "https://cwe.mitre.org/data/definitions/209.html",
+              "name": "Generation of Error Message Containing Sensitive Information",
+              "shortDescription": {
+                "text": "Generation of Error Message Containing Sensitive Information"
+              }
+            },
+            {
+              "id": "CWE-285",
+              "helpUri": "https://cwe.mitre.org/data/definitions/285.html",
+              "name": "Improper Authorization",
+              "shortDescription": {
+                "text": "Improper Authorization"
+              }
+            },
+            {
+              "id": "CWE-287",
+              "helpUri": "https://cwe.mitre.org/data/definitions/287.html",
+              "name": "Improper Authentication",
+              "shortDescription": {
+                "text": "Improper Authentication"
+              }
+            },
+            {
+              "id": "CWE-494",
+              "helpUri": "https://cwe.mitre.org/data/definitions/494.html"
+            },
+            {
+              "id": "CWE-829",
+              "helpUri": "https://cwe.mitre.org/data/definitions/829.html",
+              "name": "Inclusion of Functionality from Untrusted Control Sphere",
+              "shortDescription": {
+                "text": "Inclusion of Functionality from Untrusted Control Sphere"
+              }
+            },
+            {
+              "id": "CWE-1236",
+              "helpUri": "https://cwe.mitre.org/data/definitions/1236.html",
+              "name": "Improper Neutralization of Formula Elements in a CSV File",
+              "shortDescription": {
+                "text": "Improper Neutralization of Formula Elements in a CSV File"
+              }
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "applicationId": "spring-ai-blog-agent",
+        "scanDegraded": false,
+        "unrankedFallback": false
+      },
+      "results": [
+        {
+          "ruleId": "CWE-829: Inclusion of Functionality from Untrusted Control Sphere",
+          "level": "error",
+          "message": {
+            "text": "Automated workflow dispatch triggers high-privilege workflow on untrusted PR code  [CVSS 10.0: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/security-scan.yml"
+                },
+                "region": {
+                  "startLine": 175
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "10.0",
+            "cvssRating": "Critical",
+            "category": "CWE-829: Inclusion of Functionality from Untrusted Control Sphere",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            "cwe": "CWE-829 - Inclusion of Functionality from Untrusted Control Sphere",
+            "cweId": "CWE-829",
+            "cweName": "Inclusion of Functionality from Untrusted Control Sphere",
+            "cvssScore": 10.0,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe `reporting` job in `security-scan.yml` is triggered on `pull_request` events and uses `github.rest.actions.createWorkflowDispatch` to trigger the `nightly-dependency-update.yml` workflow. The `ref` parameter for this dispatch is set to `context.ref || 'main'`. In a `pull_request` event, `context.ref` refers to the merge ref of the PR (e.g., `refs/pull/X/merge`), which contains the unvetted code from the attacker's branch. The target workflow, `nightly-dependency-update.yml`, has high privileges (`contents: write`, `pull-requests: write`) and executes scripts from the repository (e.g., `.github/scripts/update-dependencies.py`). An attacker can include a malicious script in their PR and trigger its execution by intentionally causing a security scan failure.\n\n#### Impact\nAn attacker can achieve Remote Code Execution (RCE) in the context of a highly privileged workflow. This allows them to steal repository secrets (like `PERSONAL_ACCESS_TOKEN`) or inject malicious code into the main branch, compromising the software supply chain.\n\n#### Exploit scenario\nAn attacker submits a PR containing a modified `update-dependencies.py` that exfiltrates the `PR_TOKEN` environment variable. The attacker also modifies a file to ensure the `semgrep` job fails. When the `security-scan` workflow runs, the `reporting` job detects the failure and triggers the `nightly-dependency-update` workflow on the PR's merge ref, executing the malicious script with write access.\n\n#### Preconditions\n- Attacker can submit a Pull Request to the repository\n- The attacker modifies a script or configuration file used by the `nightly-dependency-update.yml` workflow\n\n```\nawait github.rest.actions.createWorkflowDispatch({\n  owner,\n  repo,\n  workflow_id: 'nightly-dependency-update.yml',\n  ref: context.ref || 'main'\n});\n```\n\n#### How to fix\nEnsure that `workflow_dispatch` is only triggered using a trusted, immutable reference (e.g., 'main') and never uses `context.ref` when the triggering workflow is running in a `pull_request` context.\n\n**Exploitability:** Pre-auth (via PR). An attacker can trigger a high-privilege workflow using unvetted code from their own branch, leading to RCE in the CI/CD environment with repository write access.\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 (no reason given)\n\nThe scanner has correctly identified a highly critical logic flaw in the GitHub Actions configuration. \n\nIn `.github/workflows/security-scan.yml`, the `reporting` job is configured to run even if previous security scanning jobs fail (`if: always()`). When a `pull_request` event triggers this workflow, the `context.ref` refers to the PR's merge ref (e.g., `refs/pull/X/merge`), which contains the unvetted code from the attacker's branch merged into the target branch.\n\nThe `reporting` job executes a `workflow_dispatch` call to `nightly-dependency-update.yml`, explicitly passing `ref: context.ref || 'main'`. Because an attacker can submit a PR that intentionally fails a security scan (e.g., by introducing a detectable secret or malformed code), they can force the execution of the `nightly-dependency-update.yml` workflow using their unvetted merge ref. \n\nThe target workflow, `nightly-dependency-update.yml`, has high privileges (`contents: write`, `pull-requests: write`) and executes `.github/scripts/update-dependencies.py`. Since this script is checked out from the provided `ref` (the attacker's code), the attacker can execute arbitrary Python code with the permissions of the nightly workflow, leading to full repository compromise or secret exfiltration (e.g., stealing `PERSONAL_ACCESS_TOKEN`)."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-829"
+            }
+          ],
+          "rank": 100.0
+        },
+        {
+          "ruleId": "CWE-287: Improper Authentication",
+          "level": "error",
+          "message": {
+            "text": "Default RabbitMQ credentials allow message injection  [CVSS 9.8: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml"
+                },
+                "region": {
+                  "startLine": 8
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "9.8",
+            "cvssRating": "Critical",
+            "category": "CWE-287: Improper Authentication",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "cwe": "CWE-287 - Improper Authentication",
+            "cweId": "CWE-287",
+            "cweName": "Improper Authentication",
+            "cvssScore": 9.8,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe RabbitMQ service is configured with default `guest/guest` credentials. The `researcher-agent`, which is an untrusted entry point due to its internet access, is part of the same Docker network and uses this broker. An attacker who compromises the researcher agent can use these known credentials to publish arbitrary messages to the queues used by the Supervisor Agent.\n\n#### Impact\nAn attacker can inject malicious messages into the RabbitMQ bus, potentially triggering unauthorized actions or bypassing business logic in the Supervisor Agent. This could lead to unauthorized content generation or deployment of malicious blog drafts.\n\n#### Exploit scenario\nAn attacker compromises the `researcher-agent` container via its internet-facing interface. They then use the default `guest/guest` credentials to connect to the RabbitMQ service and inject a crafted message into the task queue, forcing the `supervisor-agent` to execute an unauthorized workflow.\n\n#### Preconditions\n- Attacker compromises the researcher-agent container\n- The researcher-agent is on the same Docker network as RabbitMQ\n\n```\nRABBITMQ_DEFAULT_USER=guest\nRABBITMQ_DEFAULT_PASS=guest\n```\n\n#### How to fix\nReplace the default `RABBITMQ_DEFAULT_USER` and `RABBITMQ_DEFAULT_PASS` with strong, unique credentials that are not shared across all services.\n\n**Exploitability:** Achievable if the Researcher Agent is compromised. Default credentials allow any service on the internal Docker network to inject arbitrary tasks into the Supervisor Agent.\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The RabbitMQ service uses default `guest/guest` credentials and is accessible from the `researcher-agent` container on the same Docker network, allowing an attacker to inject arbitrary messages into the `supervisor-tasks` queue.\n\nThe scanner alleges that the RabbitMQ service in `docker-compose.yml` is using default `guest/guest` credentials, which could allow an attacker who compromises the `researcher-agent` to inject messages into queues used by the `supervisor-agent`.\n\n**Analysis:**\n1.  **Credentials Verification**: In `docker-compose.yml`, lines 8 and 9 confirm:\n    ```yaml\n    RABBITMQ_DEFAULT_USER=guest\n    RABBITMQ_DEFAULT_PASS=guest\n    ```\n2.  **Network Exposure**: The `researcher-agent` (lines 67-104) is part of the same Docker network as RabbitMQ and has access to it via the `rabbitmq` service name.\n3.  **Data Flow / Vulnerability Path**:\n    *   The `ResearcherController` (lines 58-116) listens to a queue named `research-tasks`. After processing, it sends data to the `supervisor-tasks` queue using `rabbitTemplate.convertAndSend(\"supervisor-tasks\", jsonPayload);` (line 110).\n    *   The `BlogAgentController` (lines 73-163) listens to the `supervisor-tasks` queue via `@RabbitListener(queuesToDeclare = @Queue(\"supervisor-tasks\"))`. It processes the payload, which contains a `topic` and `facts`.\n    *   Importantly, the `BlogAgentController`'s `processSupervisorTask` method (line 74) is an entry point triggered by messages in that queue. An attacker who can connect to RabbitMQ with `guest/guest` credentials can publish arbitrary JSON payloads to the `supervisor-tasks` queue.\n    *   The code in `BlogAgentController.processSupervisorTask` takes the `facts` string from the payload and uses it directly in a prompt to an LLM (line 85): `user(\"Here are the gathered facts:\\n\" + facts + ...)`. This allows for **Prompt Injection**.\n    *   Furthermore, the contents of this message eventually end up in a file on the host's filesystem via `java.nio.file.Files.writeString(targetFile, contentWithImages);` (line 152). While there is path traversal protection (lines 137-145), an attacker can still control the *content* of the files written to the `output` directory.\n    *   The most direct impact described by the finding is \"message injection\": injecting a crafted message into `supervisor-tasks` to force unauthorized workflows or data manipulation \u2026"
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-287"
+            }
+          ],
+          "rank": 98.0
+        },
+        {
+          "ruleId": "CWE-78: Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+          "level": "error",
+          "message": {
+            "text": "Command injection bypass via delimiter manipulation  [CVSS 9.8: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "security-policies/opa-guardrails/policies/agent_commands.rego"
+                },
+                "region": {
+                  "startLine": 10
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "9.8",
+            "cvssRating": "Critical",
+            "category": "CWE-78: Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "cwe": "CWE-78 - Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+            "cweId": "CWE-78",
+            "cweName": "Improper Neutralization of Special Elements used in an OS Command (OS Command Injection)",
+            "cvssScore": 9.8,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe policy attempts to prevent forbidden command execution by splitting the input command string only by spaces (`split(command, \" \")`) and checking if any resulting part matches a forbidden command or ends with a path-based version of it. An attacker can bypass this filter by using shell metachartains like ';' or '|' to chain a forbidden command to another command without using any spaces (e.g., 'ls;rm'). In this case, the split produces a single part ['ls;rm'], which fails both the equality check (`parts[_] == forbidden_cmd`) and the suffix check (`endswith(parts[_], \"/rm\")`).\n\n#### Impact\nAn attacker can execute arbitrary forbidden commands (e.g., 'rm', 'nc') with the privileges of the Agent process, leading to full system compromise and unauthorized data access.\n\n#### Exploit scenario\nAn attacker provides the command string 'ls;rm' through an untrusted input source (like a web search result processed by the Researcher Agent). The OPA policy evaluates this as a single part that does not match any forbidden command in the configuration, allowing the shell to execute both 'ls' and 'rm'.\n\n#### Preconditions\n- Attacker can influence the command string sent to the OPA evaluator (e.g., via the Researcher Agent processing external web content)\n\n```\nparts := split(command, \" \")\n    forbidden_cmd := forbidden_commands[_]\n    \n    # Check if the base command or any piped command is forbidden\n    parts[_] == forbidden_cmd\n```\n\n#### How to fix\nAvoid using string splitting for security boundaries; instead, use a strict allow-list of permitted commands and arguments, or implement a parser that recognizes all shell metacharacters as delimiters.\n\n**Exploitability:** Direct command injection possible if an attacker can submit commands to the OPA engine, bypassing the space-based delimiter check using shell metacharacters.\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The OPA policy relies on `split(command, \" \")`, which can be bypassed by using shell metacharacters like `;`, `|`, or `&` to chain forbidden commands without spaces.\n\nThe scanner identifies a potential command injection bypass in `security-policies/opa-guardrails/policies/agent_commands.rego`.\n\n**Analysis of the OPA Policy:**\nThe policy aims to prevent forbidden commands from being executed by splitting the command string by spaces (`split(command, \" \")`) and then checking if any part is equal to a forbidden command or ends with `/` + `forbidden_cmd`. \n\nAs stated in the finding:\n1. If an attacker provides a command like `ls;rm`, the `split(command, \" \")` function will produce a single element in the list: `['ls;rm']`.\n2. This string `ls;rm` is neither equal to a forbidden command (e.g., `rm`) nor does it end with `/rm`.\n3. Consequently, the `deny` rules are not triggered, and the command execution is allowed by the OPA policy.\n\n**Impact:**\nIf an downstream component (like a shell-invoking agent) executes this string using a shell (e.g., `subprocess.run(cmd, shell=True)` or even just because the input was intended for a shell), the semicolon `;` acts as a command separator in most shells. This allows the execution of arbitrary commands that were specifically blocked by the policy list.\n\n**Checking for Mitigations:**\nThe provided code snippet is an OPA policy (Rego). Rego itself doesn't execute the command; it only provides the decision. The vulnerability exists because the *logic* used to detect forbidden commands is flawed and bypassable via shell metacharacters that don't involve spaces. I have checked `tls_scanner.py` (the identified entry point), which uses `subprocess.run(cmd, ...)` where `cmd` is a list of arguments (`[\"openssl\", ...]`). In Python, when `shell=False` (the default), `subprocess.run` does not invoke a shell and therefore does not interpret `;`, `|`, or `&`. \n\n**However**, the finding refers to an \"Agent\" pattern (e.g., \"Researcher Agent\") processing external content. If such an agent exists in the architectu\u2026"
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-78"
+            }
+          ],
+          "rank": 98.0
+        },
+        {
+          "ruleId": "CWE-285: Improper Authorization",
+          "level": "error",
+          "message": {
+            "text": "Security guardrail bypass via incomplete denylist  [CVSS 9.8: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "security-policies/policy/rules/guardrails.rego"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "9.8",
+            "cvssRating": "Critical",
+            "category": "CWE-285: Improper Authorization",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "cwe": "CWE-285 - Improper Authorization",
+            "cweId": "CWE-285",
+            "cweName": "Improper Authorization",
+            "cvssScore": 9.8,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe security policy in `guardrails.rego` uses a denylist approach, specifically checking if the attacker-controlled `input.request.type` is exactly equal to the string 'unsafe_op'. Because it does not use an allowlist of permitted operations, any other value provided in the `type` field (e.g., via the Supervisor Agent REST API) will bypass this specific security check. Furthermore, providing a non-string type like an array containing the forbidden string (e.g., `['unsafe_op']`) also causes the equality check to fail, resulting in a bypass.\n\n#### Impact\nAn attacker can bypass the security policy by providing an operation type other than 'unsafe_op'. This allows unauthorized or malicious operations to be executed by the Supervisor Agent, potentially leading to unauthorized system actions.\n\n#### Exploit scenario\nAn attacker sends a request to the Supervisor Agent REST API with the payload `{\"request\": {\"type\": \"malicious_operation\"}}`. The OPA policy evaluates the equality `input.request.type == \"unsafe_op\"` as false, no deny message is generated in `main.rego`, and the unauthorized operation is permitted to proceed.\n\n#### Preconditions\n- Attacker can send requests to the Supervisor Agent REST API\n- The system relies on this specific Rego policy to prevent unauthorized operations\n\n```\ninput.request.type == \"unsafe_op\"\n```\n\n#### How to fix\nReplace the denylist approach in `security-policies/policy/rules/guardrails.rego:5` with an allowlist of authorized operation types. Define a set of permitted strings and deny any input that does not belong to that set.\n\n**Exploitability:** Auth bypass/Logic flaw. The denylist approach allows any operation string other than 'unsafe_op' (or an array containing it) to pass the security check.\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 9/10) \u2014 The Rego equality check is susceptible to both value-based denylist incompleteness and a highly effective type-confusion exploit using arrays.\n\nThe scanner correctly identifies a logic flaw in the Rego policy definition within `security-policies/policy/rules/guardrails.rego`. \n\nIn Rego, the equality operator (`==`) is type-sensitive. The policy defines a `deny` rule that triggers only when `input.request.type` is exactly equal to the string `\"unsafe_op\"`. This implementation suffers from two distinct vulnerabilities:\n\n1.  **Type Confusion Bypass (Technical Bypass):** An attacker can bypass the specific check for `\"unsafe_op\"` by providing the value as an array containing the string, such as `[\"unsafe_op\"]`. In Rego, `[\"unsafe_op\"] == \"unsafe_op\"` evaluates to `false`, meaning the `deny` rule will not trigger, and the ostensibly \"unsafe\" operation will proceed.\n2.  **Incomplete Denylist (Design Flaw):** The policy relies on a denylist of specific forbidden operations rather than an allowlist of permitted ones. This means any value other than `\"unsafe_op\"`\u2014including potentially sensitive or unauthorized operations like `\"delete_all\"` or `\"admin_access\"`\u2014will pass this specific security check, assuming no other `deny` rules exist in the policy bundle to catch them. \n\nSince the code's purpose (as indicated by the package name and message) is to serve as a security guardrail for an agent's operations, the ability to bypass checks for known unsafe types or bypass the entire mechanism via type manipulation represents a real security risk in any system relying on this OPA policy for authorization."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-285"
+            }
+          ],
+          "rank": 98.0
+        },
+        {
+          "ruleId": "CWE-73: External Control of File Name or Path",
+          "level": "error",
+          "message": {
+            "text": "Arbitrary File Write via CSV Export Argument  [CVSS 9.8: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "tls_scanner.py"
+                },
+                "region": {
+                  "startLine": 123
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "9.8",
+            "cvssRating": "Critical",
+            "category": "CWE-73: External Control of File Name or Path",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "cwe": "CWE-73 - External Control of File Name or Path",
+            "cweId": "CWE-73",
+            "cweName": "External Control of File Name or Path",
+            "cvssScore": 9.8,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe script's main entry point accepts a '--csv' argument which is used directly as a filename in the `open()` function with write mode ('w'). There is no validation to ensure that the provided path is restricted to a safe directory or that it does not contain directory traversal sequences (e.g., '../'). Since the `main` function is identified as an untrusted entry point, an attacker can specify any path on the filesystem that the executing user has permission to write to.\n\n#### Impact\nAn attacker can overwrite arbitrary files on the host filesystem by controlling the '--csv' argument. This can lead to Remote Code Execution (RCE) if sensitive files like web shells, configuration files, or authorized_keys are overwritten.\n\n#### Exploit scenario\nAn attacker provides '--csv /var/www/html/shell.php --targets \"<?php system($_GET[cmd]); ?>\"' as arguments to the script. The script writes a CSV containing the malicious PHP payload into the web root, creating a functional web shell.\n\n#### Preconditions\n- Attacker can control command-line arguments passed to the `main` function (e.g., via a wrapper service or CI/CD configuration)\n\n```\nwith open(args.csv, \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"Start_URL\", \"Final_URL\", \"PQC\", \"Issuer\", \"Protocol\", \"Group\", \"Cipher\"])\n    writer.writeheader()\n    writer.writerows(results)\n```\n\n#### How to fix\nImplement strict path validation for the `--csv` argument. Ensure the resolved absolute path resides within a predefined, restricted directory and reject any input containing directory traversal components or absolute paths to sensitive system directories.\n\n**Exploitability:** Arbitrary file write via path traversal in the '--csv' argument, allowing an attacker to overwrite sensitive local files if they can influence execution arguments.\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 (no reason given)\n\nThe scanner correctly identifies a vulnerability where the `--csv` argument in `tls_scanner.py` is used directly as a filename in a write operation without any path validation or sanitization. If an attacker can influence the command-line arguments passed to this script (e.g., through a wrapper service, CI/CD pipeline, or a web interface that invokes the script), they can perform an arbitrary file write. By combining this with the `--targets` argument (or by providing malicious input via a target file), which is also written into the CSV, the attacker can write arbitrary content to any location on the filesystem that the executing user has permission to access. This can lead to Remote Code Execution (RCE) if an attacker can overwrite a web-accessible file (like a `.php` or `.jsp` file in a web root) with a malicious payload.\n\nThe precondition defined in the finding\u2014that the caller is an external/untrusted entry point (e.g., a wrapper service)\u2014is aligned with the \"Out of Scope\" exception for boundary-crossing inputs. No validation exists in `tls_scanner.py` to prevent directory traversal or path manipulation via the `--csv` flag."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-73"
+            }
+          ],
+          "rank": 98.0
+        },
+        {
+          "ruleId": "CWE-494",
+          "level": "error",
+          "message": {
+            "text": "Unverified binary download from external URL  [CVSS 9.0: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "security-policies/.github/workflows/opa-test.yml"
+                },
+                "region": {
+                  "startLine": 19
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "9.0",
+            "cvssRating": "Critical",
+            "category": "CWE-494",
+            "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            "cwe": "CWE-494",
+            "cweId": "CWE-494",
+            "cvssScore": 9.0,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe workflow downloads a binary from an external URL (`openpolicyagent.org`) using `curl` but fails to verify its integrity via a cryptographic checksum. If the remote source or the download path is compromised, the runner will execute a malicious payload with the permissions of the GitHub Actions environment.\n\n#### Impact\nAn attacker compromising the OPA distribution server can execute arbitrary code in the CI/CD pipeline. This leads to the theft of repository secrets (e.g., GITHUB_TOKEN) and potential supply chain poisoning of the project.\n\n#### Exploit scenario\nAn attacker replaces the OPA binary on the distribution server with a script that exfiltrates the `GITHUB_TOKEN` to an external server. When the workflow triggers on a push or PR, `curl` downloads the malicious script and the subsequent execution of `./opa` runs the attacker's code.\n\n#### Preconditions\n- Attacker must be able to compromise the OPA download infrastructure or intercept the download via a Man-in-the-Middle attack (if TLS is bypassed/compromised)\n\n```\ncurl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64\nchmod 755 opa\n```\n\n#### How to fix\nVerify the integrity of the downloaded binary by checking its SHA-256 hash against a known good value immediately after the `curl` command.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 (no reason given)\n\nThe scanner correctly identifies that the GitHub Actions workflow downloads an external binary from `openpolicyagent.org` using `curl` without verifying its integrity (e.g., via a SHA-256 checksum). This creates a supply chain vulnerability: if the remote server or the TLS connection is compromised, the runner will execute arbitrary code provided by the attacker. While the use of HTTPS mitigates Man-in-the-Middle attacks, it does not protect against a compromise of the OPA distribution infrastructure itself. The impact includes potential exposure of `GITHUB_TOKEN` and other repository secrets or the ability to inject malicious logic into subsequent CI steps/artifacts."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-494"
+            }
+          ],
+          "rank": 90.0
+        },
+        {
+          "ruleId": "CWE-494",
+          "level": "error",
+          "message": {
+            "text": "Unverified OPA binary download via curl  [CVSS 10.0: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "security-policies/.github/workflows/test.yml"
+                },
+                "region": {
+                  "startLine": 9
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "10.0",
+            "cvssRating": "Critical",
+            "category": "CWE-494",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            "cwe": "CWE-494",
+            "cweId": "CWE-494",
+            "cvssScore": 10.0,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe workflow downloads the OPA binary from an external URL using `curl` and executes it without verifying its integrity via a checksum (e.g., SHA256). This makes the build pipeline dependent on the security of the remote host and the network path, specifically targeting the 'latest' release which can change without notice.\n\n#### Impact\nAn attacker who compromises the OPA distribution server or intercepts network traffic can replace the legitimate OPA binary with a malicious one. This leads to arbitrary code execution on the GitHub Actions runner, potentially allowing for the theft of repository secrets or lateral movement within the CI/CD environment.\n\n#### Exploit scenario\nAn attacker intercepts the connection to `openintagent.org` or compromises their download server to serve a malicious binary. When the workflow runs, it downloads and executes this binary, granting the attacker RCE on the runner.\n\n#### Preconditions\n- Attacker can intercept network traffic (MITM) during the workflow execution\n- or Attacker has compromised the OPA download infrastructure\n\n```\ncurl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64 && chmod 755 opa\n```\n\n#### How to fix\nDownload the binary and verify its integrity using a hardcoded SHA256 checksum before execution. Use a specific, versioned URL instead of 'latest'.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The workflow downloads a binary from an external URL and executes it without verifying its checksum, leaving the pipeline vulnerable to upstream supply chain attacks.\n\nThe scanner correctly identifies that the GitHub Actions workflow downloads an external binary (`opa`) via `curl` from a remote URL without performing any integrity verification (such as checking a SHA256 checksum). While the use of HTTPS provides protection against many Man-in-the-Middle (MITM) attacks, it does not protect against a compromise of the upstream download server or its distribution infrastructure (e.g., an S3 bucket). If the OPA release infrastructure were compromised, the workflow would automatically download and execute a malicious binary, leading to Remote Code Execution (RCE) on the GitHub Actions runner. This is a classic software supply chain vulnerability."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-494"
+            }
+          ],
+          "rank": 100.0
+        },
+        {
+          "ruleId": "CWE-494",
+          "level": "error",
+          "message": {
+            "text": "Supply chain risk via mutable image tags  [CVSS 10.0: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "critical",
+            "security-severity": "10.0",
+            "cvssRating": "Critical",
+            "category": "CWE-494",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            "cwe": "CWE-494",
+            "cweId": "CWE-494",
+            "cvssScore": 10.0,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.9,
+            "description": "#### Description\nThe 'supervisor-agent', 'opa', and 'prometheus' services all utilize mutable tags (':latest' or ':latest-debug'). This bypasses the security property of supply-chain integrity, as there is no guarantee that the code running in production matches the audited/tested version from the build pipeline.\n\n#### Impact\nThe use of the ':latest' tag makes deployments non-deterministic and vulnerable to supply chain attacks. If the 'ghcr.io/jsoehner/spring-ai-blog-agent' registry is compromised, an attacker can push a malicious image that is automatically pulled and executed during the next service restart or deployment.\n\n#### Exploit scenario\nAn attacker gains access to the GitHub Container Registry and overwrites the 'latest' tag for the supervisor-agent with a malicious image containing a backdoor. The next time the docker-compose stack is updated or restarted, the compromised image is deployed into the production environment.\n\n#### Preconditions\n- Attlaner must have write access to the container registry (ghcr.io or docker.io)\n\n```\nimage: ghcr.io/jsoehner/spring-ai-blog-agent:latest\n```\n\n#### How to fix\nPin all container images to a specific, immutable content hash (SHA256) or at least a specific version tag (e.g., 'v1.2.3') instead of using ':latest'.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 (no reason given)\n\nThe scanner correctly identifies that several services in `docker-compose.yml` (`supervisor-agent`, `researcher-agent`, `image-agent`, `opa`, and `prometheus`) utilize mutable image tags such as `:latest` or `:latest-debug`. This configuration presents a supply chain risk because it prevents the guarantee of image integrity; if an attacker compromises the container registry (e.g., GHCR), they can overwrite these tags with malicious images that will be automatically pulled and executed by any pipeline or environment using this configuration. While the `supervisor-agent`, `researcher-agent`, and `image-agent` also include a `build: .` instruction which builds the image locally from source, the `:latest` tag still points to a mutable remote reference that could be used in pull-based deployments (e.g., via `docker-compose pull`) or by other users of this configuration who do not have the local build context."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-494"
+            }
+          ],
+          "rank": 100.0
+        },
+        {
+          "ruleId": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+          "level": "error",
+          "message": {
+            "text": "Sensitive Git history exposed via host bind mount  [CVSS 7.5: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker-compose.yml"
+                },
+                "region": {
+                  "startLine": 57
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "high",
+            "security-severity": "7.5",
+            "cvssRating": "High",
+            "category": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cwe": "CWE-200 - Exposure of Sensitive Information to an Unauthorized Actor",
+            "cweId": "CWE-200",
+            "cweName": "Exposure of Sensitive Information to an Unauthorized Actor",
+            "cvssScore": 7.5,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe docker-compose configuration mounts the host's '.git' directory directly into the running 'supervisor-agent' container at '/app/.git'. While the application runs as a non-root user, any vulnerability in the Spring Boot application (such as Path Traversal or Local File Inclusion) allows an attacker to traverse the Git structure and reconstruct the repository's entire history.\n\n#### Impact\nAn attacker who gains file-read access or shell execution within the 'supervisor-agent' container can access the complete Git history of the repository. This exposes deleted secrets, internal commit metadata, and historical architectural changes that are not present in the current working directory.\n\n#### Exploit scenario\nAn attacker exploits a file-read vulnerability in the Supervisor Agent REST API to read '/app/.git/logs/HEAD'. By parsing these logs, they identify previous commit hashes and use 'git show <hash>' (if git is available) or direct object reads of Git blobs to recover previously deleted API keys or configuration files.\n\n#### Preconditions\n- Attacker must be able to trigger a file-read or command execution within the 'supervisor-agent' container\n\n```\n- ./.git:/app/.git\n```\n\n#### How to fix\nRemove the '.git' bind mount from the 'supervisor-agent' service in docker-compose.yml. Only copy the necessary application files into the image during the build stage.\n\n**Exploitability:** Information leak of entire Git history. Requires a pre-existing LFI/Path Traversal vulnerability in the Spring Boot application.\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The .git directory is explicitly mounted into the container, and there is a functional arbitrary file read tool (`CodeTools.readFile`) available to the application's agent, allowing an attacker to traverse the Git history.\n\nThe scanner identifies a sensitive information leak via a host bind mount of the `.git` directory into the `supervisor-agent` container in `docker-compose.yml`.\n\n**Analysis:**\n1.  **Vulnerability Confirmation**: In `docker-compose.yml`, line 57, the configuration indeed contains `- ./.git:/app/.git`. This mounts the host's Git history into the container.\n2.  **Attack Surface**: The scanner claims that a vulnerability like Path Traversal or LFI in the Spring Boot application would allow an attacker to read this directory.\n3.  **Code Review**: \n    *   `CodeTools.java` contains a `@Tool` called `readFile(String absolutePath)` which directly reads any file path provided by the user: `return Files.readString(path);`. This is a classic Local File Inclusion (LFI) / Arbitrary File Read vulnerability. Since this code is part of an AI Agent's toolset, if an attacker can influence the agent's instructions or interact with the controller that triggers these tools, they can read any file within the container.\n    *   The `supervisor-agent` container has `.git` mounted at `/app/.git`. An attacker using `CodeTools.readFile(\"/app/.git/logs/HEAD\")` (or similar) would successfully be able to retrieve Git history and potentially secrets stored in previous commits or the Git structure itself.\n    *   The `BlogAgentController` does not have a direct request-to-file read path in its REST endpoints, but it *does* trigger background tasks (`processSupervisorTask`) that use these tools (via the AI agent's logic). While the controller has some sanitization for writing files to the `output` directory (lines 137-145), it does not prevent the `CodeTools` from reading arbitrary paths if they are invoked.\n4.  **Impact**: Access to the `.git` directory allows an attacker to reconstruct the repository's history, which often contains sensitive information such as deleted credentials, internal configuration, or architectural details that were once present in the repo. This is a confirmed info-leak via an insecure container configuration.\n\nThe scanner is correct about both the mount and the potential impact if a file-read vulnerability (which exis\u2026"
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-200"
+            }
+          ],
+          "rank": 75.0
+        },
+        {
+          "ruleId": "CWE-20: Improper Input Validation",
+          "level": "error",
+          "message": {
+            "text": "TLS Audit Spoofing via Certificate Issuer Injection  [CVSS 7.5: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "tls_scanner.py"
+                },
+                "region": {
+                  "startLine": 69
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "high",
+            "security-severity": "7.5",
+            "cvssRating": "High",
+            "category": "CWE-20: Improper Input Validation",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "cwe": "CWE-20 - Improper Input Validation",
+            "cweId": "CWE-20",
+            "cweName": "Improper Input Validation",
+            "cvssScore": 7.5,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.9,
+            "description": "#### Description\nThe scanner uses `re.search` on the entire output of `openssl s_client`. Because the certificate chain (which contains untrusted data provided by the target server) is printed to stdout before the handshake summary, an attacker can inject strings like 'Protocol : TLSv1.3' into the Certificate Issuer field. The parser will find this first occurrence and report the spoofed value instead of the actual negotiated protocol found in the handshake summary.\n\n#### Impact\nAn attacker can manipulate the audit results to report false security properties (e.g., claiming TLS 1.3 or PQC support) by embedding specific strings in their certificate's Issuer field, effectively bypassing the security audit.\n\n#### Exploit scenario\nAn attacker hosts a server with a certificate where the Issuer field contains the string 'Protocol : TLSv1.3'. When the scanner audits this host, it matches the injected string in the certificate dump and reports TLS 1.3, even if the actual connection used an insecure protocol like TLS 1.0.\n\n#### Preconditions\n- Attacker controls the TLS certificate presented to the scanner.\n\n```\nprotocol = re.search(r\"Protocol\\s*:\\s*(TLSv[\\d\\.]+)\", output)\n        cipher = re.search(r\"Cipher is\\s*(.+)\", output)\n```\n\n#### How to fix\nThe parser should only search for protocol and cipher information within the handshake summary section of the OpenSSL output (e.g., by splitting the output at the end of the certificate block) or use a more restrictive regex that ensures the match is not part of the certificate text.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 (no reason given)\n\nThe scanner has correctly identified a logic flaw in `tls_scanner.py`. \n\nThe script executes `openssl s_client -showcerts` and captures the entire standard output into the `output` variable. The `openssl s_client` command prints the certificate chain (which contains untrusted, attacker-controlled data from the server) at the beginning of its output, followed by a handshake summary containing the actual negotiated `Protocol` and `Cipher`.\n\nThe parser uses `re.search(r\"Protocol\\s*:\\s*(TLSv[\\d\\.]+)\", output)`, which returns the **first** occurrence of the pattern found in the entire string. An attacker hosting a malicious TLS server can include the string `\"Protocol : TLSv1.3\"` within an untrusted field (such as the `Issuer` or `Subject` of the certificate) to spoof the reported protocol version. This allows a server using insecure protocols (e.g., TLS 1.0) to appear compliant with modern standards in the audit report, effectively bypassing the security check's purpose.\n\nThere are no preceding filters or anchors (like searching from the end of the string or specifically targeting the summary section) to prevent this injection."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-20"
+            }
+          ],
+          "rank": 75.0
+        },
+        {
+          "ruleId": "CWE-74: Improper Neutralization of Special Elements in Output (Injection)",
+          "level": "warning",
+          "message": {
+            "text": "Markdown injection via unescaped pipe characters in security reports  [CVSS 5.3: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/scripts/parse-findings.js"
+                },
+                "region": {
+                  "startLine": 73
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "medium",
+            "security-severity": "5.3",
+            "cvssRating": "Medium",
+            "category": "CWE-74: Improper Neutralization of Special Elements in Output (Injection)",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+            "cwe": "CWE-74 - Improper Neutralization of Special Elements in Output (Injection)",
+            "cweId": "CWE-74",
+            "cweName": "Improper Neutralization of Special Elements in Output (Injection)",
+            "cvssScore": 5.3,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "*1 additional call site(s) collapsed during dedup \u2014 same root cause; each location needs the same fix applied.*\n\n#### Description\nThe script parses JSON reports from security tools (Gitleaks, Semgrep, Trivy) and constructs a Markdown table by concatenating fields like `tool`, `file`, `severity`, and `description` into a string. While the script removes newlines from the description, it fails to escape the pipe character (`|`), which is the structural delimiter for Markdown tables. An attacker who can trigger a security finding containing a pipe character can break out of the current table cell and inject new columns or rows.\n\n#### Impact\nAn attacker can manipulate the generated `findings-table.md` to inject arbitrary Markdown content. This can be used to deceive developers with fake findings or perform phishing attacks if the table is rendered in a web UI, such as GitHub PR comments.\n\n#### Exploit scenario\nAn attacker submits a Pull Request containing a string like `| Fake | Info |`. A tool like Semgrep identifies this as a finding with that message. When the script runs, it writes `| Semgrep | path:1 | HIGH | | Fake | Info | |` to the Markdown table, allowing the attacker to inject arbitrary content into the report.\n\n#### Preconditions\n- Attacker can influence the content of security tool reports (e.g., via a Pull Request)\n- The generated Markdown file is rendered in an environment that parses Markdown (e.g., GitHub UI)\n\n```\ntable += `| ${f.tool} | ${f.file} | ${f.severity} | ${f.description.replace(/\\n/g, ' ')} |\\n`;\n```\n\n#### How to fix\nEscape the pipe character (`|`) and other Markdown control characters before appending them to the table string. Specifically, at line 73, replace `|` with `\\|`.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The script `parse-findings.js` constructs a Markdown table by concatenating fields from security tool reports (`gitleaks-report.json`, `semgrep-results.json`, `trivy-results.json`) without escaping the pipe character (`|`). Since an attacker can control the content of these reports (e.g., by including specific strings in a Pull Request that trigger finding messages), they can break out of the table cells to inject arbitrary rows or columns, leading to the manipulation and deception within the security report rendered on GitHub.",
+            "dedupRelatedLocationCount": 1
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-74"
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/security-scan.yml"
+                },
+                "region": {
+                  "startLine": 127,
+                  "endLine": 167
+                }
+              },
+              "message": {
+                "text": "Additional call site \u2014 collapsed during dedup; same root cause as the primary location and needs the same fix."
+              }
+            }
+          ],
+          "rank": 53.0
+        },
+        {
+          "ruleId": "CWE-1236: Improper Neutralization of Formula Elements in a CSV File",
+          "level": "warning",
+          "message": {
+            "text": "CSV Formula Injection in TLS Audit Export  [CVSS 4.3: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "tls_scanner.py"
+                },
+                "region": {
+                  "startLine": 107
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "medium",
+            "security-severity": "4.3",
+            "cvssRating": "Medium",
+            "category": "CWE-1236: Improper Neutralization of Formula Elements in a CSV File",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+            "cwe": "CWE-1236 - Improper Neutralization of Formula Elements in a CSV File",
+            "cweId": "CWE-1236",
+            "cweName": "Improper Neutralization of Formula Elements in a CSV File",
+            "cvssScore": 4.3,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 1.0,
+            "description": "#### Description\nThe script takes user-provided target URLs from command-line arguments or a text file and writes them directly into a CSV file using `csv.DictWriter`. There is no validation or sanitization to strip or escape characters that trigger formula execution in spreadsheet software (e.g., '=', '+', '-', '@'). An attacker who can influence the input targets (via CLI or a shared target file) can inject malicious payloads.\n\n#### Impact\nAn attacker can execute arbitrary formulas in spreadsheet software when the generated CSV is opened. This can lead to data exfiltration, local file disclosure, or phishing attacks against users viewing the audit results.\n\n#### Exploit scenario\nAn attacker provides a target string like '=SUM(1+1)' via the `--file` argument. When an administrator opens the resulting CSV in Microsoft Excel or LibreOffice, the cell executes the formula, which could be expanded to exfiltrate data via `HYPERLINK`.\n\n#### Preconditions\n- Attacker can influence the input targets (e.g., by modifying a shared target file or CI/CD parameter)\n- The resulting CSV is opened in a spreadsheet application that supports formula execution\n\n```\nwriter.writerows(results)\n```\n\n#### How to fix\nSanitize all input strings before writing them to the CSV. Specifically, ensure that any cell value starting with '=', '+', '-', '@', or '\t' is either stripped of those characters or prefixed with an apostrophe (').\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The script writes user-provided targets from command-line arguments and files directly into a CSV file without any sanitization of characters that trigger formula execution in spreadsheet software (=, +, -, @). An attacker can inject malicious formulas via the `--file` argument or CLI arguments if they can control these inputs (e.g., through a Pull Request to a shared targets file used in CI/CD), which will execute when an administrator opens the exported CSV in applications like Excel or LibreOffice."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-1236"
+            }
+          ],
+          "rank": 43.0
+        },
+        {
+          "ruleId": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+          "level": "warning",
+          "message": {
+            "text": "Sensitive local system paths and internal addresses leaked in audit logs  [CVSS 5.3: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "piolium/audit-state.json"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "medium",
+            "security-severity": "5.3",
+            "cvssRating": "Medium",
+            "category": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "cwe": "CWE-200 - Exposure of Sensitive Information to an Unauthorized Actor",
+            "cweId": "CWE-200",
+            "cweName": "Exposure of Sensitive Information to an Unauthorized Actor",
+            "cvssScore": 5.3,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *internal-network position required*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe `error` and `last_error` fields in `audit-state.json` contain unmasked absolute Windows filesystem paths (e.g., `C:\\Users\\jsoehner\\AppData\\...`) and internal service URLs (`http://127.0.0.1:8080`). This data is likely written to the state file by error handlers during runtime without sanitization of the underlying exception messages.\n\n#### Impact\nAn attacker accessing the audit state can discover absolute filesystem paths on the host machine and internal network addresses. This information facilitates targeted attacks, such as identifying software versions for exploitation or preparing path traversal attacks.\n\n#### Exploit scenario\nAn attacker querying the Supervisor Agent's REST API (an untrusted entry point) retrieves the audit state JSON, revealing the host's local username and the exact location of sensitive npm modules on the developer's or server's filesystem.\n\n#### Preconditions\n- Attacker can access the `audit-state.json` file via the Supervisor Agent REST API or repository access\n\n```\n\"error\": \"Failed after 5 retries: No API key found for llama-server=http://127.0.0.1:8080.\\n\\nUse /login to log into a provider via OAuth or API key. See:\\n  C:\\\\Users\\\\jsoehner\\\\AppData\\\\Roaming\\\\npm\\\\node_modules\\\\@earendil-works\\\\pi-coding-agent\\\\docs\\\\providers.md...\"\n```\n\n#### How to fix\nImplement a sanitization layer in the error handling logic to strip absolute filesystem paths, local user directories, and internal IP addresses from error messages before they are persisted to audit logs or state files.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 10/10) \u2014 The `audit-state.json` file contains unmasked absolute filesystem paths containing the local username and internal service URLs, which constitutes an information leak.\n\nThe scanner has correctly identified that `piolium/audit-state.json` contains sensitive information, specifically absolute Windows filesystem paths (revealing the local username `jsoehner`) and internal service URLs (`http://127.0.0.1:8080`).\n\nWhile the \"exploit scenario\" assumes an attacker can access this file via a REST API, the primary issue is indeed the presence of unmasked, sensitive data in a state file that is intended to be used for audit logging and potentially exposed through other interfaces. The content itself is verified by the `Read` operation on the file.\n\nThe impact of leaking local usernames and internal network addresses is a real information leak (PII/system metadata), as it aids an attacker in reconnaissance and lateral movement within a compromised environment."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-200"
+            }
+          ],
+          "rank": 53.0
+        },
+        {
+          "ruleId": "CWE-209: Generation of Error Message Containing Sensitive Information",
+          "level": "warning",
+          "message": {
+            "text": "Sensitive information disclosure via stack traces  [CVSS 5.3: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N]"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/resources/application.properties.template"
+                },
+                "region": {
+                  "startLine": 13
+                }
+              }
+            }
+          ],
+          "properties": {
+            "severity": "medium",
+            "security-severity": "5.3",
+            "cvssRating": "Medium",
+            "category": "CWE-209: Generation of Error Message Containing Sensitive Information",
+            "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "cwe": "CWE-209 - Generation of Error Message Containing Sensitive Information",
+            "cweId": "CWE-209",
+            "cweName": "Generation of Error Message Containing Sensitive Information",
+            "cvssScore": 5.3,
+            "offensivePriority": "P3",
+            "offensivePriorityLabel": "Internal Network / Privileged Position",
+            "offensivePriorityReason": "Internal Network / Privileged Position | *exposure unverified \u2014 no CMDB context; AV:N (network-routable; internet exposure unconfirmed)*",
+            "confidence": 0.95,
+            "description": "#### Description\nThe configuration `server.error.include-stacktrace=always` is explicitly enabled in the application properties template. When an exception occurs during processing of a request to the Supervisor Agent's REST API, the full stack trace is returned in the HTTP response body to the caller.\n\n#### Impact\nAn attacker can obtain detailed internal implementation details, including class names, method calls, and library versions. This reconnaissance significantly aids in crafting more sophisticated exploits against the application.\n\n#### Exploit scenario\nAn attacker sends a malunformed request (e.g., invalid JSON or unexpected type) to a REST endpoint on the Supervisor Agent. The server encounters an unhandled exception and returns an HTTP 500 error containing the complete Java stack trace, revealing internal code paths and dependencies.\n\n#### Preconditions\n- The application is deployed using this configuration\n- The attacker can reach the Supervisor Agent's REST API\n\n```\nserver.error.include-stacktrace=always\n```\n\n#### How to fix\nDisable stack trace inclusion in error responses by setting `server.error.include-stacktrace=never` in production configurations.\n\n**Exploitability:** (not ranked by chaining pass)\n\n#### Adversarial verification\n**Verdict:** TRUE_POSITIVE (confidence: 9/10) \u2014 The configuration `server.error.include-stacktrace=always` in the properties template is explicitly set to include full stack traces in error responses, and no custom exception handling was found in the controllers to prevent this disclosure.\n\nThe scanner identifies that `server.error.include-stacktrace=always` is set in `src/main/resources/application.properties.template`. This configuration tells Spring Boot to include the full stack trace in the HTTP response body when an unhandled exception occurs.\n\nI analyzed the controllers (e.g., `BlogAgentController`) and found that they expose REST endpoints (`/blog`). If a request to these endpoints triggers an unhandled exception (for example, due to malformed input or unexpected downstream service behavior), Spring Boot's default error handling mechanism will use this configuration setting. Since there is no global `@ControllerAdvice` or custom error handler visible in the provided controllers that overrides this behavior to sanitize the response, a stack trace could indeed be leaked to an attacker.\n\nThe leak of stack traces can reveal internal class names, dependencies, and even parts of the logic flow (as seen in `BlogAgentController`), which aids an attacker in reconnaissance for more complex exploits.\n\nWhile the configuration is present in a `.template` file, it is likely used as the basis for production configurations. The impact is information disclosure via stack traces."
+          },
+          "taxa": [
+            {
+              "toolComponent": {
+                "name": "CWE",
+                "guid": "b7c8d9e0-1f2a-3b4c-5d6e-7f8090a1b2c3"
+              },
+              "id": "CWE-209"
+            }
+          ],
+          "rank": 53.0
+        }
+      ],
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": [
+            {
+              "level": "warning",
+              "message": {
+                "text": "s4: 7 recoverable error(s) logged"
+              }
+            },
+            {
+              "level": "warning",
+              "message": {
+                "text": "s6-verify: 1 recoverable error(s) logged"
+              }
+            },
+            {
+              "level": "warning",
+              "message": {
+                "text": "1 deep-dive chunk(s) failed or timed out; their findings are absent"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

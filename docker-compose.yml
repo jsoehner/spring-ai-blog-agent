@@ -1,6 +1,6 @@
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    image: ${DOCKER_REGISTRY_PREFIX:-}rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -55,7 +55,7 @@ services:
     volumes:
       - ./config:/app/config
       - ./.git:/app/.git
-      - logging_data:/app/request-activity.log
+      - ./request-activity.log:/app/request-activity.log
       - ./output:/app/output
     read_only: true
     tmpfs:
@@ -94,7 +94,7 @@ services:
       start_period: 40s
     volumes:
       - ./config:/app/config
-      - logging_data:/app/request-activity.log
+      - ./request-activity.log:/app/request-activity.log
       - ./output:/app/output
     read_only: true
     tmpfs:
@@ -131,7 +131,7 @@ services:
       start_period: 40s
     volumes:
       - ./config:/app/config
-      - logging_data:/app/request-activity.log
+      - ./request-activity.log:/app/request-activity.log
       - ./output:/app/output
     read_only: true
     tmpfs:
@@ -140,7 +140,7 @@ services:
       - no-new-privileges:true
 
   opa:
-    image: openpolicyagent/opa:latest-debug
+    image: ${DOCKER_REGISTRY_PREFIX:-}openpolicyagent/opa:latest-debug
     ports:
       - "8181:8181"
     command:
@@ -160,7 +160,9 @@ services:
       - no-new-privileges:true
 
   prometheus:
-    image: prom/prometheus:latest
+    profiles:
+      - monitoring
+    image: ${DOCKER_REGISTRY_PREFIX:-}prom/prometheus:latest
     ports:
       - "9090:9090"
     volumes:
@@ -175,6 +177,4 @@ services:
     security_opt:
       - no-new-privileges:true
 
-volumes:
-  logging_data:
-    driver: local
+# No volumes required since we use host-bind mounts.

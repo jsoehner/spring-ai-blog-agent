@@ -126,3 +126,34 @@ touch request-activity.log
 **Cause:** The docker-compose setup configures the Prometheus container with `read_only: true` and mounts `/prometheus` as a `tmpfs` volume. Since the container runs as user `nobody` (UID `65534`), it does not have write access to the root-owned `tmpfs` mounted at `/prometheus`, causing it to crash when attempting to create directories/files.
 
 **Solution:** Configure the Prometheus service in [docker-compose.yml](file:///Users/jsoehner/spring-ai-blog-agent/docker-compose.yml) to write its runtime TSDB data to `/tmp/prometheus` using the `--storage.tsdb.path=/tmp/prometheus` option. Since `/tmp` is a world-writable tmpfs, this succeeds.
+
+### 15. Docker Hub Pull Failures / Rate Limit Errors (`toomanyrequests`)
+**Symptom:** When running `docker-compose up` or `docker compose pull`, Docker fails to pull `rabbitmq:3-management`, `openpolicyagent/opa:latest-debug`, or `prom/prometheus:latest` with a rate limit or network error.
+
+**Cause:** Docker Hub imposes pull rate limits for anonymous requests, and corporate/constrained environments may block direct access to Docker Hub (`docker.io`).
+
+**Solution:** Use the `DOCKER_REGISTRY_PREFIX` environment variable or add it to a `.env` file to prefix the Docker Hub images with a mirror or local registry cache. For example:
+```bash
+export DOCKER_REGISTRY_PREFIX=mirror.gcr.io/
+docker compose up -d
+```
+Or define it in a `.env` file in the root of the project:
+```properties
+DOCKER_REGISTRY_PREFIX=mirror.gcr.io/
+```
+
+### 16. How to make Prometheus or other non-essential containers optional?
+**Symptom:** You want to run the core application (agents, rabbitmq, and OPA) without starting monitoring tools like Prometheus to save system resources or avoid pulling their images.
+
+**Solution:** Non-essential services like `prometheus` are configured with a Docker Compose profile (`monitoring`). This keeps them disabled by default. If you want to enable them, set the `COMPOSE_PROFILES` environment variable:
+```bash
+# Enable monitoring profile
+export COMPOSE_PROFILES=monitoring
+docker compose up -d
+```
+Or define it in your `.env` file:
+```properties
+COMPOSE_PROFILES=monitoring
+```
+
+

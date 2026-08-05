@@ -101,6 +101,26 @@ The primary settings for the agents are controlled through environment variables
 
 Inside `docker-compose.yml`, you will find `environment:` blocks for each agent (`supervisor-agent`, `researcher-agent`, `image-agent`). Ensure your `.env` or local environment holds your `GITHUB_TOKEN` (required for the agent to open PRs automatically).
 
+> [!TIP]
+> **Docker Hub Pull / Rate Limit Issues:**
+> If you experience issues pulling the third-party dependencies (like `rabbitmq`, `opa`, or `prometheus`) from Docker Hub due to rate limits or network restrictions, you can configure a custom registry mirror or prefix by exporting the `DOCKER_REGISTRY_PREFIX` environment variable or adding it to your `.env` file:
+> ```bash
+> # Use Google's public mirror for Docker Hub official images:
+> export DOCKER_REGISTRY_PREFIX=mirror.gcr.io/
+> 
+> # Or use a local/corporate registry cache:
+> export DOCKER_REGISTRY_PREFIX=my-registry.local/
+> ```
+
+> [!TIP]
+> **Optional Containers (Docker Compose Profiles):**
+> Non-essential containers (like `prometheus`) are marked as optional via Docker Compose profiles. They will **not** start by default when running `docker compose up`.
+> To start optional services, define the `COMPOSE_PROFILES` environment variable or specify the profile on the command line:
+> ```bash
+> # Start with monitoring (Prometheus) enabled:
+> COMPOSE_PROFILES=monitoring docker compose up -d
+> ```
+
 ### 3. LLM Configuration Options
 You can configure the system to use different LLM providers by adjusting the environment variables. Here are the available options depending on your setup:
 
@@ -148,20 +168,28 @@ The Autonomous Issue Agent has been extracted from this project into its own sta
 Please refer to the new project at `gh-issue-agent` on your local filesystem for standalone setup and usage.
 
 ### 7. Dependency Updates & Local Docker Verification
-To keep dependencies secure and up-to-date, we scan the codebase using the `com.github.ben-manes.versions` plugin and apply necessary overrides. To verify and test dependency updates locally within the multi-agent container environment:
-1. Rebuild the application containers:
+To keep dependencies secure and up-to-date, we scan the codebase using the `com.github.ben-manes.versions` plugin and apply updates dynamically via a Python utility script.
+
+To check and apply updates:
+1. Run Gradle's dependency updates task to see available versions:
    ```bash
-   docker compose build
+   ./gradlew dependencyUpdates
    ```
-2. Start the services locally:
+2. Automatically apply the recommended updates from the report using the update script:
    ```bash
-   docker compose up -d
+   .venv/bin/python3 .github/scripts/update-dependencies.py
    ```
-3. Monitor startup logs of the supervisor agent to verify correct initialization:
+
+To verify and test dependency updates locally within the multi-agent container environment:
+1. Rebuild the application containers and submit a test topic:
    ```bash
-   docker compose logs supervisor-agent
+   ./run-and-submit.sh --build "AI Security"
    ```
-4. Stop and clean up the containers once verification is complete:
+2. Monitor runtime logs of the supervisor/researcher agents to verify correct orchestration:
+   ```bash
+   docker compose logs -f supervisor-agent
+   ```
+3. Stop and clean up the containers once verification is complete:
    ```bash
    docker compose down
    ```
@@ -174,6 +202,7 @@ To keep dependencies secure and up-to-date, we scan the codebase using the `com.
 - **[ADR-0001: Security Hardening and Dependency Injection Refactoring](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0001-security-hardening-and-dependency-injection.md)** — Outlines the path traversal protections, SSRF mitigation, TLS option separation, ChatClient builder mutate adjustments, and Spring Dependency Injection configurations implemented to secure and clean the codebase.
 - **[ADR-0002: Mitigating DNS Rebinding SSRF and Aligning Project Rules](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0002-mitigating-dns-rebinding-ssrf-and-aligning-project-rules.md)** — Documents the resolutions for DNS Rebinding, SSRF in Python scripts, Docker image layer build sequence, and aligning prompt/filename patterns with the project rules.
 - **[ADR-0003: Workflow and Agent Coordination Optimization](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0003-workflow-and-agent-coordination-optimization.md)** — Explains the parallelization of security scans in GitHub Actions, dynamic dependency updates querying Maven Central, and converting Supervisor task processing to asynchronous CompletableFuture coordination.
+- **[ADR-0004: Dependency Updates and Gradle Build Configuration Fixes](file:///Users/jsoehner/spring-ai-blog-agent/docs/decisions/0004-dependency-updates-and-gradle-build-fixing.md)** — Documents the fixes for the OWASP dependencycheck plugin configuration and Java compilation errors, the inclusion of the Gradle versions plugin, and applying dependency updates.
 
 ### Agent Skills
 We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:
