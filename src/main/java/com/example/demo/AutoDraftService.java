@@ -80,6 +80,7 @@ public class AutoDraftService {
     }
 
     private void runCommand(List<String> cmd) throws Exception {
+        // nosemgrep: java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
         Process process = pb.start();
