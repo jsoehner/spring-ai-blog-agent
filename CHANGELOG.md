@@ -8,6 +8,7 @@
 - **Testing**: Fixed JUnit test assertion in `TlsScannerToolTest.java` to accept `Unsafe Host` alongside `Failed` for invalid domains to align with new SSRF-prevention logic, resolving nightly workflow failures.
 
 ### Changed
+- **LLM Configuration**: Configured `gemma4:12b` as the high-reasoning model for the Researcher Agent and `qwen3:4b` for the Supervisor Agent, setting chat options mappings consistently across the project.
 - **CI/CD**: Parallelized the security scanning workflow jobs (Gitleaks, Semgrep, Trivy) to run concurrently on separate runner instances and upload reports as build artifacts for downstream reporting.
 - **Architecture**: Optimized the Supervisor Agent `processSupervisorTask` to execute asynchronously using `CompletableFuture.runAsync()`, immediately freeing up RabbitMQ listener threads to increase system throughput.
 - **CI/CD**: Implemented generic GitHub Actions workflows for nightly dependency updates and security scanning (Gitleaks, Semgrep, Trivy).
