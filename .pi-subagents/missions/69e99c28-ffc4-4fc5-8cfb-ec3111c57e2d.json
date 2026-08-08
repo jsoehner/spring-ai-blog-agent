@@ -3,13 +3,189 @@
   "id": "69e99c28-ffc4-4fc5-8cfb-ec3111c57e2d",
   "title": "Review the staged changes and create a high-quality git commit message following Conventional Com...",
   "objective": "Review the staged changes and create a high-quality git commit message following Conventional Commits. Stage all changes and commit them with the generated message. Then, push the changes to the origin main branch.",
-  "status": "active",
+  "status": "completed",
   "createdAt": "2026-08-08T19:53:10.557Z",
-  "updatedAt": "2026-08-08T19:53:10.557Z",
-  "runs": [],
+  "updatedAt": "2026-08-08T19:54:39.493Z",
+  "runs": [
+    {
+      "runId": "6989f06b",
+      "mode": "single",
+      "agent": "worker",
+      "status": "completed",
+      "startedAt": "2026-08-08T19:54:39.492Z",
+      "completedAt": "2026-08-08T19:54:39.492Z",
+      "usage": {
+        "tokens": 7866
+      }
+    }
+  ],
   "decisions": [],
-  "artifacts": [],
+  "artifacts": [
+    {
+      "kind": "output",
+      "path": "C:\\Users\\jsoehner\\spring-ai-blog-agent\\.pi-subagents\\artifacts\\6989f06b_worker_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "C:\\Users\\jsoehner\\spring-ai-blog-agent\\.pi-subagents\\artifacts\\6989f06b_worker_0_transcript.jsonl",
+      "description": "Child transcript"
+    }
+  ],
   "receipts": [],
   "cwd": "C:\\Users\\jsoehner\\spring-ai-blog-agent",
-  "ownerSessionId": "C:\\Users\\jsoehner\\.pi\\agent\\sessions\\--C--Users-jsoehner-spring-ai-blog-agent--\\2026-08-08T18-07-54-789Z_019fe28f-5fa5-7c86-8d46-5cb4558b7dcd.jsonl"
+  "ownerSessionId": "C:\\Users\\jsoehner\\.pi\\agent\\sessions\\--C--Users-jsoehner-spring-ai-blog-agent--\\2026-08-08T18-07-54-789Z_019fe28f-5fa5-7c86-8d46-5cb4558b7dcd.jsonl",
+  "summary": "The legacy ADRs have been successfully migrated to a new directory structure within the architecture folder. The files were moved from `docs/adr/` to `docs/architecture/decisions/legacy/`, preserving their original numbering and content while consolidating all architectural decisions into one primary documentation tree.",
+  "acceptance": {
+    "status": "checked",
+    "evidenceStatus": "checked",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": false,
+      "inferredReason": [
+        "write-capable worker/task"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Implement the requested change without widening scope",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "write-capable worker/task"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Implement the requested change without widening scope",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "criterion:criterion-1",
+        "status": "passed",
+        "message": "Required criterion 'criterion-1' satisfied."
+      },
+      {
+        "id": "evidence:changed-files",
+        "status": "passed",
+        "message": "changed-files evidence present."
+      },
+      {
+        "id": "evidence:tests-added",
+        "status": "not-applicable",
+        "message": "tests-added evidence explicitly reported as not applicable."
+      },
+      {
+        "id": "evidence:commands-run",
+        "status": "passed",
+        "message": "commands-run evidence present."
+      },
+      {
+        "id": "evidence:residual-risks",
+        "status": "passed",
+        "message": "residual-risks evidence present."
+      },
+      {
+        "id": "evidence:no-staged-files",
+        "status": "passed",
+        "message": "no-staged-files evidence present."
+      },
+      {
+        "id": "no-staged-files",
+        "status": "passed",
+        "message": "No staged files detected."
+      }
+    ],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Migrated legacy ADRs to docs/architecture/decisions/legacy/ without changing content or renumbering."
+        }
+      ],
+      "changedFiles": [
+        "docs/adr/0001-layered-architecture.md",
+        "docs/adr/0002-logging-observability.md",
+        "docs/adr/0003-configuration-management.md",
+        "docs/adr/0004-version-control-abstraction.md",
+        "docs/adr/0005-file-system-storage-strategy.md",
+        "docs/adr/0006-external-tool-integration-pattern.md",
+        "docs/adr/0007-message-broker-task-routing.md",
+        "docs/adr/0008-agent-orchestration-patterns.md",
+        "docs/adr/0009-threading-concurrency-model.md",
+        "docs/adr/010-content-processing-pipeline.md",
+        "docs/adr/011-prompt-engineering-versioning.md",
+        "docs/architecture/decisions/legacy/0001-layered-architecture.md",
+        "docs/architecture/decisions/legacy/0002-logging-observability.md",
+        "docs/architecture/decisions/legacy/0003-configuration-management.md",
+        "docs/architecture/decisions/legacy/0004-version-control-abstraction.md",
+        "docs/architecture/decisions/legacy/0005-file-system-storage-strategy.md",
+        "docs/architecture/decisions/legacy/0006-external-tool-integration-pattern.md",
+        "docs/architecture/decisions/legacy/0007-message-broker-task-routing.md",
+        "docs/architecture/decisions/legacy/0008-agent-orchestration-patterns.md",
+        "docs/architecture/decisions/legacy/0009-threading-concurrency-model.md",
+        "docs/architecture/decisions/legacy/010-content-processing-pipeline.md",
+        "docs/architecture/decisions/legacy/011-prompt-engineering-versioning.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "git add .",
+          "result": "passed",
+          "summary": "Staged all changed files"
+        },
+        {
+          "command": "git commit -m \"refactor(docs): migrate legacy ADRs to architecture decisions folder\"",
+          "result": "passed",
+          "summary": "Committed changes with conventional commit message"
+        },
+        {
+          "command": "git push origin main",
+          "result": "passed",
+          "summary": "Pushed changes to origin main"
+        }
+      ],
+      "validationOutput": [
+        "Successfully pushed commit 234a945 to origin main"
+      ],
+      "residualRisks": [
+        "none"
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Renamed 11 files from docs/adr/ to docs/architecture/decisions/legacy/",
+      "reviewFindings": [
+        "no blockers"
+      ],
+      "manualNotes": "The migration preserves the historical sequence of the legacy ADRs while centralizing them within the architecture documentation tree."
+    }
+  }
 }
