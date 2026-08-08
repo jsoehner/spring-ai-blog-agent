@@ -14,8 +14,8 @@ if [ -z "$TOPIC" ]; then
   exit 1
 fi
 
-EXPECTED_SERVICES=$(docker-compose config --services 2>/dev/null | wc -l | tr -d ' ')
-RUNNING_SERVICES=$(docker-compose ps --services --status=running 2>/dev/null | wc -l | tr -d ' ')
+EXPECTED_SERVICES=$(docker compose config --services 2>/dev/null | wc -l | tr -d ' ')
+RUNNING_SERVICES=$(docker compose ps --services --status=running 2>/dev/null | wc -l | tr -d ' ')
 
 if [ "$EXPECTED_SERVICES" -eq "$RUNNING_SERVICES" ] && [ "$RUNNING_SERVICES" -gt 0 ]; then
   echo "✅ All $RUNNING_SERVICES containers are fully operational. Skipping environment restart..."
@@ -27,12 +27,12 @@ else
 
   if [ "$BUILD" = true ]; then
     echo "🛠️ Building local image instead of pulling..."
-    docker-compose up -d --build
+    docker compose up -d --build
   else
     echo "🔄 Pulling the latest image from ghcr.io..."
     docker pull ghcr.io/jsoehner/spring-ai-blog-agent:latest
     echo "🚀 Starting containers with docker-compose..."
-    docker-compose up -d
+    docker compose up -d
   fi
 
   echo "⏳ Waiting for Supervisor Agent API to become available..."

@@ -41,8 +41,5 @@ config/application.properties
 src/main/resources/application.properties
 .env
 
-# Generated logs & artifacts
-*.log
-*.html
-output/
-.DS_Store
+# Piolium (Security Framework - Do not track)
+piolium/

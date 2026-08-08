@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "ea6bb750-2117-4f68-93cb-17a834a1e184",
+  "title": "Review the staged changes and create a high-quality git commit message following Conventional Com...",
+  "objective": "Review the staged changes and create a high-quality git commit message following Conventional Commits. Stage all changes and commit them with the generated message. Then, push the changes to the origin main branch.",
+  "status": "active",
+  "createdAt": "2026-08-08T19:00:32.438Z",
+  "updatedAt": "2026-08-08T19:00:32.438Z",
+  "runs": [],
+  "decisions": [],
+  "artifacts": [],
+  "receipts": [],
+  "cwd": "C:\\Users\\jsoehner\\spring-ai-blog-agent",
+  "ownerSessionId": "C:\\Users\\jsoehner\\.pi\\agent\\sessions\\--C--Users-jsoehner-spring-ai-blog-agent--\\2026-08-08T18-07-54-789Z_019fe28f-5fa5-7c86-8d46-5cb4558b7dcd.jsonl"
+}

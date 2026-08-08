@@ -1,24 +1,26 @@
 package com.example.demo.security;
 
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Service
 public class OpaClient {
+    private static final Logger log = LoggerFactory.getLogger(OpaClient.class);
 
     private final RestTemplate restTemplate;
     private final String opaUrl;
 
     public OpaClient(RestTemplate restTemplate, 
-                     @Value("${opa.url:http://localhost:8181/v1/data/agent/main}") String opaUrl) {
+                     @Value("${opa.url}") String opaUrl) {
         this.restTemplate = restTemplate;
         this.opaUrl = opaUrl;
     }
@@ -71,8 +73,7 @@ public class OpaClient {
                 return resultBody.getResult().isAllow();
             }
         } catch (Exception e) {
-            // Log error
-            System.err.println("Error calling OPA server: " + e.getMessage());
+            log.error("Error calling OPA server at {}: {}", url, e.getMessage());
             return false; // Fail-safe (Deny on error)
         }
         return false;

@@ -7,12 +7,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Aspect
 @Component
 public class OpaGuardrailAspect {
 
     private final OpaClient opaClient;
+    private static final String BASE_WORKSPACE = Paths.get(".").toAbsolutePath().normalize().toString();
 
     public OpaGuardrailAspect(OpaClient opaClient) {
         this.opaClient = opaClient;
@@ -23,17 +26,16 @@ public class OpaGuardrailAspect {
         String toolName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
 
+        Map<String, Object> input = new HashMap<>();
+        input.put("resource_type", "tool");
+        
         Map<String, Object> request = new HashMap<>();
         request.put("action", toolName);
         request.put("tool_name", toolName);
         request.put("arguments", args);
-
-        Map<String, Object> input = new HashMap<>();
-        input.put("resource_type", "tool");
         input.put("topic", request.getOrDefault("topic", "default_topic"));
         input.put("request", request);
 
-        // Specific handling for file writes based on agent_files.rego
         if ("writeFile".equals(toolName) || "readFile".equals(toolName) || "scanImageMetadata".equals(toolName) || "moveImages".equals(toolName)) {
             input.put("resource_type", "file");
             if (args.length > 0) {
@@ -46,9 +48,11 @@ public class OpaGuardrailAspect {
                     path = args[0].toString();
                 }
                 
-                // Securely normalize the path before sending it to OPA to prevent path traversal bypass
                 try {
-                    String normalizedPath = java.nio.file.Paths.get(path).toAbsolutePath().normalize().toString();
+                    String normalizedPath = Paths.get(path).toAbsolutePath().normalize().toString();
+                    if (!normalizedPath.startsWith(BASE_WORKSPACE)) {
+                        throw new SecurityException("Path traversal attempt detected: " + path);
+                    }
                     request.put("path", normalizedPath);
                 } catch (Exception e) {
                     throw new SecurityException("Failed to normalize path: " + path);

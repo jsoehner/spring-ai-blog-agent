@@ -1,16 +1,37 @@
 package com.example.demo;
 
+import com.example.demo.service.ExternalTool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
+@Slf4j
 @Component
-public class WordPressTool {
+public class WordPressTool implements ExternalTool {
 
     public record DraftRequest(String title, String content) {}
+
+    @Override
+    public String getName() {
+        return "WordPressTool";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.";
+    }
+
+    @Override
+    public Object execute(Map<String, Object> inputs) throws Exception {
+        String title = (String) inputs.get("title");
+        String content = (String) inputs.get("content");
+        return createDraftPost(new DraftRequest(title, content));
+    }
 
     @Tool(description = "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.")
     public String createDraftPost(DraftRequest request) {
@@ -28,7 +49,7 @@ public class WordPressTool {
         String fileName = fileTarget.toString();
         String wpFileName = wpFileTarget.toString();
 
-        System.out.println("WordPressTool: Saving draft locally to " + fileName + " and " + wpFileName + "! Title: " + request.title());
+        log.info("WordPressTool: Saving draft locally to {} and {}! Title: {}", fileName, wpFileName, request.title());
         
         try {
             File file = new File(fileName);
@@ -48,9 +69,10 @@ public class WordPressTool {
                 wpWriter.write("<h1>" + request.title() + "</h1>");
                 wpWriter.write(request.content());
             }
-            System.out.println("Saved blog post to local file: " + fileName);
+            log.info("Saved blog post to local file: {}", fileName);
             return "Successfully saved draft locally to " + file.getAbsolutePath() + " and " + wpFile.getAbsolutePath() + ".\nYou can now open this file in your browser or text editor and paste it directly into WordPress!\nSaved blog post to local file: " + fileName;
         } catch (IOException e) {
+            log.error("Failed to save draft: {}", e.getMessage());
             return "Failed to save draft locally: " + e.getMessage();
         }
     }
