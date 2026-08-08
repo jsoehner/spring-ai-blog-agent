@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "f2577f9a-d338-4300-9103-d401a44ce2c5",
+  "title": "Review the staged changes and create a high-quality git commit message following Conventional Com...",
+  "objective": "Review the staged changes and create a high-quality git commit message following Conventional Commits. Stage all changes and commit them with the generated message. Then, push the changes to the origin main branch.",
+  "status": "failed",
+  "createdAt": "2026-08-08T19:00:40.886Z",
+  "updatedAt": "2026-08-08T19:30:45.094Z",
+  "runs": [
+    {
+      "runId": "f4681c15",
+      "mode": "single",
+      "agent": "worker",
+      "status": "failed",
+      "startedAt": "2026-08-08T19:30:45.094Z",
+      "completedAt": "2026-08-08T19:30:45.094Z",
+      "usage": {
+        "tokens": 89023
+      }
+    }
+  ],
+  "decisions": [],
+  "artifacts": [
+    {
+      "kind": "output",
+      "path": "C:\\Users\\jsoehner\\spring-ai-blog-agent\\.pi-subagents\\artifacts\\f4681c15_worker_0_output.md"
+    },
+    {
+      "kind": "other",
+      "path": "C:\\Users\\jsoehner\\spring-ai-blog-agent\\.pi-subagents\\artifacts\\f4681c15_worker_0_transcript.jsonl",
+      "description": "Child transcript"
+    }
+  ],
+  "receipts": [],
+  "cwd": "C:\\Users\\jsoehner\\spring-ai-blog-agent",
+  "ownerSessionId": "C:\\Users\\jsoehner\\.pi\\agent\\sessions\\--C--Users-jsoehner-spring-ai-blog-agent--\\2026-08-08T18-07-54-789Z_019fe28f-5fa5-7c86-8d46-5cb4558b7dcd.jsonl",
+  "summary": "Subagent timed out after 1800000ms.\n\nOutput:\nSubagent timed out after 1800000ms.\n\nPartial output before timeout:\nThe `git diff --name-only --diff-filter=U` command returned no output, which means there are no unmerged paths. However, `git rebase --continue` is still failing. This sometimes happens if the index is in a weird state. I will try to add the files again to be sure.\n\nOutput artifact: C:\\Users\\jsoehner\\spring-ai-blog-agent\\.pi-subagents\\artifacts\\f4681c15_worker_0_output.md",
+  "acceptance": {
+    "status": "rejected",
+    "evidenceStatus": "rejected",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": false,
+      "inferredReason": [
+        "write-capable worker/task"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Implement the requested change without widening scope",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "write-capable worker/task"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Implement the requested change without widening scope",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "timeout",
+        "status": "failed",
+        "message": "Acceptance was not evaluated because the subagent timed out."
+      }
+    ],
+    "verifyRuns": []
+  }
+}

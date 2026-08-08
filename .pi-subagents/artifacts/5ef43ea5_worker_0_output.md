@@ -1,0 +1,1 @@
+The ADRs in the project have been updated to follow the standardized format, including the new Audit Envelope, Risk Assessment (in table format), and Verification sections. I have also migrated the legacy ADRs to a dedicated sub-directory to maintain historical context while cleaning up the main architecture folder.

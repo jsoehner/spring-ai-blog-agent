@@ -1,0 +1,1 @@
+The legacy ADRs have been successfully migrated to a new directory structure within the architecture folder. The files were moved from `docs/adr/` to `docs/architecture/decisions/legacy/`, preserving their original numbering and content while consolidating all architectural decisions into one primary documentation tree.

@@ -1,0 +1,1 @@
+The ADRs have been updated to include the standardized Risk Assessment and Mitigations sections, and the changes have been committed and pushed to the repository.
