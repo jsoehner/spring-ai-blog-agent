@@ -86,8 +86,11 @@ This decision aligns with the principle of "Defense in Depth" and "Fail Secure."
 * **DevSecOps**: Simplifies security auditing by providing a single, predictable point of path normalization.
 
 ## 7. Risk Assessment & Mitigations
-* **Risk**: Normalization might fail on symbolic links.
-  * *Mitigation*: Use `toAbsolutePath().normalize()` which handles most standard cases; for high-security needs, `toRealPath()` could be considered in the future.
+
+| Threat / Hazard ID | Risk Description | Pre-Mitigation Level | Designed Architectural Mitigation | Residual Risk Level |
+| :--- | :--- | :--- | :--- | :--- |
+| `THREAT-01` | Path traversal to sensitive system files (e.g., `/etc/passwd`). | **High** | Mandatory path normalization and workspace prefix verification in both Aspect and Tool layers. | **Low (Accepted)** |
+| `HAZARD-02` | Symbolic link bypass of workspace boundaries. | **Medium** | Use of `toAbsolutePath().normalize()` to resolve path segments. | **Low (Accepted)** |
 
 ## 8. Financial & Operational Impact
 * Negligible performance overhead for path normalization.

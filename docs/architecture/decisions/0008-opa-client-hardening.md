@@ -86,8 +86,11 @@ This decision follows standard enterprise patterns for infrastructure clients: e
 * **Operations**: Provides better observability into the health of the security policy engine.
 
 ## 7. Risk Assessment & Mitigations
-* **Risk**: Infrastructure failures will cause all tool executions to be denied.
-  * *Mitigation*: This is the intended security behavior (Fail-Closed). Monitoring should be set up to alert on OPA connection errors.
+
+| Threat / Hazard ID | Risk Description | Pre-Mitigation Level | Designed Architectural Mitigation | Residual Risk Level |
+| :--- | :--- | :--- | :--- | :--- |
+| `THREAT-03` | Security infrastructure (OPA) is unreachable, causing service outage. | **Medium** | Fail-closed behavior ensures security; SLF4J logging provides immediate visibility for ops. | **Low (Accepted)** |
+| `HAZARD-03` | Accidental connection to a non-production OPA instance. | **Medium** | Removal of default URLs requires explicit configuration for each environment. | **Low (Accepted)** |
 
 ## 8. Financial & Operational Impact
 * Reduces incident response time by providing clearer logs for security policy failures.
