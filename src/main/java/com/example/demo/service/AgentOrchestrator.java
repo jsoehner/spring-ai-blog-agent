@@ -40,6 +40,8 @@ public class AgentOrchestrator {
         FAILED
     }
 
+    private final TextHumanizerProcessor textHumanizerProcessor;
+
     public AgentOrchestrator(ChatClient.Builder chatClientBuilder,
                             WordPressTool wordPressTool,
                             @org.springframework.beans.factory.annotation.Value("${IMAGE_AGENT_URL:http://localhost:8080/image}") String imageAgentUrl,
@@ -48,7 +50,8 @@ public class AgentOrchestrator {
                             ToolRegistry toolRegistry,
                             MessageService messageService,
                             VersionControlService versionControlService,
-                            ContentPipeline contentPipeline) {
+                            ContentPipeline contentPipeline,
+                            TextHumanizerProcessor textHumanizerProcessor) {
         this.wordPressTool = wordPressTool;
         this.imageAgentUrl = imageAgentUrl;
         this.storageService = storageService;
@@ -56,6 +59,7 @@ public class AgentOrchestrator {
         this.messageService = messageService;
         this.versionControlService = versionControlService;
         this.contentPipeline = contentPipeline;
+        this.textHumanizerProcessor = textHumanizerProcessor;
 
         this.bloggerClient = chatClientBuilder.build().mutate()
                 .defaultSystem(new String(bloggerPromptResource.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8))
@@ -74,8 +78,11 @@ public class AgentOrchestrator {
         try {
             Map<String, String> payload = objectMapper.readValue(jsonPayload, new com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {});
             String topic = payload.get("topic");
-            String facts = payload.get("facts");
+            String rawFacts = payload.get("facts");
             log.info("Supervisor Agent received compiled facts for topic: {}", topic);
+
+            // Humanize research output before Pass 2 blog writing
+            String facts = textHumanizerProcessor.process(rawFacts);
 
             workflowStates.put(topic, WorkflowState.WRITING);
             log.info("Starting Pass 2 (Blog Writing/Grammar Check) for: {}", topic);

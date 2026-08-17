@@ -10,11 +10,13 @@ import java.util.List;
 @Service
 public class ContentPipeline {
 
-    private final List<ContentProcessor> processors = new ArrayList<>();
+    private final List<ContentProcessor> processors;
 
-    public ContentPipeline() {
+    public ContentPipeline(TextHumanizerProcessor textHumanizerProcessor) {
+        processors = new ArrayList<>();
         // Order matters here
         processors.add(new MarkdownSanitizer());
+        processors.add(textHumanizerProcessor);
         processors.add(new HtmlValidator());
         processors.add(new SeoMetadataInjector());
     }

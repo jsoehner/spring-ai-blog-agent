@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 @Service
 public class GitVersionControlService implements VersionControlService {
 
-    private static final Pattern SAFE_STRING = Pattern.compile("^[a-zA-Z0-9\\s\\-_\\.]+$\");
+    private static final Pattern SAFE_STRING = Pattern.compile("^[a-zA-Z0-9\\s\\-_\\.]+$");
 
     @Override
     public void createBranch(String branchName) throws Exception {
@@ -32,7 +32,7 @@ public class GitVersionControlService implements VersionControlService {
         validateString(title);
         // Body is usually longer and might contain more characters, but we still want to be careful.
         // For now, we allow more characters but strip shell metacharacters.
-        String safeBody = body.replaceAll("[;&|><\\$\\\]\\*\\?\\!]", "");
+        String safeBody = body.replaceAll("[;&|><\\$\\\\\\*\\?\\!]", "");
         runCommand(List.of("gh", "pr", "create", "--title", title, "--body", safeBody));
     }
 

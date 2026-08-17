@@ -16,8 +16,9 @@ WORKDIR /app
 # Create a non-root user to run the app
 RUN addgroup -S spring && adduser -S spring -G spring
 
-# Install git, github cli (gh), python3, and requests inside the container
-RUN apk add --no-cache git github-cli python3 py3-requests
+# Install git, github cli (gh), python3, pip, and python dependencies inside the container
+RUN apk add --no-cache git github-cli python3 py3-pip py3-requests \
+    && pip install --no-cache-dir --break-system-packages texthumanize
 
 COPY --from=builder --chown=spring:spring /app/build/libs/*.jar app.jar
 
