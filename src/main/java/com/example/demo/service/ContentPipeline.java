@@ -16,7 +16,7 @@ public class ContentPipeline {
         processors = new ArrayList<>();
         // Order matters here
         processors.add(new MarkdownSanitizer());
-        processors.add(textHumanizerProcessor);
+        processors.add(new GutenbergTagHealer());
         processors.add(new HtmlValidator());
         processors.add(new SeoMetadataInjector());
     }

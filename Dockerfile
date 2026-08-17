@@ -27,4 +27,6 @@ EXPOSE 8080
 
 USER spring:spring
 
+RUN git config --global --add safe.directory /app
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -2,12 +2,15 @@
 
 ## [Unreleased]
 ### Added
+- **GutenbergTagHealer**: Added `GutenbergTagHealer.java` content processor to automatically heal missing paragraph (`<p>`) and heading (`<h2>`) HTML tags inside WordPress Gutenberg block comments. Added `GutenbergTagHealerTest.java` to test this healing logic.
 - **CI/CD**: Implemented a custom `update-dependencies.py` Python script that dynamically queries Maven Central metadata and automatically updates version definitions in `build.gradle` inside the nightly workflow.
 
 ### Fixed
 - **Testing**: Fixed JUnit test assertion in `TlsScannerToolTest.java` to accept `Unsafe Host` alongside `Failed` for invalid domains to align with new SSRF-prevention logic, resolving nightly workflow failures.
 
 ### Changed
+- **Content Pipeline**: Updated `ContentPipeline.java` to use the new `GutenbergTagHealer` post-processor, replacing the incorrect post-processing registration of `TextHumanizerProcessor`.
+- **Dockerfile**: Added global git config safe directory configuration to permit Git actions inside Docker containers.
 - **LLM Configuration**: Configured `gemma4:12b` as the high-reasoning model for the Researcher Agent and `qwen3:4b` for the Supervisor Agent, setting chat options mappings consistently across the project.
 - **CI/CD**: Parallelized the security scanning workflow jobs (Gitleaks, Semgrep, Trivy) to run concurrently on separate runner instances and upload reports as build artifacts for downstream reporting.
 - **Architecture**: Optimized the Supervisor Agent `processSupervisorTask` to execute asynchronously using `CompletableFuture.runAsync()`, immediately freeing up RabbitMQ listener threads to increase system throughput.
