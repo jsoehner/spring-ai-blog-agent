@@ -48,16 +48,19 @@ class OpaGuardrailAspectTest {
     @Test
     @SuppressWarnings("unchecked")
     void testWriteFileToolPathExtraction() {
+        String workspace = java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString();
+        String safePath = java.nio.file.Paths.get(workspace, "safe.txt").toAbsolutePath().normalize().toString();
+
         when(opaClient.evaluatePolicy(argThat(argument -> {
             Map<String, Object> input = (Map<String, Object>) argument;
             if ("file".equals(input.get("resource_type"))) {
                 Map<String, Object> request = (Map<String, Object>) input.get("request");
-                return "/tmp/safe.txt".equals(request.get("path"));
+                return safePath.equals(request.get("path"));
             }
             return false;
         }))).thenReturn(true);
 
-        WriteRequest safeRequest = new WriteRequest("/tmp/safe.txt", "content");
+        WriteRequest safeRequest = new WriteRequest(safePath, "content");
         String result = dummyAspectTools.writeFile(safeRequest);
         assertEquals("written", result);
 

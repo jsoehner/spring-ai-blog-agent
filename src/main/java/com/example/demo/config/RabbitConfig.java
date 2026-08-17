@@ -11,6 +11,9 @@ public class RabbitConfig {
     public static final String QUEUE_SUPERVISOR = "supervisor-tasks";
     public static final String ROUTING_KEY_SUPERVISOR = "task.supervisor.request";
 
+    public static final String QUEUE_RESEARCH = "research-tasks";
+    public static final String ROUTING_KEY_RESEARCH = "task.research.request";
+
     @Bean
     public TopicExchange taskExchange() {
         return new TopicExchange(EXCHANGE_NAME, true, false);
@@ -24,5 +27,15 @@ public class RabbitConfig {
     @Bean
     public Binding supervisorBinding(Queue supervisorQueue, TopicExchange taskExchange) {
         return BindingBuilder.bind(supervisorQueue).to(taskExchange).with(ROUTING_KEY_SUPERVISOR);
+    }
+
+    @Bean
+    public Queue researchQueue() {
+        return new Queue(QUEUE_RESEARCH, true);
+    }
+
+    @Bean
+    public Binding researchBinding(Queue researchQueue, TopicExchange taskExchange) {
+        return BindingBuilder.bind(researchQueue).to(taskExchange).with(ROUTING_KEY_RESEARCH);
     }
 }

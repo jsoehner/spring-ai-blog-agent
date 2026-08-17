@@ -24,6 +24,7 @@ A Python wrapper script `src/main/resources/scripts/humanize.py` was created and
 Specifically:
 - **Pre-Supervisor Pass Humanization**: The researcher's compiled facts are humanized via `TextHumanizerProcessor` *before* being provided to the supervisor blogger agent (`AgentOrchestrator.java`). This guarantees that the supervisor works with naturalized factual context while maintaining control over the final WordPress HTML structure.
 - **Content Pipeline Integration**: `TextHumanizerProcessor` was also registered in `ContentPipeline.java` as part of the post-processing chain.
+- **Dynamic Classpath Script Resolution**: In containerized environments where source files are packaged inside a JAR, the processor automatically resolves and extracts the script resource (`scripts/humanize.py`) from the classpath to a temporary file before execution. This eliminates dependencies on external filesystem directories inside multi-stage Docker builds.
 
 ### Positive Consequences
 * Factual context and blog text are naturalized before WordPress assembly.

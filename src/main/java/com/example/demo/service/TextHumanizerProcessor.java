@@ -16,6 +16,7 @@ public class TextHumanizerProcessor implements ContentProcessor {
     private final String pythonExecutable;
     private final String scriptPath;
     private final boolean enabled;
+    private final String resolvedScriptPath;
 
     public TextHumanizerProcessor(
             @Value("${humanizer.python.path:python3}") String pythonExecutable,
@@ -24,6 +25,41 @@ public class TextHumanizerProcessor implements ContentProcessor {
         this.pythonExecutable = pythonExecutable;
         this.scriptPath = scriptPath;
         this.enabled = enabled;
+        this.resolvedScriptPath = resolveScriptPath(scriptPath);
+    }
+
+    private String resolveScriptPath(String path) {
+        File file = new File(path);
+        if (file.exists() && file.isFile()) {
+            return path;
+        }
+
+        String resourceName = "scripts/humanize.py";
+        if (path.contains("scripts/")) {
+            resourceName = path.substring(path.indexOf("scripts/"));
+        } else {
+            int lastSlash = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+            if (lastSlash != -1) {
+                resourceName = "scripts/" + path.substring(lastSlash + 1);
+            }
+        }
+
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName)) {
+            if (in != null) {
+                File tempFile = File.createTempFile("humanize-", ".py");
+                tempFile.deleteOnExit();
+                try (OutputStream out = new FileOutputStream(tempFile)) {
+                    in.transferTo(out);
+                }
+                log.info("Extracted script from classpath resource {} to {}", resourceName, tempFile.getAbsolutePath());
+                return tempFile.getAbsolutePath();
+            } else {
+                log.warn("Could not find script path as file or classpath resource: {}", path);
+            }
+        } catch (IOException e) {
+            log.error("Failed to extract humanizer script from classpath resource: {}", path, e);
+        }
+        return path;
     }
 
     @Override
@@ -33,7 +69,7 @@ public class TextHumanizerProcessor implements ContentProcessor {
         }
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(pythonExecutable, scriptPath);
+            ProcessBuilder pb = new ProcessBuilder(pythonExecutable, resolvedScriptPath);
             Process process = pb.start();
 
             try (OutputStream os = process.getOutputStream()) {
