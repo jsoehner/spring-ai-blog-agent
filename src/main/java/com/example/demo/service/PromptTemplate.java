@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class PromptTemplate {
     private String name;
     private String version;

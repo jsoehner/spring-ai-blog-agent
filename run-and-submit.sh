@@ -22,7 +22,7 @@ if [ "$EXPECTED_SERVICES" -eq "$RUNNING_SERVICES" ] && [ "$RUNNING_SERVICES" -gt
 else
   echo "⚠️ Environment not fully operational ($RUNNING_SERVICES/$EXPECTED_SERVICES running). Re-initializing..."
   
-  docker-compose down 2>/dev/null || true
+  docker compose down 2>/dev/null || true
   docker rm -f supervisor-agent researcher-agent 2>/dev/null || true
 
   if [ "$BUILD" = true ]; then

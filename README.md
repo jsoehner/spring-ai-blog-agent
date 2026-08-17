@@ -206,6 +206,7 @@ To verify and test dependency updates locally within the multi-agent container e
 - **[ADR-0008: OPA Client Hardening](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0008-opa-client-hardening.md)** — Documents OPA client hardening and request validation policy enforcement.
 - **[ADR-0009: Integrating TextHumanize for AI Blog Post Naturalization](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0009-integrating-texthumanize-for-blog-naturalization.md)** — Documents integrating the `texthumanize` Python package via a local CLI wrapper to naturalize research facts before passing them to the supervisor blogger pass.
 - **[ADR-0010: Lombok Integration and Java Build Compatibility](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0010-lombok-integration-and-java-build-compatibility.md)** — Documents configuring the `io.freefair.lombok` plugin, enforcing JDK 21 toolchains, and resolving package import and class inheritance compilation errors.
+- **[ADR-0011: Gitignore Agent Artifacts and README Gotchas Update](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0011-gitignore-agent-artifacts-and-readme-gotchas.md)** — Documents ignoring agent artifact directories (`.pi/`, `.pi-subagents/`) and syncing framework/agent gotchas into README documentation.
 
 ### Agent Skills
 We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:
@@ -217,6 +218,8 @@ We maintain specialized agent skills inside the `.agents/skills/` directory. New
 
 Here are a few common issues and best practices to keep in mind when working with this project:
 
+- **Gitignore Agent Artifacts:** Agent execution frameworks may create `.pi` and `.pi-subagents` directories during local execution. These are ignored in `.gitignore` to prevent tracking temporary agent context and state files.
+- **Prompting for Paragraph Structure:** When prompting an LLM to generate blog posts or articles, explicitly instruct it with: `CRITICAL: Do NOT bold the first sentence of your paragraphs, and do NOT separate the opening sentence from the rest of the paragraph; integrate it naturally into the same paragraph block.` This prevents the common LLM quirk of aggressively highlighting and isolating topic sentences.
 - **Host JDK 25 vs JDK 21 Toolchain Mismatch with Lombok:** Running Gradle on host machines with newer JDKs (e.g. JDK 25) without the `io.freefair.lombok` plugin can cause Lombok internal errors (`NoSuchFieldException: com.sun.tools.javac.code.TypeTag :: UNKNOWN`). Enforce `toolchain { languageVersion = JavaLanguageVersion.of(21) }` in `build.gradle` and apply `io.freefair.lombok` to ensure javac runs with compatible annotation processing.
 - **Class Cyclic Inheritance:** Ensure service implementations do not accidentally declare `implements ServiceClass` targeting their own class name (e.g. `public class StorageService implements StorageService`), which causes compiler cyclic inheritance errors.
 - **Checked Exceptions in Spring Component Constructors:** When reading classpath resources (e.g., `Resource.getInputStream().readAllBytes()`) in `@Service` constructors, always wrap the read in a `try-catch` block to handle checked `IOException`s rather than letting unhandled exceptions break component initialization.
@@ -234,6 +237,7 @@ Here are a few common issues and best practices to keep in mind when working wit
 - **Spring AI 2.0.0 Naming:** Starting with Spring AI 2.0.0, dependencies require the `-model-` segment (e.g., `spring-ai-starter-model-openai` instead of `spring-ai-starter-openai`).
 - **Search Tool Fallbacks:** When implementing web search tools for AI agents (like the Researcher Agent), prefer using open APIs (like the Wikipedia API) instead of scraping search engines (e.g., DuckDuckGo) as they aggressively block automated requests. Additionally, ensure the fallback `webcrawler.default.urls` contains a solid list of generic security-related URLs.
 - **Local File Output Naming:** When saving generated HTML blog posts locally, standardize the filename by using the topic string, replacing spaces with hyphens, and converting to lowercase (e.g., `topic.replaceAll("\\s+", "-").toLowerCase() + ".html"`).
+
 
 ---
 

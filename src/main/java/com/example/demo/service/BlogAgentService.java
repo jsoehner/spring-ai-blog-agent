@@ -31,7 +31,7 @@ public class BlogAgentService {
     public BlogAgentService(ChatClient.Builder chatClientBuilder,
                             WordPressTool wordPressTool,
                             @org.springframework.beans.factory.annotation.Value("${IMAGE_AGENT_URL:http://localhost:8080/image}") String imageAgentUrl,
-                            @org.springframework.beans.factory.annotation.Value("${blogger.prompt.path:prompts/blogger-prompt.txt}") org.springframework.core.io.Resource bloggerPromptResource,
+                            @org.springframework.beans.factory.annotation.Value("${blogger.prompt.path:classpath:prompts/blogger-prompt.txt}") org.springframework.core.io.Resource bloggerPromptResource,
                             OpaService opaService,
                             MessageService messageService,
                             StorageService storageService,

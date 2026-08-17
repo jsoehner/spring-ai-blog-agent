@@ -14,8 +14,10 @@ public class PromptManager {
 
     public PromptManager(List<PromptTemplate> templates) {
         for (PromptTemplate template : templates) {
-            promptRegistry.computeIfAbsent(template.getName(), k -> new HashMap<>())
-                    .put(template.getVersion(), template);
+            if (template != null && template.getName() != null) {
+                promptRegistry.computeIfAbsent(template.getName(), k -> new HashMap<>())
+                        .put(template.getVersion(), template);
+            }
         }
     }
 
@@ -40,13 +42,5 @@ public class PromptManager {
                 .max(Comparator.comparing(PromptTemplate::getVersion))
                 .map(PromptTemplate::getContent)
                 .orElseThrow(() -> new RuntimeException("No versions found for prompt: " + name));
-    }
-
-    @Data
-    public static class PromptTemplate {
-        private String name;
-        private String version;
-        private String description;
-        private String content;
     }
 }
