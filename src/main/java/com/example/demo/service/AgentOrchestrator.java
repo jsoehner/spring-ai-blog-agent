@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.tools.WordPressTool;
+import com.example.demo.WordPressTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,8 +62,15 @@ public class AgentOrchestrator {
         this.contentPipeline = contentPipeline;
         this.textHumanizerProcessor = textHumanizerProcessor;
 
+        String promptText = "";
+        try {
+            promptText = new String(bloggerPromptResource.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        } catch (java.io.IOException e) {
+            log.error("Failed to read blogger prompt resource: {}", e.getMessage());
+        }
+
         this.bloggerClient = chatClientBuilder.build().mutate()
-                .defaultSystem(new String(bloggerPromptResource.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8))
+                .defaultSystem(promptText)
                 .build();
     }
 
@@ -75,9 +83,10 @@ public class AgentOrchestrator {
     }
 
     public void handleSupervisorTask(String jsonPayload) {
+        String topic = null;
         try {
             Map<String, String> payload = objectMapper.readValue(jsonPayload, new com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {});
-            String topic = payload.get("topic");
+            topic = payload.get("topic");
             String rawFacts = payload.get("facts");
             log.info("Supervisor Agent received compiled facts for topic: {}", topic);
 

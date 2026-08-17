@@ -23,6 +23,6 @@ public class RabbitConfig {
 
     @Bean
     public Binding supervisorBinding(Queue supervisorQueue, TopicExchange taskExchange) {
-        return Binding.binding(supervisorQueue).to(taskExchange).with(ROUTING_KEY_SUPERVISOR);
+        return BindingBuilder.bind(supervisorQueue).to(taskExchange).with(ROUTING_KEY_SUPERVISOR);
     }
 }

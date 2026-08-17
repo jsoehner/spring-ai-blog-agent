@@ -7,9 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class StorageService implements StorageService {
+public class StorageService {
 
-    @Override
     public void saveBlogPost(String topic, String content) throws IOException {
         Path targetFile = getSafePath(topic, ".html");
         

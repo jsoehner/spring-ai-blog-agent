@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.tools.WordPressTool;
+import com.example.demo.WordPressTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
