@@ -1,0 +1,14 @@
+2026-08-22T02:50:54.451Z  INFO 2407 --- [Test worker] c.e.d.security.OpaGuardrailAspectTest    : Starting OpaGuardrailAspectTest using Java 21.0.12 with PID 2407 (started by runner in /home/runner/work/spring-ai-blog-agent/spring-ai-blog-agent)
+2026-08-22T02:50:54.452Z  INFO 2407 --- [Test worker] c.e.d.security.OpaGuardrailAspectTest    : No active profile set, falling back to 1 default profile: "default"
+2026-08-22T02:50:54.461Z  INFO 2407 --- [Test worker] c.e.d.security.OpaGuardrailAspectTest    : Started OpaGuardrailAspectTest in 0.033 seconds (process running for 5.662)
+2026-08-22T02:50:54.584Z ERROR 2407 --- [Test worker] c.e.demo.service.TextHumanizerProcessor  : TextHumanizer Python script failed with exit code 1: Traceback (most recent call last):
+  File "/home/runner/work/spring-ai-blog-agent/spring-ai-blog-agent/src/main/resources/scripts/humanize.py", line 3, in <module>
+    import texthumanize
+ModuleNotFoundError: No module named 'texthumanize'
+
+2026-08-22T02:50:54.587Z  INFO 2407 --- [Test worker] c.e.demo.service.TextHumanizerProcessor  : Extracted script from classpath resource scripts/humanize.py to /tmp/humanize-627348763308691535.py
+2026-08-22T02:50:54.681Z ERROR 2407 --- [Test worker] c.e.demo.service.TextHumanizerProcessor  : TextHumanizer Python script failed with exit code 1: Traceback (most recent call last):
+  File "/tmp/humanize-627348763308691535.py", line 3, in <module>
+    import texthumanize
+ModuleNotFoundError: No module named 'texthumanize'
+
