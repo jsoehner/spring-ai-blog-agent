@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class HtmlValidator implements ContentProcessor {
+    private static final Logger log = LoggerFactory.getLogger(HtmlValidator.class);
     @Override
     public String process(String content) {
         if (content == null) return null;

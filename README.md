@@ -1,6 +1,6 @@
 # 🤖 Spring AI Autonomous Blog Agent
 
-![License](https://img.shields.io/badge/License-MIT-blue.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.x-brightgreen.svg) ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg) ![Java](https://img.shields.io/badge/Java-25-orange.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.x-brightgreen.svg) ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange.svg)
 
 **A highly robust, multi-agent AI system built to run complex asynchronous tasks utilizing Spring Boot and local/private Large Language Models (LLMs).**
 
@@ -72,8 +72,8 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 - **Asynchronous Decoupling:** Never drop a request. Send as many topics as you want; the agent works through them at its own pace.
 - **Curated Web Crawling:** Pre-configured to search the top industry sites for Mobile Security, Cryptography, AppSec, and AI Security.
 - **Autonomous Scheduling:** Uses Spring's `@Scheduled` annotation to run completely independently on a strict cron schedule (e.g., every Mon/Thu).
-- **Security Hardening:** Implemented robust protections against Path Traversal (via OPA guardrails), SSRF (via DNS/IP range validation), and Command Injection (via option separators and strict input sanitization).
-- **WordPress Ready:** Generates both a raw local draft (`blog_draft.html`) and a WordPress-optimized draft (`blog_draft_wp.html`).
+- **Java 25 Native:** Fully updated and tested against OpenJDK 25 toolchains with clean SLF4J logging and standard Java constructs.
+- **WordPress & Gutenberg Ready:** Generates both a raw local draft and WordPress Gutenberg block-formatted draft with automated whitespace, carriage return, and comment tag normalization (eliminating stray line feeds and spacing errors).
 - **Dynamic File Generation:** Automatically saves HTML drafts to the `output/` directory with filenames matching the requested topic (e.g., `output/ai-code-tech-debt.html`). These files are automatically synced to your host machine when running via Docker.
 - **Local Application Logging:** Keeps a clean, overwritten `request-activity.log` tracing all agent interactions on every application start via a custom Logback configuration.
 - **Security Hardening:** Production-ready protections against SSRF (DNS/IP range validation), Path Traversal (fail-closed normalization), and Command Injection (option separators and strict input sanitization).
@@ -207,6 +207,7 @@ To verify and test dependency updates locally within the multi-agent container e
 - **[ADR-0009: Integrating TextHumanize for AI Blog Post Naturalization](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0009-integrating-texthumanize-for-blog-naturalization.md)** — Documents integrating the `texthumanize` Python package via a local CLI wrapper to naturalize research facts before passing them to the supervisor blogger pass.
 - **[ADR-0010: Lombok Integration and Java Build Compatibility](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0010-lombok-integration-and-java-build-compatibility.md)** — Documents configuring the `io.freefair.lombok` plugin, enforcing JDK 21 toolchains, and resolving package import and class inheritance compilation errors.
 - **[ADR-0011: Gitignore Agent Artifacts and README Gotchas Update](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0011-gitignore-agent-artifacts-and-readme-gotchas.md)** — Documents ignoring agent artifact directories (`.pi/`, `.pi-subagents/`) and syncing framework/agent gotchas into README documentation.
+- **[ADR-0012: Java 25 Upgrade and Gutenberg Block Formatting Normalization](file:///Users/jsoehner/spring-ai-blog-agent/docs/architecture/decisions/0012-java-25-upgrade-and-gutenberg-formatting-normalization.md)** — Documents native Java 25 support, migrating from Lombok to standard SLF4J loggers/POJOs, isolating `texthumanize` to pre-supervisor research facts, and sanitizing Gutenberg blocks against stray linefeeds and comment spacing.
 
 ### Agent Skills
 We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:
@@ -218,9 +219,10 @@ We maintain specialized agent skills inside the `.agents/skills/` directory. New
 
 Here are a few common issues and best practices to keep in mind when working with this project:
 
+- **Java 25 Native Support & Logging Patterns:** The codebase is configured with `toolchain { languageVersion = JavaLanguageVersion.of(25) }`. To prevent JDK 25 javac internal annotation processing conflicts, standard SLF4J `LoggerFactory.getLogger(...)` and plain POJO constructs are used in place of Lombok.
+- **WordPress Gutenberg Block Formatting & Whitespace Normalization:** When generating WordPress block HTML, ensure comment tags are well-formed (e.g. `<!-- wp:paragraph -->` with no space inside `wp:`) and individual blocks (`<!-- wp:paragraph --><p>...</p><!-- /wp:paragraph -->`) reside on single lines without internal carriage returns or line feeds. `MarkdownSanitizer` automatically cleans and normalizes these blocks.
 - **Gitignore Agent Artifacts:** Agent execution frameworks may create `.pi` and `.pi-subagents` directories during local execution. These are ignored in `.gitignore` to prevent tracking temporary agent context and state files.
 - **Prompting for Paragraph Structure:** When prompting an LLM to generate blog posts or articles, explicitly instruct it with: `CRITICAL: Do NOT bold the first sentence of your paragraphs, and do NOT separate the opening sentence from the rest of the paragraph; integrate it naturally into the same paragraph block.` This prevents the common LLM quirk of aggressively highlighting and isolating topic sentences.
-- **Host JDK 25 vs JDK 21 Toolchain Mismatch with Lombok:** Running Gradle on host machines with newer JDKs (e.g. JDK 25) without the `io.freefair.lombok` plugin can cause Lombok internal errors (`NoSuchFieldException: com.sun.tools.javac.code.TypeTag :: UNKNOWN`). Enforce `toolchain { languageVersion = JavaLanguageVersion.of(21) }` in `build.gradle` and apply `io.freefair.lombok` to ensure javac runs with compatible annotation processing.
 - **Class Cyclic Inheritance:** Ensure service implementations do not accidentally declare `implements ServiceClass` targeting their own class name (e.g. `public class StorageService implements StorageService`), which causes compiler cyclic inheritance errors.
 - **Checked Exceptions in Spring Component Constructors:** When reading classpath resources (e.g., `Resource.getInputStream().readAllBytes()`) in `@Service` constructors, always wrap the read in a `try-catch` block to handle checked `IOException`s rather than letting unhandled exceptions break component initialization.
 - **TextHumanize & WordPress Compatibility Order:** When applying `texthumanize` to AI-generated blog posts, execute text naturalization on the researcher's raw facts *before* providing them to the supervisor blogger model. Applying text naturalization after HTML structure generation can alter custom HTML markup, figure tags, and WordPress shortcode comments (`<!-- wp:image -->`). Running humanization on factual context before the blogger pass preserves both naturalized text tone and valid WordPress HTML output.

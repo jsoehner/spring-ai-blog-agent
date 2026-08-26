@@ -1,14 +1,15 @@
 package com.example.demo.service;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Slf4j
 @Service
 public class PromptManager {
+
+    private static final Logger log = LoggerFactory.getLogger(PromptManager.class);
 
     private final Map<String, Map<String, PromptTemplate>> promptRegistry = new HashMap<>();
 

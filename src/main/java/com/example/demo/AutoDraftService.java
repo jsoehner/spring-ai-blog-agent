@@ -1,6 +1,7 @@
 package com.example.demo;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,9 +14,10 @@ import com.example.demo.service.ToolRegistry;
 import java.util.List;
 import java.util.Random;
 
-@Slf4j
 @Service
 public class AutoDraftService {
+
+    private static final Logger log = LoggerFactory.getLogger(AutoDraftService.class);
 
     private final ChatClient chatClient;
     private final AgentOrchestrator agentOrchestrator;

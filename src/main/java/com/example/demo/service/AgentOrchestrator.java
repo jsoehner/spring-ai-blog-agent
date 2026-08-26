@@ -2,7 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.WordPressTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,9 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Slf4j
 @Service
 public class AgentOrchestrator {
+
+    private static final Logger log = LoggerFactory.getLogger(AgentOrchestrator.class);
 
     private final ContentPipeline contentPipeline;
 

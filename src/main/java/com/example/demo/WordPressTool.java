@@ -1,7 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.service.ExternalTool;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +11,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
-@Slf4j
 @Component
 public class WordPressTool implements ExternalTool {
+
+    private static final Logger log = LoggerFactory.getLogger(WordPressTool.class);
 
     public record DraftRequest(String title, String content) {}
 

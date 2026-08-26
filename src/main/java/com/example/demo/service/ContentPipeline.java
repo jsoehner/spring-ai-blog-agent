@@ -1,22 +1,23 @@
 package com.example.demo.service;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Service
 public class ContentPipeline {
 
+    private static final Logger log = LoggerFactory.getLogger(ContentPipeline.class);
+
     private final List<ContentProcessor> processors;
 
-    public ContentPipeline(TextHumanizerProcessor textHumanizerProcessor) {
+    public ContentPipeline() {
         processors = new ArrayList<>();
-        // Order matters here
+        // Order matters here: sanitize markdown/blocks, validate HTML, inject SEO
         processors.add(new MarkdownSanitizer());
-        processors.add(textHumanizerProcessor);
         processors.add(new HtmlValidator());
         processors.add(new SeoMetadataInjector());
     }

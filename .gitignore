@@ -46,3 +46,8 @@ piolium/
 .pi/
 .pi-subagents/
 
+# Runtime output and logs
+output/
+request-activity.log
+
+
