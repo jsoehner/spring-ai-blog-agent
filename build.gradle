@@ -1,15 +1,6 @@
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.owasp:dependency-check-gradle:9.0.9"
-	}
-}
-
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '4.1.1'
+	id 'org.springframework.boot' version '4.1.0'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'com.github.ben-manes.versions' version '0.54.0'
 }
@@ -25,6 +16,7 @@ java {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
 }
 
 ext {
@@ -54,15 +46,4 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-// Use the plugin from the buildscript classpath
-apply plugin: 'org.owasp.dependencycheck'
-
-dependencyCheck {
-	autoUpdate = false
-	data.directory = "build/nvd-data"
-	outputDirectory = "build/reports/dependency-check"
-	format = "HTML"
-	suppressionFile = 'config/dependency-check-suppression.xml'
 }

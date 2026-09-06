@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.WordPressTool;
+import com.example.demo.tools.WordPressTool;
 import com.example.demo.service.ToolRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

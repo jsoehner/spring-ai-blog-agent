@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.tools;
 
 import com.example.demo.service.ExternalTool;
 import org.slf4j.Logger;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @Component
@@ -16,7 +18,7 @@ public class WordPressTool implements ExternalTool {
 
     private static final Logger log = LoggerFactory.getLogger(WordPressTool.class);
 
-    public record DraftRequest(String title, String content) {}
+    public record DraftRequest(String topic, String content) {}
 
     @Override
     public String getName() {
@@ -30,19 +32,21 @@ public class WordPressTool implements ExternalTool {
 
     @Override
     public Object execute(Map<String, Object> inputs) throws Exception {
-        String title = (String) inputs.get("title");
+        String topic = (String) inputs.get("topic");
+        if (topic == null) {
+            topic = (String) inputs.get("title");
+        }
         String content = (String) inputs.get("content");
-        return createDraftPost(new DraftRequest(title, content));
+        return createDraftPost(new DraftRequest(topic, content));
     }
 
     @Tool(description = "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.")
     public String createDraftPost(DraftRequest request) {
-        // Sanitize title to prevent path traversal
-        String safeBaseName = request.title().replaceAll("[^a-zA-Z0-9\\s-]", "").strip().replaceAll("\\s+", "-").toLowerCase();
+        String safeBaseName = request.topic().replaceAll("[^a-zA-Z0-9\\s-]", "").strip().replaceAll("\\s+", "-").toLowerCase();
         
-        java.nio.file.Path baseDir = java.nio.file.Paths.get("output").toAbsolutePath().normalize();
-        java.nio.file.Path fileTarget = baseDir.resolve(safeBaseName + ".html").normalize();
-        java.nio.file.Path wpFileTarget = baseDir.resolve(safeBaseName + "_wp.html").normalize();
+        Path baseDir = Paths.get("output").toAbsolutePath().normalize();
+        Path fileTarget = baseDir.resolve(safeBaseName + ".html").normalize();
+        Path wpFileTarget = baseDir.resolve(safeBaseName + "_wp.html").normalize();
         
         if (!fileTarget.startsWith(baseDir) || !wpFileTarget.startsWith(baseDir)) {
             throw new SecurityException("Path traversal attempt detected!");
@@ -51,28 +55,26 @@ public class WordPressTool implements ExternalTool {
         String fileName = fileTarget.toString();
         String wpFileName = wpFileTarget.toString();
 
-        log.info("WordPressTool: Saving draft locally to {} and {}! Title: {}", fileName, wpFileName, request.title());
+        log.info("WordPressTool: Saving draft locally to {} and {}! Topic: {}", fileName, wpFileName, request.topic());
         
         try {
-            File file = new File(fileName);
+            File file = fileTarget.toFile();
             if (file.getParentFile() != null && !file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             try (FileWriter writer = new FileWriter(file)) {
-                writer.write("<h1>" + request.title() + "</h1>");
                 writer.write(request.content());
             }
             
-            File wpFile = new File(wpFileName);
+            File wpFile = wpFileTarget.toFile();
             if (wpFile.getParentFile() != null && !wpFile.getParentFile().exists()) {
                 wpFile.getParentFile().mkdirs();
             }
             try (FileWriter wpWriter = new FileWriter(wpFile)) {
-                wpWriter.write("<h1>" + request.title() + "</h1>");
                 wpWriter.write(request.content());
             }
             log.info("Saved blog post to local file: {}", fileName);
-            return "Successfully saved draft locally to " + file.getAbsolutePath() + " and " + wpFile.getAbsolutePath() + ".\nYou can now open this file in your browser or text editor and paste it directly into WordPress!\nSaved blog post to local file: " + fileName;
+            return "Successfully saved draft locally to " + file.getAbsolutePath() + " and " + wpFile.getAbsolutePath() + ".\nSaved blog post to local file: " + fileName;
         } catch (IOException e) {
             log.error("Failed to save draft: {}", e.getMessage());
             return "Failed to save draft locally: " + e.getMessage();

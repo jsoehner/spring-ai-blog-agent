@@ -66,7 +66,7 @@ public class ResearcherController {
             BeanOutputConverter<ResearchReport> converter = new BeanOutputConverter<>(ResearchReport.class);
             String formatInstructions = converter.getFormat();
             
-            String promptText = "Please gather facts about the following topic and summarize them. Include the source URLs for each fact: " + topic + "\n\n" + formatInstructions;
+            String promptText = "Please research the following topic across multiple technical dimensions (such as foundational architectural principles, economic cost multipliers of prevention vs remediation, threat modeling patterns like STRIDE or Zero Trust, and compliance/governance standards). Gather concrete, non-overlapping facts with source URLs: " + topic + "\n\n" + formatInstructions;
             
             ResearchReport report = null;
             int maxAttempts = 3;
@@ -92,12 +92,26 @@ public class ResearcherController {
                 }
             }
 
-            String facts = "Summary: " + report.summary() + "\n\nFacts:\n";
+            StringBuilder factsBuilder = new StringBuilder();
+            if (report.summary() != null && !report.summary().isBlank()) {
+                factsBuilder.append("Context Overview: ").append(report.summary().trim()).append("\n\nResearch Findings:\n");
+            }
             if (report.facts() != null) {
+                java.util.Set<String> seenClaims = new java.util.HashSet<>();
                 for (Fact f : report.facts()) {
-                    facts += "- " + f.claim() + " (" + f.sourceUrl() + ")\n";
+                    if (f.claim() != null && !f.claim().isBlank()) {
+                        String normalized = f.claim().trim().toLowerCase();
+                        if (seenClaims.add(normalized)) {
+                            factsBuilder.append("- ").append(f.claim().trim());
+                            if (f.sourceUrl() != null && !f.sourceUrl().isBlank()) {
+                                factsBuilder.append(" (Source: ").append(f.sourceUrl().trim()).append(")");
+                            }
+                            factsBuilder.append("\n");
+                        }
+                    }
                 }
             }
+            String facts = factsBuilder.toString();
             
             System.out.println("Gathered facts to be considered for the blog:\n" + facts);
 

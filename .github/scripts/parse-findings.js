@@ -70,7 +70,7 @@ if (fs.existsSync('trivy-results.json')) {
 if (allFindings.length > 0) {
   let table = '| Tool | File | Severity | Description |\n| --- | --- | --- | --- |\n';
   allFindings.forEach(f => {
-    table += `| ${f.tool} | ${f.file} | ${f.severity} | ${f.description.replace(/\n/g, ' ')} |\n`;
+    table += `| ${f.tool} | ${f.file} | ${f.severity} | ${f.description.replace(/\|/g, '\\|').replace(/\n/g, ' ')} |\n`;
   });
   fs.writeFileSync('findings-table.md', table);
 }

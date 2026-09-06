@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.WordPressTool;
+import com.example.demo.tools.WordPressTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

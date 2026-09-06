@@ -1,6 +1,6 @@
 # 0010. Lombok Integration and Java Build Compatibility
 
-* Status: Accepted
+* Status: Superseded by [ADR-0012](0012-java-25-upgrade-and-gutenberg-formatting-normalization.md)
 * Deciders: Development Team
 * Date: 2026-08-17
 

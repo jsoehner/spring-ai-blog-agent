@@ -50,10 +50,11 @@ jobs:
 
       - name: SAST Scanning (Semgrep)
         id: semgrep
+        uses: semgrep/semgrep-action@v1.3.0
         continue-on-error: true
-        run: |
-          pip install semgrep
-          semgrep scan --config auto --json -o semgrep-results.json
+        with:
+          config: auto
+          artifacts: semgrep-results.json
 
       - name: Upload Semgrep Report
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -62,6 +63,7 @@ jobs:
           name: semgrep-results
           path: semgrep-results.json
           retention-days: 1
+
 
   trivy:
     name: Dependency SCA Scanning
@@ -176,7 +178,7 @@ jobs:
                 owner,
                 repo,
                 workflow_id: 'nightly-dependency-update.yml',
-                ref: context.ref || 'main'
+                ref: 'main'
               });
               console.log('Successfully triggered dependency update workflow.');
             } catch (error) {

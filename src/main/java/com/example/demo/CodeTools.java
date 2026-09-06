@@ -14,7 +14,11 @@ public class CodeTools {
     @Tool(description = "Reads the contents of a source code file or text file from the local filesystem. Input is the absolute file path.")
     public String readFile(String absolutePath) {
         try {
-            Path path = Paths.get(absolutePath);
+            Path path = Paths.get(absolutePath).toAbsolutePath().normalize();
+            Path baseDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
+            if (!path.startsWith(baseDir)) {
+                return "Error: Access denied. Path is outside the project workspace.";
+            }
             if (!Files.exists(path)) {
                 return "Error: File does not exist at " + absolutePath;
             }
@@ -29,7 +33,11 @@ public class CodeTools {
     @Tool(description = "Writes or overwrites a file with the provided content. Use this to save refactored code, apply fixes, or create new files. Input requires the absolute file path and the complete new content of the file.")
     public String writeFile(WriteRequest request) {
         try {
-            Path path = Paths.get(request.absolutePath());
+            Path path = Paths.get(request.absolutePath()).toAbsolutePath().normalize();
+            Path baseDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
+            if (!path.startsWith(baseDir)) {
+                return "Error: Access denied. Path is outside the project workspace.";
+            }
             
             // Create parent directories if they don't exist
             if (path.getParent() != null && !Files.exists(path.getParent())) {

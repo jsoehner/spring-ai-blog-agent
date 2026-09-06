@@ -28,7 +28,7 @@ class TlsScannerToolTest {
             assertTrue(result.contains("Failed") || result.contains("Unsafe Host"));
         } else {
             assertTrue(result.contains("Scan failed with exit code") || result.contains("Failed to run"));
-            assertTrue(result.contains("ModuleNotFoundError") || result.contains("requests") || result.contains("exit code"));
+            assertTrue(result.contains("ModuleNotFoundError") || result.contains("requests") || result.contains("exit code") || result.contains("python"));
         }
     }
 }

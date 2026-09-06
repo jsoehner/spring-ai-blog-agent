@@ -5,8 +5,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     read_only: true
     tmpfs:
       - /var/lib/rabbitmq
@@ -22,20 +22,22 @@ services:
 
   supervisor-agent:
     build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
     ports:
       - "8081:8080"
     environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - SPRING_PROFILES_ACTIVE=supervisor
       - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
       - RESEARCHER_URL=http://researcher-agent:8080/research
       - IMAGE_AGENT_URL=http://image-agent:8080/image
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AI_OLLAMA_CHAT_OPTIONS_MODEL=qwen3.5:9b
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
       - SPRING_AI_OPENAI_API_KEY=dummy
-      - OPA_URL=http://opa:8181/v1/data/agent/main
+      - OPA_URL=http://opa:8181/v1/data/blog
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -54,10 +56,9 @@ services:
       retries: 3
       start_period: 40s
     volumes:
-      - ./config:/app/config:z
-      - ./.git:/app/.git:z
-      - ./request-activity.log:/app/request-activity.log:z
-      - ./output:/app/output:z
+      - app_config:/app/config
+      - app_logs:/app/request-activity.log
+      - ./output:/app/output
     read_only: true
     tmpfs:
       - /tmp:exec
@@ -67,16 +68,18 @@ services:
 
   researcher-agent:
     build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
     environment:
       - SPRING_PROFILES_ACTIVE=researcher
       - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
       - IMAGE_AGENT_URL=http://image-agent:8080/image
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AI_OLLAMA_CHAT_OPTIONS_MODEL=gemma4:12b
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
       - SPRING_AI_OPENAI_API_KEY=dummy
-      - OPA_URL=http://opa:8181/v1/data/agent/main
+      - OPA_URL=http://opa:8181/v1/data/blog
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -95,25 +98,28 @@ services:
       retries: 3
       start_period: 40s
     volumes:
-      - ./config:/app/config:z
-      - ./request-activity.log:/app/request-activity.log:z
-      - ./output:/app/output:z
+      - app_config:/app/config
+      - app_logs:/app/request-activity.log
+      - ./output:/app/output
     read_only: true
     tmpfs:
       - /tmp:exec
     security_opt:
       - no-new-privileges:true
+
 
   image-agent:
     build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
     environment:
       - SPRING_PROFILES_ACTIVE=image-agent
       - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
       - SPRING_AI_OPENAI_API_KEY=dummy
-      - OPA_URL=http://opa:8181/v1/data/agent/main
+      - OPA_URL=http://opa:8181/v1/data/blog
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -132,17 +138,18 @@ services:
       retries: 3
       start_period: 40s
     volumes:
-      - ./config:/app/config:z
-      - ./request-activity.log:/app/request-activity.log:z
-      - ./output:/app/output:z
+      - app_config:/app/config
+      - app_logs:/app/request-activity.log
+      - ./output:/app/output
     read_only: true
     tmpfs:
       - /tmp:exec
     security_opt:
       - no-new-privileges:true
 
+
   opa:
-    image: ${DOCKER_REGISTRY_PREFIX:-}openpolicyagent/opa:latest-debug
+    image: openpolicyagent/opa:latest
     ports:
       - "8181:8181"
     command:
@@ -161,22 +168,6 @@ services:
     security_opt:
       - no-new-privileges:true
 
-  prometheus:
-    profiles:
-      - monitoring
-    image: ${DOCKER_REGISTRY_PREFIX:-}prom/prometheus:latest
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:z
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/tmp/prometheus'
-    read_only: true
-    tmpfs:
-      - /prometheus
-      - /tmp
-    security_opt:
-      - no-new-privileges:true
-
-# No volumes required since we use host-bind mounts.
+volumes:
+  app_config:
+  app_logs:

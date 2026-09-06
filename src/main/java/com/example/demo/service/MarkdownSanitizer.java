@@ -39,20 +39,25 @@ public class MarkdownSanitizer implements ContentProcessor {
         });
         text = WP_CLOSE_TAG_SPACES.matcher(text).replaceAll(mr -> "<!-- /wp:" + mr.group(1) + " -->");
 
+        // Remove any meta tags or SEO comments if present in WordPress content
+        text = text.replaceAll("<!--\\s*SEO:[\\s\\S]*?-->\\s*", "").replaceAll("<meta[^>]*>\\s*", "");
+
         // Remove linebreaks and extra spaces between block comments and their enclosed HTML element
         text = WP_BLOCK_INTERNAL_SPACING.matcher(text).replaceAll(mr -> {
             String openTag = mr.group(1).trim();
             String inner = mr.group(2).trim();
             String closeTag = mr.group(3).trim();
 
-            if ((inner.startsWith("<p>") && inner.endsWith("</p>")) ||
-                (inner.matches("^<h[1-6]>.*</h[1-6]>$"))) {
+            if ((inner.startsWith("<p") && inner.endsWith("</p>")) ||
+                (inner.matches("^<h[1-6][^>]*>[\\s\\S]*</h[1-6]>$"))) {
                 int openTagEnd = inner.indexOf('>');
                 int closeTagStart = inner.lastIndexOf('<');
                 String tagOpen = inner.substring(0, openTagEnd + 1);
                 String tagClose = inner.substring(closeTagStart);
                 String body = inner.substring(openTagEnd + 1, closeTagStart).trim().replaceAll("\\s+", " ");
                 inner = tagOpen + body + tagClose;
+            } else if (inner.startsWith("<figure") && inner.endsWith("</figure>")) {
+                inner = inner.replaceAll(">\\s+<", "><").replaceAll("\\s*\\n\\s*", " ").replaceAll("\\s+", " ").trim();
             }
 
             return openTag + inner + closeTag;

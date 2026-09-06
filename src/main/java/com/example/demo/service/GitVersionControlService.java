@@ -32,7 +32,7 @@ public class GitVersionControlService implements VersionControlService {
         validateString(title);
         // Body is usually longer and might contain more characters, but we still want to be careful.
         // For now, we allow more characters but strip shell metacharacters.
-        String safeBody = body.replaceAll("[;&|><\\$\\\\\\*\\?\\!]", "");
+        String safeBody = body.replaceAll("[;&|><\\$\\!\\*\\?]", "");
         runCommand(List.of("gh", "pr", "create", "--title", title, "--body", safeBody));
     }
 
@@ -51,6 +51,12 @@ public class GitVersionControlService implements VersionControlService {
     }
 
     private void runCommand(List<String> cmd) throws Exception {
+        for (String arg : cmd) {
+            // Check for common shell metacharacters without complex regex escaping
+            if (arg.matches(".*[;&|><\\$\\!\\*\\?].*")) {
+                throw new IllegalArgumentException("Command contains forbidden shell metacharacters: " + arg);
+            }
+        }
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
         Process process = pb.start();
@@ -62,7 +68,6 @@ public class GitVersionControlService implements VersionControlService {
         }
         int exitCode = process.waitFor();
         if (exitCode != 0) {
-            // Use a safer way to log the command without joining strings into a single command string.
             throw new RuntimeException("Command failed with exit code " + exitCode + ". Command arguments: " + cmd);
         }
     }

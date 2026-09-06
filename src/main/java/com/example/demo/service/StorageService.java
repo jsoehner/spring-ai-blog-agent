@@ -20,6 +20,17 @@ public class StorageService {
         System.out.println("Saved blog post to local file: " + targetFile.toString());
     }
 
+    public void saveWordPressPost(String topic, String content) throws IOException {
+        Path targetFile = getSafePath(topic, "_wp.html");
+        
+        if (!Files.exists(targetFile.getParent())) {
+            Files.createDirectories(targetFile.getParent());
+        }
+        
+        Files.writeString(targetFile, content);
+        System.out.println("Saved wordpress post to local file: " + targetFile.toString());
+    }
+
     public Path getSafePath(String topic, String extension) {
         // Sanitize filename to prevent path traversal
         String safeBaseName = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();

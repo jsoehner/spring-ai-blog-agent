@@ -17,7 +17,6 @@ public class OpaService {
         Map<String, Object> input = new java.util.HashMap<>();
         input.put("topic", topic);
 
-        String topicOpaUrl = opaClient.getOpaUrl().replace("/agent/main", "/blog");
-        return opaClient.evaluatePolicy(topicOpaUrl, input);
+        return opaClient.evaluatePolicy(opaClient.getOpaUrl(), input);
     }
 }
