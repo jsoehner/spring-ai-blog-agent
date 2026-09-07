@@ -1,6 +1,15 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- **CI/CD**: Upgraded `actions/setup-python` to v7 (`5fda3b95a4ea91299a34e894583c3862153e4b97`) to resolve Node 20 deprecation warnings on GitHub Actions runners.
+- **CI/CD**: Upgraded `actions/setup-java` to v6 (`dd06d9cba3e5552c54d9f8ea23572deb30010f7c`) and configured `java-version: '25'` in `nightly-dependency-update.yml` to align with Java 25 toolchain requirements.
+- **CI/CD**: Configured `peter-evans/create-pull-request` with `token: ${{ secrets.GITHUB_TOKEN }}` in `nightly-dependency-update.yml` to resolve Git exit code 128 authentication errors caused by invalid/expired PAT secrets.
+- **CI/CD**: Fixed `security-scan.yml` artifact handling to download `gitleaks-results.sarif` produced by `gitleaks-action@v3` and added SARIF parsing support in `parse-findings.js`.
+- **Build**: Resolved Gradle 10 deprecation warning in `build.gradle` by switching repository assignment to Groovy property syntax (`url = '...'`).
+- **Dependencies**: Upgraded `org.springframework.boot` to `4.1.1`.
+- **Git**: Added `__pycache__/` and `*.pyc` to `.gitignore`.
+
 ### Added
 - **CI/CD**: Implemented a custom `update-dependencies.py` Python script that dynamically queries Maven Central metadata and automatically updates version definitions in `build.gradle` inside the nightly workflow.
 

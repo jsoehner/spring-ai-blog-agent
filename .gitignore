@@ -49,5 +49,5 @@ piolium/
 # Runtime output and logs
 output/
 request-activity.log
-
-
+__pycache__/
+*.pyc

@@ -25,9 +25,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Setup Java
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'temurin'
           cache: 'gradle'
 
@@ -49,10 +49,8 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         continue-on-error: true
-        env:
-          PR_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          token: ${{ env.PR_TOKEN || github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore(deps): update project dependencies"
           title: "Automated Dependency Update"
           body: |

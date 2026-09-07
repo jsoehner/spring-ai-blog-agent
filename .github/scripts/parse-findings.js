@@ -2,7 +2,7 @@ const fs = require('fs');
 
 let allFindings = [];
 
-// Parse Gitleaks
+// Parse Gitleaks (JSON and SARIF)
 if (fs.existsSync('gitleaks-report.json')) {
   try {
     const raw = fs.readFileSync('gitleaks-report.json', 'utf8');
@@ -19,6 +19,30 @@ if (fs.existsSync('gitleaks-report.json')) {
     }
   } catch (e) {
     console.error('Error parsing Gitleaks report:', e);
+  }
+} else if (fs.existsSync('results.sarif') || fs.existsSync('gitleaks-results.sarif')) {
+  try {
+    const sarifPath = fs.existsSync('results.sarif') ? 'results.sarif' : 'gitleaks-results.sarif';
+    const raw = fs.readFileSync(sarifPath, 'utf8');
+    const sarif = JSON.parse(raw);
+    if (sarif.runs && Array.isArray(sarif.runs)) {
+      for (const run of sarif.runs) {
+        if (run.results && Array.isArray(run.results)) {
+          for (const res of run.results) {
+            const loc = res.locations?.[0]?.physicalLocation;
+            const file = loc ? `${loc.artifactLocation?.uri || 'unknown'}:${loc.region?.startLine || 1}` : 'unknown';
+            allFindings.push({
+              tool: 'Gitleaks',
+              file: file,
+              description: `${res.message?.text || ''} (${res.ruleId || ''})`,
+              severity: 'CRITICAL'
+            });
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Error parsing Gitleaks SARIF report:', e);
   }
 }
 
