@@ -22,6 +22,9 @@ public class OpaClient {
 
     public OpaClient(RestTemplate restTemplate, 
                      @Value("${opa.url}") String opaUrl) {
+        if (opaUrl == null || !opaUrl.startsWith("http")) {
+            throw new IllegalArgumentException("Invalid OPA URL provided. Must be a valid http(s) URL.");
+        }
         this.restTemplate = restTemplate;
         this.opaUrl = opaUrl;
     }
