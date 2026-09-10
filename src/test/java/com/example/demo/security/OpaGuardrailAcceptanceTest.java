@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(classes = {
     OpaGuardrailAspect.class, 

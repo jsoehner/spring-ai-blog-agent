@@ -62,8 +62,10 @@ public class OpaGuardrailAspect {
                         throw new SecurityException("Path traversal attempt detected: " + path);
                     }
                     request.put("path", normalizedPath);
+                } catch (SecurityException se) {
+                    throw se;
                 } catch (Exception e) {
-                    throw new SecurityException("Failed to normalize path: " + path);
+                    throw new SecurityException("Failed to normalize path: " + path, e);
                 }
                 
                 request.put("action", ("writeFile".equals(toolName) || "moveImages".equals(toolName)) ? "write" : "read");

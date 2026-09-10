@@ -51,3 +51,4 @@ output/
 request-activity.log
 __pycache__/
 *.pyc
+.DS_Store
