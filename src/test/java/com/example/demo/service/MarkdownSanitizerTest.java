@@ -80,4 +80,19 @@ class MarkdownSanitizerTest {
         String actual = sanitizer.process(input);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testAutoHealsMissingHtmlTagsInHeadingAndParagraphBlocks() {
+        String input = """
+                <!-- wp:heading -->The Dual-Use Reality of Generative Models<!-- /wp:heading -->
+                <!-- wp:paragraph -->The cybersecurity landscape currently faces a fundamental paradox.<!-- /wp:paragraph -->
+                """;
+
+        String expected = """
+                <!-- wp:heading --><h2>The Dual-Use Reality of Generative Models</h2><!-- /wp:heading -->
+                <!-- wp:paragraph --><p>The cybersecurity landscape currently faces a fundamental paradox.</p><!-- /wp:paragraph -->""";
+
+        String actual = sanitizer.process(input);
+        assertEquals(expected, actual);
+    }
 }

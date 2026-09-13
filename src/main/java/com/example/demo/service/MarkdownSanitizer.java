@@ -48,14 +48,28 @@ public class MarkdownSanitizer implements ContentProcessor {
             String inner = mr.group(2).trim();
             String closeTag = mr.group(3).trim();
 
-            if ((inner.startsWith("<p") && inner.endsWith("</p>")) ||
-                (inner.matches("^<h[1-6][^>]*>[\\s\\S]*</h[1-6]>$"))) {
-                int openTagEnd = inner.indexOf('>');
-                int closeTagStart = inner.lastIndexOf('<');
-                String tagOpen = inner.substring(0, openTagEnd + 1);
-                String tagClose = inner.substring(closeTagStart);
-                String body = inner.substring(openTagEnd + 1, closeTagStart).trim().replaceAll("\\s+", " ");
-                inner = tagOpen + body + tagClose;
+            if (openTag.contains("wp:paragraph")) {
+                if (inner.startsWith("<p") && inner.endsWith("</p>")) {
+                    int openTagEnd = inner.indexOf('>');
+                    int closeTagStart = inner.lastIndexOf('<');
+                    String tagOpen = inner.substring(0, openTagEnd + 1);
+                    String tagClose = inner.substring(closeTagStart);
+                    String body = inner.substring(openTagEnd + 1, closeTagStart).trim().replaceAll("\\s+", " ");
+                    inner = tagOpen + body + tagClose;
+                } else if (!inner.isEmpty()) {
+                    inner = "<p>" + inner.replaceAll("\\s+", " ").trim() + "</p>";
+                }
+            } else if (openTag.contains("wp:heading")) {
+                if (inner.matches("^<h[1-6][^>]*>[\\s\\S]*</h[1-6]>$")) {
+                    int openTagEnd = inner.indexOf('>');
+                    int closeTagStart = inner.lastIndexOf('<');
+                    String tagOpen = inner.substring(0, openTagEnd + 1);
+                    String tagClose = inner.substring(closeTagStart);
+                    String body = inner.substring(openTagEnd + 1, closeTagStart).trim().replaceAll("\\s+", " ");
+                    inner = tagOpen + body + tagClose;
+                } else if (!inner.isEmpty()) {
+                    inner = "<h2>" + inner.replaceAll("\\s+", " ").trim() + "</h2>";
+                }
             } else if (inner.startsWith("<figure") && inner.endsWith("</figure>")) {
                 inner = inner.replaceAll(">\\s+<", "><").replaceAll("\\s*\\n\\s*", " ").replaceAll("\\s+", " ").trim();
             }
