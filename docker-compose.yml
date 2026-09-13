@@ -5,8 +5,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
     read_only: true
     tmpfs:
       - /var/lib/rabbitmq
@@ -25,12 +25,13 @@ services:
     image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
     ports:
       - "8081:8080"
+    entrypoint: ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
     environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - SPRING_PROFILES_ACTIVE=supervisor
       - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER:-guest}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS:-guest}
       - RESEARCHER_URL=http://researcher-agent:8080/research
       - IMAGE_AGENT_URL=http://image-agent:8080/image
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
@@ -69,11 +70,12 @@ services:
   researcher-agent:
     build: .
     image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
+    entrypoint: ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
     environment:
       - SPRING_PROFILES_ACTIVE=researcher
       - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER:-guest}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS:-guest}
       - IMAGE_AGENT_URL=http://image-agent:8080/image
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AI_OLLAMA_CHAT_OPTIONS_MODEL=gemma4:12b
@@ -111,11 +113,12 @@ services:
   image-agent:
     build: .
     image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
+    entrypoint: ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
     environment:
       - SPRING_PROFILES_ACTIVE=image-agent
       - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_DEFAULT_USER:-guest}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS:-guest}
       - SPRING_AI_OLLAMA_BASE_URL=http://192.168.100.190:11434
       - SPRING_AUTOCONFIGURE_EXCLUDE=org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
       - SPRING_AI_OPENAI_API_KEY=dummy
@@ -155,6 +158,7 @@ services:
     command:
       - "run"
       - "--server"
+      - "--addr=:8181"
       - "--log-level=debug"
       - "/policies"
     volumes:
