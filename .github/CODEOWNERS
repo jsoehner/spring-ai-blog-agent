@@ -1,0 +1,15 @@
+# Security Governance CODEOWNERS
+# Require review on high-risk and security-critical paths
+
+# Security and Policy Controls
+/security-policies/                                @jsoehner
+/policy.rego                                       @jsoehner
+/src/main/java/com/example/demo/security/          @jsoehner
+
+# CI/CD Workflows & Policies
+/.github/workflows/                                @jsoehner
+/.github/CODEOWNERS                                @jsoehner
+/.github/dependabot.yml                            @jsoehner
+
+# Architectural Decisions
+/docs/adr/                                         @jsoehner
