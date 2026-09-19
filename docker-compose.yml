@@ -1,6 +1,6 @@
 services:
   rabbitmq:
-    image: ${DOCKER_REGISTRY_PREFIX:-}rabbitmq:3-management
+    image: ${DOCKER_REGISTRY_PREFIX:-}rabbitmq:management
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -22,7 +22,7 @@ services:
 
   supervisor-agent:
     build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
     ports:
       - "8081:8080"
     entrypoint: ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
@@ -69,7 +69,7 @@ services:
 
   researcher-agent:
     build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
     entrypoint: ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
     environment:
       - SPRING_PROFILES_ACTIVE=researcher
@@ -112,7 +112,7 @@ services:
 
   image-agent:
     build: .
-    image: ghcr.io/jsoehner/spring-ai-blog-agent:v1.0.0
+    image: ghcr.io/jsoehner/spring-ai-blog-agent:latest
     entrypoint: ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app.jar"]
     environment:
       - SPRING_PROFILES_ACTIVE=image-agent
@@ -152,7 +152,7 @@ services:
 
 
   opa:
-    image: openpolicyagent/opa:v0.60.0
+    image: openpolicyagent/opa:latest
     ports:
       - "8181:8181"
     command:
