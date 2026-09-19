@@ -36,7 +36,7 @@ public class OpaGuardrailAspect {
         Map<String, Object> request = new HashMap<>();
         request.put("action", toolName);
         request.put("tool_name", toolName);
-        request.put("arguments", flattenArguments(args));
+        request.put("arguments", flattenArguments(toolName, args));
         input.put("topic", request.getOrDefault("topic", "default_topic"));
         input.put("request", request);
 
@@ -79,18 +79,30 @@ public class OpaGuardrailAspect {
         return joinPoint.proceed();
     }
 
-    private Map<String, String> flattenArguments(Object[] args) {
+    /**
+     * Flattens tool arguments into a schema-consistent map for OPA evaluation.
+     * This prevents "type confusion" where OPA might misinterpret generic maps.
+     */
+    private Map<String, String> flattenArguments(String toolName, Object[] args) {
         Map<String, String> flattened = new HashMap<>();
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
-            if (arg instanceof com.example.demo.CodeTools.WriteRequest writeRequest) {
-                flattened.put("writeRequest.absolutePath", writeRequest.absolutePath());
-                flattened.put("writeRequest.content", writeRequest.content());
-            } else if (arg instanceof com.example.demo.ImageTools.MoveRequest moveRequest) {
-                flattened.put("moveRequest.sourceDirectory", moveRequest.sourceDirectory());
-                flattened.put("moveRequest.targetDirectory", moveRequest.targetDirectory());
-            } else {
-                flattened.put("arg" + i, String.valueOf(arg));
+            switch (toolName) {
+                case "writeFile":
+                    if (arg instanceof com.example.demo.CodeTools.WriteRequest writeRequest) {
+                        flattened.put("writeRequest.absolutePath", writeRequest.absolutePath());
+                        flattened.put("writeRequest.content", writeRequest.content());
+                    }
+                    break;
+                case "moveImages":
+                    if (arg instanceof com.example.demo.ImageTools.MoveRequest moveRequest) {
+                        flattened.put("moveRequest.sourceDirectory", moveRequest.sourceDirectory());
+                        flattened.put("moveRequest.targetDirectory", moveRequest.targetDirectory());
+                    }
+                    break;
+                default:
+                    flattened.put("arg" + i, String.valueOf(arg));
+                    break;
             }
         }
         return flattened;

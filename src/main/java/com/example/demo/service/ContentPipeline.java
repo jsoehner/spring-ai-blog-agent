@@ -16,7 +16,8 @@ public class ContentPipeline {
 
     public ContentPipeline() {
         processors = new ArrayList<>();
-        // Order matters here: sanitize markdown/blocks, deduplicate repeated content, validate HTML, inject SEO
+        // Order matters here: verify facts, sanitize markdown/blocks, deduplicate repeated content, validate HTML, inject SEO
+        processors.add(new FactVerifier());
         processors.add(new MarkdownSanitizer());
         processors.add(new SentenceDeduplicator());
         processors.add(new HtmlValidator());

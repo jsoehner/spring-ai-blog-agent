@@ -31,6 +31,10 @@ public class WebCrawlerConfig {
         "wikipedia.org"
     );
 
+    private final List<String> DENY_LIST = java.util.Arrays.asList(
+        "127.0.0.1", "localhost", "0.0.0.0", "169.254.169.254", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"
+    );
+
     @Tool(description = "Returns a curated list of default websites for researching topics when web search fails.")
     public List<String> getDefaultSearchSites() {
         System.out.println("Researcher Agent retrieving default search sites list...");
@@ -84,13 +88,20 @@ public class WebCrawlerConfig {
                 return false;
             }
             
+            // Check against deny list (IP ranges and hostnames)
+            for (String denied : DENY_LIST) {
+                if (host.equals(denied) || host.contains(denied)) {
+                    return false;
+                }
+            }
+            
             // Check against allowlist
             boolean isAllowed = ALLOWED_DOMAINS.stream().anyMatch(host::endsWith);
             if (!isAllowed) {
                 System.out.println("URL " + host + " is not in the allowlist.");
                 return false;
             }
-
+            
             java.net.InetAddress[] addresses = java.net.InetAddress.getAllByName(host);
             for (java.net.InetAddress addr : addresses) {
                 if (addr.isLoopbackAddress() || 
