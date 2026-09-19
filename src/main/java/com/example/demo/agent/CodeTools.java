@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.agent;
 
 import org.springframework.ai.tool.annotation.Tool;
 

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.web;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.PostMapping;

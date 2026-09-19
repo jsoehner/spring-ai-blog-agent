@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.infrastructure;
 
 import org.springframework.stereotype.Service;
 import java.io.IOException;

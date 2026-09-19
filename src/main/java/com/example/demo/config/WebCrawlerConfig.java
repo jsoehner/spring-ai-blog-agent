@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.config;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 @Component
 public class WebCrawlerConfig {
@@ -24,6 +24,13 @@ public class WebCrawlerConfig {
     @Value("${webcrawler.default.urls:https://thehackernews.com/,https://www.bleepingcomputer.com/,https://www.schneier.com/,https://krebsonsecurity.com/,https://haveibeenpwned.com/,https://www.identitytheft.gov/,https://www.virustotal.com/,https://owasp.org/,https://www.cisa.gov/,https://staysafeonline.org/}")
     private List<String> defaultUrls;
 
+    private final List<String> ALLOWED_DOMAINS = java.util.Arrays.asList(
+        "thehackernews.com", "bleepingcomputer.com", "schneier.com",
+        "krebsonsecurity.com", "haveibeenpwned.com", "identitytheft.gov",
+        "virustotal.com", "owasp.org", "cisa.gov", "staysafeonline.org",
+        "wikipedia.org"
+    );
+
     @Tool(description = "Returns a curated list of default websites for researching topics when web search fails.")
     public List<String> getDefaultSearchSites() {
         System.out.println("Researcher Agent retrieving default search sites list...");
@@ -33,7 +40,7 @@ public class WebCrawlerConfig {
     @Tool(description = "Searches the web for a given topic and returns a list of relevant URLs.")
     public List<String> searchWeb(String query) {
         System.out.println("Researcher Agent searching Wikipedia for: " + query);
-        List<String> urls = new java.util.ArrayList<>();
+        List<String> urls = new ArrayList<>();
         try {
             String url = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + 
                          java.net.URLEncoder.encode(query, "UTF-8") + "&utf8=&format=json";
@@ -76,6 +83,14 @@ public class WebCrawlerConfig {
             if (host == null || host.isEmpty()) {
                 return false;
             }
+            
+            // Check against allowlist
+            boolean isAllowed = ALLOWED_DOMAINS.stream().anyMatch(host::endsWith);
+            if (!isAllowed) {
+                System.out.println("URL " + host + " is not in the allowlist.");
+                return false;
+            }
+
             java.net.InetAddress[] addresses = java.net.InetAddress.getAllByName(host);
             for (java.net.InetAddress addr : addresses) {
                 if (addr.isLoopbackAddress() || 

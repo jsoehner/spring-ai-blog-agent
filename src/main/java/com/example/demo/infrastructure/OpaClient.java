@@ -1,4 +1,4 @@
-package com.example.demo.security;
+package com.example.demo.infrastructure;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

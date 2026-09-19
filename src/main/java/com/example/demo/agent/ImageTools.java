@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.agent;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Metadata;

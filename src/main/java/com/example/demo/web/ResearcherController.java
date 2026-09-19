@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.web;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.demo.config.WebCrawlerConfig;
 
 import java.util.HashMap;
 import java.util.List;

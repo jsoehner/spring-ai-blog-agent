@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.infrastructure;
 
 import com.example.demo.security.OpaClient;
 import org.springframework.stereotype.Service;

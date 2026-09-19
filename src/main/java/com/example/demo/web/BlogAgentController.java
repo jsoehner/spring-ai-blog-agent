@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.web;
 
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.amqp.rabbit.annotation.Queue;

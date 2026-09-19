@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.infrastructure;
 
 import org.springframework.ai.tool.annotation.Tool;
 import java.io.BufferedReader;
