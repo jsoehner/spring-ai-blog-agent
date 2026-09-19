@@ -158,25 +158,45 @@ jobs:
               if ('${{ needs.trivy.result }}' === 'failure') body += `- Container & FS Scanning (Trivy) failed/errored\n`;
             }
             
-            await github.rest.issues.create({
+            // Check for existing open security findings issue to prevent duplicate issues
+            const existingIssues = await github.rest.issues.listForRepo({
               owner,
               repo,
-              title: 'Security Scan: Findings Detected',
-              body: body,
-              assignees: ['jsoehner'],
-              labels: ['security', 'automated-scan']
+              state: 'open',
+              labels: 'automated-scan'
             });
+            const matchingIssue = existingIssues.data.find(i => i.title === 'Security Scan: Findings Detected');
 
-            // Trigger Automated Dependency Update
-            console.log('Triggering automated dependency update workflow...');
-            try {
-              await github.rest.actions.createWorkflowDispatch({
+            if (matchingIssue) {
+              console.log(`Updating existing security issue #${matchingIssue.number}...`);
+              await github.rest.issues.update({
                 owner,
                 repo,
-                workflow_id: 'nightly-dependency-update.yml',
-                ref: 'main'
+                issue_number: matchingIssue.number,
+                body: body
               });
-              console.log('Successfully triggered dependency update workflow.');
-            } catch (error) {
-              console.error('Failed to trigger dependency update workflow:', error);
+            } else {
+              console.log('Creating new security findings issue...');
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title: 'Security Scan: Findings Detected',
+                body: body,
+                assignees: ['jsoehner'],
+                labels: ['security', 'automated-scan']
+              });
+
+              // Trigger Automated Dependency Update only for new issues
+              console.log('Triggering automated dependency update workflow...');
+              try {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner,
+                  repo,
+                  workflow_id: 'nightly-dependency-update.yml',
+                  ref: 'main'
+                });
+                console.log('Successfully triggered dependency update workflow.');
+              } catch (error) {
+                console.error('Failed to trigger dependency update workflow:', error);
+              }
             }
