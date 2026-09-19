@@ -12,6 +12,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.example.demo.infrastructure.OpaClient;
+import com.example.demo.agent.CodeTools;
+import com.example.demo.agent.ImageTools;
+
 @Aspect
 @Component
 public class OpaGuardrailAspect {
@@ -36,7 +40,7 @@ public class OpaGuardrailAspect {
         Map<String, Object> request = new HashMap<>();
         request.put("action", toolName);
         request.put("tool_name", toolName);
-        request.put("arguments", flattenArguments(args));
+        request.put("arguments", flattenArguments(toolName, args));
         input.put("topic", request.getOrDefault("topic", "default_topic"));
         input.put("request", request);
 
@@ -48,9 +52,9 @@ public class OpaGuardrailAspect {
             input.put("resource_type", "file");
             if (args.length > 0) {
                 String path;
-                if (args[0] instanceof com.example.demo.CodeTools.WriteRequest writeRequest) {
+                if (args[0] instanceof CodeTools.WriteRequest writeRequest) {
                     path = writeRequest.absolutePath();
-                } else if (args[0] instanceof com.example.demo.ImageTools.MoveRequest moveRequest) {
+                } else if (args[0] instanceof ImageTools.MoveRequest moveRequest) {
                     path = moveRequest.sourceDirectory();
                 } else {
                     path = args[0].toString();
@@ -81,18 +85,26 @@ public class OpaGuardrailAspect {
         return joinPoint.proceed();
     }
 
-    private Map<String, String> flattenArguments(Object[] args) {
+    private Map<String, String> flattenArguments(String toolName, Object[] args) {
         Map<String, String> flattened = new HashMap<>();
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
-            if (arg instanceof com.example.demo.CodeTools.WriteRequest writeRequest) {
-                flattened.put("writeRequest.absolutePath", writeRequest.absolutePath());
-                flattened.put("writeRequest.content", writeRequest.content());
-            } else if (arg instanceof com.example.demo.ImageTools.MoveRequest moveRequest) {
-                flattened.put("moveRequest.sourceDirectory", moveRequest.sourceDirectory());
-                flattened.put("moveRequest.targetDirectory", moveRequest.targetDirectory());
-            } else {
-                flattened.put("arg" + i, String.valueOf(arg));
+            switch (toolName) {
+                case "writeFile":
+                    if (arg instanceof CodeTools.WriteRequest writeRequest) {
+                        flattened.put("writeRequest.absolutePath", writeRequest.absolutePath());
+                        flattened.put("writeRequest.content", writeRequest.content());
+                    }
+                    break;
+                case "moveImages":
+                    if (arg instanceof ImageTools.MoveRequest moveRequest) {
+                        flattened.put("moveRequest.sourceDirectory", moveRequest.sourceDirectory());
+                        flattened.put("moveRequest.targetDirectory", moveRequest.targetDirectory());
+                    }
+                    break;
+                default:
+                    flattened.put("arg" + i, String.valueOf(arg));
+                    break;
             }
         }
         return flattened;

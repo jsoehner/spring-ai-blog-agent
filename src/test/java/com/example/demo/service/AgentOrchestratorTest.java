@@ -1,5 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.agent.FactVerifier;
+import com.example.demo.agent.TextHumanizerProcessor;
+import com.example.demo.infrastructure.StorageService;
+import com.example.demo.infrastructure.VersionControlService;
 import com.example.demo.tools.WordPressTool;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +36,7 @@ class AgentOrchestratorTest {
     @Mock private VersionControlService versionControlService;
     @Mock private ContentPipeline contentPipeline;
     @Mock private TextHumanizerProcessor textHumanizerProcessor;
+    @Mock private FactVerifier factVerifier;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +57,8 @@ class AgentOrchestratorTest {
             messageService,
             versionControlService,
             contentPipeline,
-            textHumanizerProcessor
+            textHumanizerProcessor,
+            factVerifier
         );
     }
 
@@ -61,6 +67,7 @@ class AgentOrchestratorTest {
         String payload = "{\"topic\": \"test-topic\", \"facts\": \"test-facts\"}";
         
         when(textHumanizerProcessor.process(anyString())).thenReturn("humanized-facts");
+        when(factVerifier.process(anyString())).thenAnswer(i -> i.getArgument(0));
         when(chatClient.prompt().user(anyString()).call().content()).thenReturn("<html>Content</html>");
         when(contentPipeline.process(anyString())).thenReturn("<html>Processed</html>");
         when(restTemplate.postForObject(anyString(), anyMap(), eq(String.class)))
@@ -83,6 +90,7 @@ class AgentOrchestratorTest {
         String payload = "{\"topic\": \"fail-topic\", \"facts\": \"test-facts\"}";
         
         when(textHumanizerProcessor.process(anyString())).thenReturn("humanized-facts");
+        when(factVerifier.process(anyString())).thenAnswer(i -> i.getArgument(0));
         when(chatClient.prompt().user(anyString()).call().content())
             .thenThrow(new RuntimeException("Persistent Failure"));
 

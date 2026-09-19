@@ -1,4 +1,4 @@
-# ADR 0001: Multi-Layered Security Guardrails for AI Tool Execution
+# ADR 0016: Multi-Layered Security Guardrails for AI Tool Execution
 
 * Status: accepted
 * Deciders: jsoehner
@@ -33,6 +33,17 @@ Chosen option: Option 3, because it provides the best balance of fine-grained po
 * **Latency**: Every tool call now requires an external network request to the OPA server.
 * **Complexity**: Adds an extra layer of infrastructure (OPA server) to maintain.
 * **Debugging**: Troubleshooting a "Denied" action requires checking both the Aspect logic and the OPA policy rules.
+
+## Security Audit Findings (Updated 2024-05-24)
+During a comprehensive security audit, the following high-severity vulnerabilities were identified in the current implementation of this ADR:
+
+### H1: Tool Schema Fragility (Argument Mapping Bypass)
+* **Description**: The `flattenArguments` method in `OpaGuardrailAspect` maps specific request objects (e.g., `WriteRequest`). If an LLM provides an unexpected object or a differently structured map, the aspect may map these as generic `argN` parameters. This can bypass OPA path checks that specifically look for `input.request.arguments.writeRequest.absolutePath`.
+* **Status**: Identified. Remediation involves moving to a strict schema-driven mapping approach.
+
+### H2: Researcher Agent SSRF
+* **Description**: The `Researcher` agent utilizes `Jsoup` for web content retrieval but lacks an egress blocklist. This allows the agent to be coerced into making requests to internal network resources (e.g., `http://169.254.169.254` or internal metadata services).
+* **Status**: Identified. Remediation involves implementing a robust IP blocklist for internal and reserved ranges.
 
 ## Pros and Cons of Options
 

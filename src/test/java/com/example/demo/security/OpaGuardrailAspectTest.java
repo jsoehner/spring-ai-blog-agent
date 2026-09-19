@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
-import com.example.demo.CodeTools.WriteRequest;
+import com.example.demo.agent.CodeTools.WriteRequest;
+import com.example.demo.infrastructure.OpaClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;

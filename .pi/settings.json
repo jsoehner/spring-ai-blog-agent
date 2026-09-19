@@ -1,6 +1,0 @@
-{
-  "compactionModel": "C:\\Users\\jsoehner\\Llama-GUI\\data\\models\\llama-3.2-1b-instruct-q8_0-gguf-llama-3.2-1b-instruct-q8_0\\llama-3.2-1b-instruct-q8_0.gguf",
-  "compaction": {
-    "model": "C:\\Users\\jsoehner\\Llama-GUI\\data\\models\\llama-3.2-1b-instruct-q8_0-gguf-llama-3.2-1b-instruct-q8_0\\llama-3.2-1b-instruct-q8_0.gguf"
-  }
-}
