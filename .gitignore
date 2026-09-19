@@ -41,10 +41,11 @@ config/application.properties
 src/main/resources/application.properties
 .env
 
-# Piolium (Security Framework - Do not track)
+# Piolium & Agent Frameworks (Do not track)
 piolium/
 .pi/
 .pi-subagents/
+.agents/
 
 # Runtime output and logs
 output/
