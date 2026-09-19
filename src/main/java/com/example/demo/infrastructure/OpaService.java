@@ -1,6 +1,6 @@
 package com.example.demo.infrastructure;
 
-import com.example.demo.security.OpaClient;
+import com.example.demo.infrastructure.OpaClient;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 

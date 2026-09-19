@@ -6,6 +6,13 @@ import com.example.demo.agent.HtmlValidator;
 import com.example.demo.agent.MarkdownSanitizer;
 import com.example.demo.agent.SeoMetadataInjector;
 import com.example.demo.agent.SentenceDeduplicator;
+import com.example.demo.agent.FactVerifier;
+import com.example.demo.agent.ContentProcessor;
+
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ContentPipeline {
@@ -14,14 +21,18 @@ public class ContentPipeline {
 
     private final List<ContentProcessor> processors;
 
-    public ContentPipeline() {
+    public ContentPipeline(FactVerifier factVerifier,
+                           MarkdownSanitizer sanitizer,
+                           SentenceDeduplicator deduplicator,
+                           HtmlValidator validator,
+                           SeoMetadataInjector seoInjector) {
         processors = new ArrayList<>();
         // Order matters here: verify facts, sanitize markdown/blocks, deduplicate repeated content, validate HTML, inject SEO
-        processors.add(new FactVerifier());
-        processors.add(new MarkdownSanitizer());
-        processors.add(new SentenceDeduplicator());
-        processors.add(new HtmlValidator());
-        processors.add(new SeoMetadataInjector());
+        processors.add(factVerifier);
+        processors.add(sanitizer);
+        processors.add(deduplicator);
+        processors.add(validator);
+        processors.add(seoInjector);
     }
 
     public String process(String content) {

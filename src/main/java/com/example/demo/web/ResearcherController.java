@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.config.WebCrawlerConfig;
 
 import java.util.HashMap;
 import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 @Component
@@ -49,7 +50,7 @@ public class ResearcherController {
                 .defaultSystem(researcherPrompt)
                 .defaultAdvisors(
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                        new SimpleLoggerAdvisor()
+                        new org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor()
                 )
                 .defaultTools(webCrawlerConfig)
                 .build();

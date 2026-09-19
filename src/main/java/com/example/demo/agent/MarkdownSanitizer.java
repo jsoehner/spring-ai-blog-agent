@@ -1,3 +1,90 @@
 package com.example.demo.agent;
 
-import org.jsoup.Jsoup;\nimport org.jsoup.nodes.Document;\nimport org.jsoup.safety.Safelist;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class MarkdownSanitizer implements ContentProcessor {\n\n    private static final Pattern MARKDOWN_FENCE = Pattern.compile(\"^```(?:html)?\\s*([\\s\\S]*?)\\s*```$\", Pattern.CASE_INSENSITIVE);\n    private static final Pattern WP_OPEN_TAG_SPACES = Pattern.compile(\"<!--\\s*wp:\\s*([a-zA-Z0-9/_-]+)(\\s+[\\s\\S]*?)?\\s*-->\");\n    private static final Pattern WP_CLOSE_TAG_SPACES = Pattern.compile(\"<!--\\s*/wp:\\s*([a-zA-Z0-9/_-]+)\\s*-->\");\n    private static final Pattern WP_BLOCK_INTERNAL_SPACING = Pattern.compile(\"((<!--\\s*wp:[a-zA-Z0-9/_-]+(?:\\s+[^>]*)?-->)\\s*([\\s\\S]*?)\\s*(<!--\\s*/wp:[a-zA-Z0-9/_-]+\\s*-->)\)");\n\n    @Override\n    public String process(String content) {\n        if (content == null) return null;\n        String text = content.replace(\"\\r\\n\", \"\\n\").replace(\"\\r\", \"\\n\").trim();\n\n        // Strip markdown code fences if present\n        Matcher fenceMatcher = MARKDOWN_FENCE.matcher(text);\n        if (fenceMatcher.matches()) {\n            text = fenceMatcher.group(1).trim();\n        } else {\n            if (text.startsWith(\"```html\")) {\n                text = text.substring(7);\n            } else if (text.startsWith(\"```\")) {\n                text = text.substring(3);\n            }\n            if (text.endsWith(\"```\")) {\n                text = text.substring(0, text.length() - 3);\n            }\n            text = text.trim();\n        }\n\n        // Security Sanitization: Clean HTML and remove dangerous tags/scripts\n        // We use a Safelist that allows common blog elements but strips scripts and iframes\n        text = Jsoup.clean(text, Safelist.relaxed().withComments());\n\n        // Normalize spaces inside wp comment tags: <!-- wp: paragraph --> -> <!-- wp:paragraph -->\n        text = WP_OPEN_TAG_SPACES.matcher(text).replaceAll(mr -> {\n            String tag = mr.group(1);\n            String attrs = mr.group(2) != null ? mr.group(2).trim() : \"\";\n            return attrs.isEmpty() ? \"<!-- wp:\" + tag + \" -->\" : \"<!-- wp:\" + tag + \" \" + attrs + \" -->\";\n        });\n        text = WP_CLOSE_TAG_SPACES.matcher(text).replaceAll(mr -> \"<!-- /wp:\" + mr.group(1) + \" -->\");\n\n        // Remove any meta tags or SEO comments if present in WordPress content\n        text = text.replaceAll(\"<!--\\s*SEO:[\\s\\S]*?-->\\s*\", \"\").replaceAll(\"<meta[^>]*>\\s*\", \"\");\n\n        // Remove linebreaks and extra spaces between block comments and their enclosed HTML element\n        text = WP_BLOCK_INTERNAL_SPACING.matcher(text).replaceAll(mr -> {\n            String openTag = mr.group(1).trim();\n            String inner = mr.group(2).trim();\n            String closeTag = mr.group(3).trim();\n\n            if ((inner.startsWith(\"<p\") && inner.endsWith(\"</p>\")) ||\n                (inner.matches(\"^<h[1-6][^>]*>[\\s\\S]*</h[1-6]>$"))) {\n                int openTagEnd = inner.indexOf('>');\n                int closeTagStart = inner.lastIndexOf('<');\n                String tagOpen = inner.substring(0, openTagEnd + 1);\n                String tagClose = inner.substring(closeTagStart);\n                String body = inner.substring(openTagEnd + 1, closeTagStart).trim().replaceAll(\"\\s+\", \" \");\n                inner = tagOpen + body + tagClose;\n            } else if (inner.startsWith(\"<figure\") && inner.endsWith(\"</figure>\")) {\n                inner = inner.replaceAll(\">\\s+<\", \"><\").replaceAll(\"\\s*\\n\\s*\", \" \").replaceAll(\"\\s+\", \" \").trim();\n            }\n\n            return openTag + inner + closeTag;\n        });\n\n        // Remove empty/blank lines and excess linefeeds\n        String[] lines = text.split(\"\\n\");\n        StringBuilder sb = new StringBuilder();\n        for (String line : lines) {\n            String trimmed = line.trim();\n            if (!trimmed.isEmpty()) {\n                if (sb.length() > 0) {\n                    sb.append(\"\\n\");\n                }\n                sb.append(trimmed);\n            }\n        }\n\n        return sb.toString();\n    }\n}
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.safety.Safelist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class MarkdownSanitizer implements ContentProcessor {
+
+    private static final Pattern MARKDOWN_FENCE = Pattern.compile("^```(?:html)?\\s*([\\s\\S]*?)\\s*```$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern WP_OPEN_TAG_SPACES = Pattern.compile("<!--\\s*wp:\\s*([a-zA-Z0-9/_-]+)(\\s+[\\s\\S]*?)?\\s*-->");
+    private static final Pattern WP_CLOSE_TAG_SPACES = Pattern.compile("<!--\\s*/wp:\\s*([a-zA-Z0-9/_-]+)\\s*-->");
+    private static final Pattern WP_BLOCK_INTERNAL_SPACING = Pattern.compile("((<!--\\s*wp:[a-zA-Z0-9/_-]+(?:\\s+[^>]*)?-->)\\s*([\\s\\S]*?)\\s*(<!--\\s*/wp:[a-zA-Z0-9/_-]+\\s*-->))");
+
+    @Override
+    public String process(String content) {
+        if (content == null) return null;
+        String text = content.replace("\r\n", "\n").replace("\r", "\n").trim();
+
+        // Strip markdown code fences if present
+        Matcher fenceMatcher = MARKDOWN_FENCE.matcher(text);
+        if (fenceMatcher.matches()) {
+            text = fenceMatcher.group(1).trim();
+        } else {
+            if (text.startsWith("```html")) {
+                text = text.substring(7);
+            } else if (text.startsWith("```")) {
+                text = text.substring(3);
+            }
+            if (text.endsWith("```")) {
+                text = text.substring(0, text.length() - 3);
+            }
+            text = text.trim();
+        }
+
+        // Security Sanitization: Clean HTML and remove dangerous tags/scripts
+        // We use a Safelist that allows common blog elements but strips scripts and iframes
+        text = Jsoup.clean(text, Safelist.relaxed());
+
+        // Normalize spaces inside wp comment tags: <!-- wp: paragraph --> -> <!-- wp:paragraph -->
+        text = WP_OPEN_TAG_SPACES.matcher(text).replaceAll(mr -> {
+            String tag = mr.group(1);
+            String attrs = mr.group(2) != null ? mr.group(2).trim() : "";
+            return attrs.isEmpty() ? "<!-- wp:" + tag + " -->" : "<!-- wp:" + tag + " " + attrs + " -->";
+        });
+        text = WP_CLOSE_TAG_SPACES.matcher(text).replaceAll(mr -> "<!-- /wp:" + mr.group(1) + " -->");
+
+        // Remove any meta tags or SEO comments if present in WordPress content
+        text = text.replaceAll("<!--\\s*SEO:[\\s\\S]*?-->\\s*", "").replaceAll("<meta[^>]*>\\s*", "");
+
+        // Remove linebreaks and extra spaces between block comments and their enclosed HTML element
+        text = WP_BLOCK_INTERNAL_SPACING.matcher(text).replaceAll(mr -> {
+            String openTag = mr.group(1).trim();
+            String inner = mr.group(2).trim();
+            String closeTag = mr.group(3).trim();
+
+            if ((inner.startsWith("<p") && inner.endsWith("</p>")) ||
+                (inner.matches("^<h[1-6][^>]*>[\\s\\S]*</h[1-6]>$"))) {
+                int openTagEnd = inner.indexOf('>');
+                int closeTagStart = inner.lastIndexOf('<');
+                String tagOpen = inner.substring(0, openTagEnd + 1);
+                String tagClose = inner.substring(closeTagStart);
+                String body = inner.substring(openTagEnd + 1, closeTagStart).trim().replaceAll("\\s+", " ");
+                inner = tagOpen + body + tagClose;
+            } else if (inner.startsWith("<figure") && inner.endsWith("</figure>")) {
+                inner = inner.replaceAll(">\\s+<", "><").replaceAll("\\s*\\n\\s*", " ").replaceAll("\\s+", " ").trim();
+            }
+
+            return openTag + inner + closeTag;
+        });
+
+        // Remove empty/blank lines and excess linefeeds
+        String[] lines = text.split("\n");
+        StringBuilder sb = new StringBuilder();
+        for (String line : lines) {
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty()) {
+                if (sb.length() > 0) {
+                    sb.append("\n");
+                }
+                sb.append(trimmed);
+            }
+        }
+
+        return sb.toString();
+    }
+}

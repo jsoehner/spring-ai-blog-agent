@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.example.demo.service.AgentOrchestrator;
-import com.example.demo.service.VersionControlService;
-import com.example.demo.service.StorageService;
-import com.example.demo.service.ToolRegistry;
+import com.example.demo.config.WebCrawlerConfig;
+import com.example.demo.infrastructure.StorageService;
+import com.example.demo.infrastructure.VersionControlService;
 
 import java.util.List;
 import java.util.Random;

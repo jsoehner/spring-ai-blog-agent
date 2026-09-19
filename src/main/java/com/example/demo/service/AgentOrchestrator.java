@@ -15,9 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.demo.util.RetryUtils.executeWithRetry;
 
+import com.example.demo.infrastructure.StorageService;
+import com.example.demo.infrastructure.VersionControlService;
+import com.example.demo.agent.TextHumanizerProcessor;
 import com.example.demo.agent.FactVerifier;
 import com.example.demo.agent.MarkdownSanitizer;
 import com.example.demo.agent.SentenceDeduplicator;
+import com.example.demo.service.ContentPipeline;
 
 @Service
 public class AgentOrchestrator {
@@ -93,7 +97,7 @@ public class AgentOrchestrator {
     public void handleSupervisorTask(String jsonPayload) {
         String topic = null;
         try {
-            Map<String, String> payload = objectMapper.readValue(jsonPayload, new com.fasterxml.jackson.databind.type.TypeReference<Map<String, String>>() {});
+            Map<String, String> payload = objectMapper.readValue(jsonPayload, Map.class);
             topic = payload.get("topic");
             if (topic == null) {
                 log.error("Topic is missing in payload");
