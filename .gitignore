@@ -45,6 +45,7 @@ src/main/resources/application.properties
 piolium/
 .pi/
 .pi-subagents/
+.agent/
 .agents/
 
 # Runtime output and logs

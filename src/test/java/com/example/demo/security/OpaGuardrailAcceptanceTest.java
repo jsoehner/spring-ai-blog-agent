@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.infrastructure.OpaClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,7 @@ class OpaGuardrailAcceptanceTest {
         // Verify that WriteRequest is flattened into a Map for OPA
         when(opaClient.evaluatePolicy(any())).thenReturn(true);
 
-        assertDoesNotThrow(() -> dummyAgentTools.writeFile(new com.example.demo.CodeTools.WriteRequest("src/test.txt", "content")));
+        assertDoesNotThrow(() -> dummyAgentTools.writeFile(new com.example.demo.agent.CodeTools.WriteRequest("src/test.txt", "content")));
     }
 }
 
@@ -114,7 +115,7 @@ class DummyAgentTools {
     }
 
     @Tool
-    public String writeFile(com.example.demo.CodeTools.WriteRequest request) {
+    public String writeFile(com.example.demo.agent.CodeTools.WriteRequest request) {
         return "Wrote " + request.absolutePath();
     }
 }

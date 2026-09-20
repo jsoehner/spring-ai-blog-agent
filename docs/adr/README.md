@@ -23,6 +23,17 @@ This directory contains Architectural Decision Records (ADRs) and Security Archi
 | 0014 | [Multi-Agent Redundancy Elimination and Progressive Blog Generation Pipeline](0014-multi-agent-redundancy-elimination-and-progressive-generation.md) | 2026-09-06 | Accepted | Internal |
 | 0015 | [Resolve CI/CD Workflow Failures, Gradle 10 Deprecations, and Dependency Upgrades](0015-resolve-ci-cd-workflow-failures-and-gradle-deprecations.md) | 2026-09-07 | Accepted | Internal |
 | 0016 | [Multi-Layered Security Guardrails for AI Tool Execution](0016-multi-layered-security-guardrails.md) | 2024-05-23 | Accepted | Internal |
+| 0017 | [Layered Architecture & Separation of Concerns](0017-layered-architecture-separation-of-concerns.md) | 2024-05-23 | Accepted | Internal |
+| 0018 | [Logging & Observability Standard](0018-logging-and-observability-standard.md) | 2024-05-23 | Accepted | Internal |
+| 0019 | [Configuration Management](0019-configuration-management.md) | 2024-05-23 | Accepted | Internal |
+| 0020 | [Version Control Abstraction](0020-version-control-abstraction.md) | 2024-05-23 | Accepted | Internal |
+| 0021 | [File System & Storage Strategy](0021-file-system-and-storage-strategy.md) | 2024-05-23 | Accepted | Internal |
+| 0022 | [External Tool Integration Pattern](0022-external-tool-integration-pattern.md) | 2024-05-23 | Accepted | Internal |
+| 0023 | [Message Broker & Task Routing](0023-message-broker-and-task-routing.md) | 2024-05-23 | Accepted | Internal |
+| 0024 | [Agent Orchestration Patterns](0024-agent-orchestration-patterns.md) | 2024-05-23 | Accepted | Internal |
+| 0025 | [Threading & Concurrency Model](0025-threading-and-concurrency-model.md) | 2024-05-23 | Accepted | Internal |
+| 0026 | [Content Processing Pipeline](0026-content-processing-pipeline.md) | 2024-05-23 | Accepted | Internal |
+| 0027 | [Prompt Engineering & Versioning](0027-prompt-engineering-and-versioning.md) | 2024-05-23 | Accepted | Internal |
 
 ## Legacy ADRs
 

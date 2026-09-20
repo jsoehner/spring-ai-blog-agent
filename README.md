@@ -81,6 +81,19 @@ Complex visual work is delegated to a separate, dedicated **Image Agent** runnin
 
 ---
 
+## 🛡️ Security & Compliance
+
+This project prioritizes security through a multi-layered defense-in-depth architecture. Every tool call initiated by an AI agent is validated against a centralized Open Policy Agent (OPA) server and a Java-based security aspect that performs path normalization and argument flattening.
+
+### Recent Security Audit
+
+A comprehensive security audit was recently conducted, identifying and documenting key findings including:
+
+- **H1: Tool Schema Fragility**: Identified risks in how tool arguments are mapped to OPA policies and currently being addressed via a schema-driven mapping approach.
+- **H2: Researcher Agent SSRF**: Identified risks in web crawling logic and mitigated via egress IP blocklisting.
+
+Detailed audit reports and Proofs of Concept (PoCs) can be found in the `security-audit/` directory.
+
 ## 🛠️ Setup & Installation
 
 ### 1. Using Pre-built Container Images

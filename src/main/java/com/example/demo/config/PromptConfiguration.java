@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.service.PromptTemplate;
+import com.example.demo.agent.PromptTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.util.List;

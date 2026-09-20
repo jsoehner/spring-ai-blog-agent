@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.service.AgentOrchestrator;
 import com.example.demo.service.BlogAgentService;
+import com.example.demo.web.BlogAgentController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
