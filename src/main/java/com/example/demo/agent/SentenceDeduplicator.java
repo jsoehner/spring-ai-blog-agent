@@ -50,9 +50,9 @@ public class SentenceDeduplicator implements ContentProcessor {
                 }
 
                 if (!uniqueSentences.isEmpty()) {
-                    // Enforce the 3-Sentence Cap per paragraph block
-                    for (int i = 0; i < uniqueSentences.size(); i += 3) {
-                        List<String> chunk = uniqueSentences.subList(i, Math.min(i + 3, uniqueSentences.size()));
+                    // Enforce the ~5 sentence cap per paragraph block (aim for 3-5 sentences)
+                    for (int i = 0; i < uniqueSentences.size(); i += 5) {
+                        List<String> chunk = uniqueSentences.subList(i, Math.min(i + 5, uniqueSentences.size()));
                         String cleanBody = String.join(" ", chunk);
                         if (seenParagraphBodies.add(normalize(cleanBody))) {
                             outputLines.add("<!-- wp:paragraph --><p>" + cleanBody + "</p><!-- /wp:paragraph -->");
