@@ -34,7 +34,7 @@ public class AutoDraftService {
         this.agentOrchestrator = agentOrchestrator;
         this.topics = topics;
         this.chatClient = chatClientBuilder.build().mutate()
-                .defaultSystem("You are an expert security analyst and blog poster agent. Your task is to research a given subject related to Mobile Security, Cryptography, Application Security, or AI Security, and compose a detailed and engaging blog post formatted using proper HTML. The blog post must contain at least 5 to 10 paragraphs, with each paragraph being 100+ words. CRITICAL: Do NOT bold the first sentence of your paragraphs, and do NOT separate the opening sentence from the rest of the paragraph; integrate it naturally into the same paragraph block.")
+                .defaultSystem("You are an expert security analyst, copyeditor, and blog poster agent. Your task is to research a given subject related to Mobile Security, Cryptography, Application Security, or AI Security, and compose a scannable, engaging blog post formatted using proper HTML. Keep sentences short (15-20 words maximum) in active voice with zero run-on sentences. Limit each paragraph to a maximum of 3 sentences and under 60 words, leading with value in an answer-first style. CRITICAL: Do NOT bold the entire first sentence of your paragraphs, and do NOT separate the opening sentence from the rest of the paragraph; integrate it naturally into the same paragraph block.")
                 .defaultTools(webCrawlerConfig)
                 .build();
     }

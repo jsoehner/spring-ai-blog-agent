@@ -39,4 +39,18 @@ class SentenceDeduplicatorTest {
         String actual = deduplicator.process(input);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testEnforcesThreeSentenceCapPerParagraph() {
+        String input = """
+                <!-- wp:paragraph --><p>First sentence delivers value. Second sentence provides context. Third sentence explains mechanics. Fourth sentence exceeds cap. Fifth sentence continues thought.</p><!-- /wp:paragraph -->
+                """;
+
+        String expected = """
+                <!-- wp:paragraph --><p>First sentence delivers value. Second sentence provides context. Third sentence explains mechanics.</p><!-- /wp:paragraph -->
+                <!-- wp:paragraph --><p>Fourth sentence exceeds cap. Fifth sentence continues thought.</p><!-- /wp:paragraph -->""";
+
+        String actual = deduplicator.process(input);
+        assertEquals(expected, actual);
+    }
 }

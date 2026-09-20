@@ -50,9 +50,14 @@ public class SentenceDeduplicator implements ContentProcessor {
                 }
 
                 if (!uniqueSentences.isEmpty()) {
-                    String cleanBody = String.join(" ", uniqueSentences);
-                    seenParagraphBodies.add(normalize(cleanBody));
-                    outputLines.add("<!-- wp:paragraph --><p>" + cleanBody + "</p><!-- /wp:paragraph -->");
+                    // Enforce the 3-Sentence Cap per paragraph block
+                    for (int i = 0; i < uniqueSentences.size(); i += 3) {
+                        List<String> chunk = uniqueSentences.subList(i, Math.min(i + 3, uniqueSentences.size()));
+                        String cleanBody = String.join(" ", chunk);
+                        if (seenParagraphBodies.add(normalize(cleanBody))) {
+                            outputLines.add("<!-- wp:paragraph --><p>" + cleanBody + "</p><!-- /wp:paragraph -->");
+                        }
+                    }
                 }
             } else {
                 // Non-paragraph lines (headings, images, metadata)

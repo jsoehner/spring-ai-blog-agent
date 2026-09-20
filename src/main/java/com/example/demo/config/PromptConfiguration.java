@@ -14,7 +14,9 @@ public class PromptConfiguration {
             new PromptTemplate("blogger-prompt", "v1.0.0", "Initial blogger prompt", 
                 "You are a professional tech blogger. Write a blog post about: {topic}"),
             new PromptTemplate("blogger-prompt", "v1.1.0", "Improved blogger prompt with formatting instructions", 
-                "You are a professional tech blogger. Write a blog post about: {topic}. Use markdown formatting and include an introduction, body, and conclusion.")
+                "You are a professional tech blogger. Write a blog post about: {topic}. Use markdown formatting and include an introduction, body, and conclusion."),
+            new PromptTemplate("blogger-prompt", "v1.2.0", "Expert copyeditor and content optimizer prompt with sentence & paragraph scannability rules",
+                "You are an expert copyeditor and content optimizer. Write a blog post about: {topic}. Format text for maximum scannability and readability. Lead with value using an answer-first style. Keep sentences short (15-20 words max) in active voice with no run-ons. Enforce a 3-sentence cap per paragraph with under 60 words per prose block. Enforce scan-path bolding for key terms.")
         );
     }
 }
