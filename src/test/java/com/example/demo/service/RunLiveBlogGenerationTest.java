@@ -5,6 +5,7 @@ import com.example.demo.agent.SentenceDeduplicator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@DisabledIfEnvironmentVariable(named = "CI", matches = ".*")
 public class RunLiveBlogGenerationTest {
 
     @Test

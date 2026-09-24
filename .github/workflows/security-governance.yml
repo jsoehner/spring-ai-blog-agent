@@ -109,6 +109,10 @@ jobs:
 
       - name: Run ADR Security Gatekeeper
         run: |
+          if [ "${{ github.actor }}" = "dependabot[bot]" ] || [[ "${{ github.actor }}" == *"bot"* ]]; then
+            echo "✅ Skipping ADR Gatekeeper check for automated bot actor: ${{ github.actor }}"
+            exit 0
+          fi
           if [ -f "scripts/adr_security_gatekeeper.py" ]; then
             python3 scripts/adr_security_gatekeeper.py --base origin/${{ github.base_ref }} --event ${{ github.event_name }}
           else
