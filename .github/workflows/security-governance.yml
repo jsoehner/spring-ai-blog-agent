@@ -108,13 +108,17 @@ jobs:
           python-version: '3.12'
 
       - name: Run ADR Security Gatekeeper
+        env:
+          ACTOR: ${{ github.actor }}
+          BASE_REF: ${{ github.base_ref }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ "${{ github.actor }}" = "dependabot[bot]" ] || [[ "${{ github.actor }}" == *"bot"* ]]; then
-            echo "✅ Skipping ADR Gatekeeper check for automated bot actor: ${{ github.actor }}"
+          if [ "$ACTOR" = "dependabot[bot]" ] || [[ "$ACTOR" == *"bot"* ]]; then
+            echo "✅ Skipping ADR Gatekeeper check for automated bot actor: $ACTOR"
             exit 0
           fi
           if [ -f "scripts/adr_security_gatekeeper.py" ]; then
-            python3 scripts/adr_security_gatekeeper.py --base origin/${{ github.base_ref }} --event ${{ github.event_name }}
+            python3 scripts/adr_security_gatekeeper.py --base "origin/$BASE_REF" --event "$EVENT_NAME" --actor "$ACTOR"
           else
             echo "Running inline fallback gatekeeper check..."
             SENSITIVE_PATHS="auth/ crypto/ security/ certs/ .github/workflows/ api/ policy/ policy.rego security-policies/ src/main/java/com/example/demo/security/"

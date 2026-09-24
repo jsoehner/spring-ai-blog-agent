@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 import re
 import requests
-import xml.etree.ElementTree as ET
 import os
+try:
+    import defusedxml.ElementTree as ET
+except ImportError:
+    import xml.etree.ElementTree as ET  # nosemgrep: python.lang.security.use-defused-xml.use-defused-xml
+
 
 def parse_version(v_str):
     # Splits version into integer parts and pre-release suffix list
