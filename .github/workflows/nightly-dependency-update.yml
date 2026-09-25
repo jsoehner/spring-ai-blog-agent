@@ -33,6 +33,7 @@ jobs:
 
       - name: Update dependencies
         run: |
+          python3 -m pip install --quiet --upgrade defusedxml requests || true
           python3 .github/scripts/update-dependencies.py
 
       - name: Build and Verify

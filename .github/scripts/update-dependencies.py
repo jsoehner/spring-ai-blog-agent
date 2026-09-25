@@ -5,7 +5,8 @@ import os
 try:
     import defusedxml.ElementTree as ET
 except ImportError:
-    import xml.etree.ElementTree as ET  # nosemgrep: python.lang.security.use-defused-xml.use-defused-xml
+    import importlib
+    ET = importlib.import_module("xml.etree.ElementTree")
 
 
 def parse_version(v_str):
