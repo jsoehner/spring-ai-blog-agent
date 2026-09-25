@@ -35,6 +35,7 @@ This directory contains Architectural Decision Records (ADRs) and Security Archi
 | 0026 | [Content Processing Pipeline](0026-content-processing-pipeline.md) | 2024-05-23 | Accepted | Internal |
 | 0027 | [Prompt Engineering & Versioning](0027-prompt-engineering-and-versioning.md) | 2024-05-23 | Accepted | Internal |
 | 0028 | [GitHub Actions SHA Pinning and Script Injection Remediation](0028-github-actions-sha-pinning-and-script-injection-remediation.md) | 2026-09-25 | Accepted | Internal |
+| 0029 | [Consolidate Security Workflows and Retire Redundant Security Testing Workflow](0029-consolidate-security-workflows-and-remove-redundant-testing-workflow.md) | 2026-09-25 | Accepted | Internal |
 
 ## Legacy ADRs
 
