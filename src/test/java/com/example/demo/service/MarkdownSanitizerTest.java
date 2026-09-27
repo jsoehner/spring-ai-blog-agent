@@ -96,4 +96,65 @@ class MarkdownSanitizerTest {
         String actual = sanitizer.process(input);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testStripsDangerousElements() {
+        String input = """
+                <!-- wp:paragraph -->
+                <p>Normal text.</p>
+                <script>alert('xss')</script>
+                <iframe src="https://evil.com"></iframe>
+                <object data="evil.swf">payload</object>
+                <embed src="evil.swf">
+                <applet code="evil.class"></applet>
+                <style>body { display: none; }</style>
+                <svg onload="alert('svg-xss')"><circle r="10"/></svg>
+                <!-- /wp:paragraph -->
+                """;
+
+        String result = sanitizer.process(input);
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<script"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<iframe"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<object"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<embed"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<applet"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<style"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("<svg"));
+        org.junit.jupiter.api.Assertions.assertTrue(result.contains("<p>Normal text.</p>"));
+    }
+
+    @Test
+    void testStripsInlineDomEventHandlers() {
+        String input = """
+                <!-- wp:paragraph -->
+                <p onclick="alert('p-click')" onmouseover="steal()">Safe paragraph content</p>
+                <img src="http://example.com/pic.png" onload="alert('loaded')" onerror="alert('error')" alt="Photo"/>
+                <!-- /wp:paragraph -->
+                """;
+
+        String result = sanitizer.process(input);
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("onclick"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("onmouseover"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("onload"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("onerror"));
+        org.junit.jupiter.api.Assertions.assertTrue(result.contains("<p>Safe paragraph content</p>"));
+        org.junit.jupiter.api.Assertions.assertTrue(result.contains("src=\"http://example.com/pic.png\""));
+    }
+
+    @Test
+    void testStripsJavascriptAndVbscriptUris() {
+        String input = """
+                <!-- wp:paragraph -->
+                <p><a href="javascript:alert('xss')">Malicious Link</a></p>
+                <p><a href="vbscript:msgbox('xss')">VB Link</a></p>
+                <img src="javascript:alert('img')" alt="Malicious Img"/>
+                <!-- /wp:paragraph -->
+                """;
+
+        String result = sanitizer.process(input);
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("javascript:"));
+        org.junit.jupiter.api.Assertions.assertFalse(result.contains("vbscript:"));
+        org.junit.jupiter.api.Assertions.assertTrue(result.contains("Malicious Link"));
+        org.junit.jupiter.api.Assertions.assertTrue(result.contains("VB Link"));
+    }
 }

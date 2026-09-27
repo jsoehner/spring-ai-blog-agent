@@ -14,6 +14,22 @@ public class MarkdownSanitizer implements ContentProcessor {
     private static final Pattern WP_CLOSE_TAG_SPACES = Pattern.compile("<!--\\s*/wp:\\s*([a-zA-Z0-9/_-]+)\\s*-->");
     private static final Pattern WP_BLOCK_INTERNAL_SPACING = Pattern.compile("(<!--\\s*wp:[a-zA-Z0-9/_-]+(?:\\s+[^>]*)?-->)\\s*([\\s\\S]*?)\\s*(<!--\\s*/wp:[a-zA-Z0-9/_-]+\\s*-->)");
 
+    private static final Pattern DANGEROUS_ELEMENT_PAIRS = Pattern.compile(
+            "(?i)<(script|iframe|object|embed|applet|style|svg)\\b[\\s\\S]*?</\\1>",
+            Pattern.CASE_INSENSITIVE);
+    private static final Pattern DANGEROUS_ELEMENT_SINGLES = Pattern.compile(
+            "(?i)<(script|iframe|object|embed|applet|style|svg)\\b[^>]*?/?>",
+            Pattern.CASE_INSENSITIVE);
+    private static final Pattern DANGEROUS_ELEMENT_CLOSING = Pattern.compile(
+            "(?i)</(script|iframe|object|embed|applet|style|svg)>",
+            Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern HTML_TAG = Pattern.compile("<[a-zA-Z][a-zA-Z0-9]*(?:[\\s/][\\s\\S]*?)?/?>");
+    private static final Pattern DOM_EVENT_HANDLERS = Pattern.compile(
+            "(?i)[\\s/]+on[a-zA-Z0-9_-]+\\s*(?:=\\s*(?:\"[^\"]*\"|'[^']*'|[^\\s>]+))?");
+    private static final Pattern DANGEROUS_URIS = Pattern.compile(
+            "(?i)\\s+(?:href|src)\\s*=\\s*(?:\"\\s*(?:javascript|vbscript):[^\"]*\"|'\\s*(?:javascript|vbscript):[^']*'|\\s*(?:javascript|vbscript):[^\\s>]*)");
+
     @Override
     public String process(String content) {
         if (content == null) return null;
@@ -35,8 +51,18 @@ public class MarkdownSanitizer implements ContentProcessor {
             text = text.trim();
         }
 
-        // Security Sanitization: strip scripts and iframes while preserving WordPress block comments
-        text = text.replaceAll("(?i)<script[\\s\\S]*?</script>", "").replaceAll("(?i)<iframe[\\s\\S]*?</iframe>", "");
+        // Security Sanitization: strip dangerous elements (<script>, <iframe>, <object>, <embed>, <applet>, <style>, <svg>)
+        text = DANGEROUS_ELEMENT_PAIRS.matcher(text).replaceAll("");
+        text = DANGEROUS_ELEMENT_SINGLES.matcher(text).replaceAll("");
+        text = DANGEROUS_ELEMENT_CLOSING.matcher(text).replaceAll("");
+
+        // Strip inline DOM event handlers and javascript:/vbscript: URIs inside HTML tags
+        text = HTML_TAG.matcher(text).replaceAll(mr -> {
+            String tag = mr.group();
+            String cleaned = DOM_EVENT_HANDLERS.matcher(tag).replaceAll("");
+            cleaned = DANGEROUS_URIS.matcher(cleaned).replaceAll("");
+            return cleaned;
+        });
 
         // Normalize spaces inside wp comment tags: <!-- wp: paragraph --> -> <!-- wp:paragraph -->
         text = WP_OPEN_TAG_SPACES.matcher(text).replaceAll(mr -> {
