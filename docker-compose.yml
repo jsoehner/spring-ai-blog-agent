@@ -19,6 +19,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
 
   supervisor-agent:
     build: .
@@ -42,6 +46,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      opa:
+        condition: service_started
     deploy:
       resources:
         limits:
@@ -59,7 +65,7 @@ services:
     volumes:
       - app_config:/app/config
       - app_logs:/app/request-activity.log
-      - ./output:/app/output
+      - ./output:/app/output:z
     read_only: true
     tmpfs:
       - /tmp:exec
@@ -85,6 +91,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      opa:
+        condition: service_started
     deploy:
       resources:
         limits:
@@ -102,7 +110,7 @@ services:
     volumes:
       - app_config:/app/config
       - app_logs:/app/request-activity.log
-      - ./output:/app/output
+      - ./output:/app/output:z
     read_only: true
     tmpfs:
       - /tmp:exec
@@ -126,6 +134,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      opa:
+        condition: service_started
     deploy:
       resources:
         limits:
@@ -143,7 +153,7 @@ services:
     volumes:
       - app_config:/app/config
       - app_logs:/app/request-activity.log
-      - ./output:/app/output
+      - ./output:/app/output:z
     read_only: true
     tmpfs:
       - /tmp:exec

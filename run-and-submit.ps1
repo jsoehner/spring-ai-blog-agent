@@ -30,6 +30,9 @@ if (-not $build -and $expectedServices -eq $runningServices -and $runningService
     docker compose down 2>$null
     docker rm -f supervisor-agent researcher-agent 2>$null
 
+    git submodule update --init --recursive 2>$null
+    if (-not (Test-Path "output")) { New-Item -ItemType Directory -Path "output" | Out-Null }
+
     if ($build) {
         Write-Host "🛠️ Building local image instead of pulling..."
         docker compose up -d --build

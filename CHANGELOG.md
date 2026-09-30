@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Fixed
+- **Prompting**: Eliminated synthetic trailing adverb padding (e.g., 'now', 'soon', 'actively', 'always', 'effectively') at the end of generated blog sentences by replacing the rigid 15–20 word sentence bracket with natural cadence (12–25 words) and adding an explicit anti-padding negative guardrail.
 - **CI/CD**: Upgraded `actions/setup-python` to v7 (`5fda3b95a4ea91299a34e894583c3862153e4b97`) to resolve Node 20 deprecation warnings on GitHub Actions runners.
 - **CI/CD**: Upgraded `actions/setup-java` to v6 (`dd06d9cba3e5552c54d9f8ea23572deb30010f7c`) and configured `java-version: '25'` in `nightly-dependency-update.yml` to align with Java 25 toolchain requirements.
 - **CI/CD**: Configured `peter-evans/create-pull-request` with `token: ${{ secrets.GITHUB_TOKEN }}` in `nightly-dependency-update.yml` to resolve Git exit code 128 authentication errors caused by invalid/expired PAT secrets.

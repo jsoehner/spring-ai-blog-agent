@@ -25,6 +25,9 @@ else
   docker compose down 2>/dev/null || true
   docker rm -f supervisor-agent researcher-agent 2>/dev/null || true
 
+  git submodule update --init --recursive 2>/dev/null || true
+  mkdir -p output && chmod 777 output 2>/dev/null || true
+
   if [ "$BUILD" = true ]; then
     echo "🛠️ Building local image instead of pulling..."
     docker compose up -d --build

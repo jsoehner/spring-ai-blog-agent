@@ -38,6 +38,7 @@ This directory contains Architectural Decision Records (ADRs) and Security Archi
 | 0029 | [Consolidate Security Workflows and Retire Redundant Security Testing Workflow](0029-consolidate-security-workflows-and-remove-redundant-testing-workflow.md) | 2026-09-25 | Accepted | Internal |
 | 0030 | [Dual-Engine BOM Governance and Security Scan Removal](0030-dual-engine-bom-governance-and-security-scan-removal.md) | 2026-09-27 | Accepted | Internal |
 | 0031 | [Automated Nightly Dependency Updates and Unattended Auto-Merge Governance](0031-automated-nightly-dependency-updates-and-unattended-auto-merge.md) | 2026-09-27 | Accepted | Internal |
+| 0032 | [Eliminate Trailing Adverb Padding and Restore Natural Sentence Cadence](0032-eliminate-trailing-adverb-padding-and-restore-natural-cadence.md) | 2026-09-30 | Accepted | Internal |
 
 ## Legacy ADRs
 
