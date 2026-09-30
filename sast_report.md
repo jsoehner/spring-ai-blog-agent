@@ -24,7 +24,7 @@ Static analysis was performed on the codebase to identify common security vulner
 ### 3. Actuator Exposure — RESOLVED
 - **Location**: `src/main/resources/application.properties` and `application.properties.template`
 - **Description**: Management endpoints were not explicitly restricted.
-- **Remediation Implemented**: Enforced `management.endpoints.web.exposure.include=health,info` across application configurations.
+- **Remediation Implemented**: Enforced Actuator web exposure (`management.endpoints.web.exposure.include`) to strictly allow `health` only across application configurations.
 
 ### 4. Supply Chain Security (GitHub Actions Pinning) — RESOLVED
 - **Location**: `.github/workflows/sbom-cbom.yml`
