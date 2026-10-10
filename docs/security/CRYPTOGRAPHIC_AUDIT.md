@@ -1,6 +1,6 @@
 ## 🛡️ Cryptographic Bill of Materials (CBOM) & PQC Migration Assessment
 
-**Format**: CycloneDX (v1.6) | **First-Party Code Crypto Assets**: 0 | **Total Tracked Crypto Assets**: 6
+**Format**: CycloneDX (v1.7) | **First-Party Code Crypto Assets**: 0 | **Total Tracked Crypto Assets**: 6
 
 ### 📊 Post-Quantum Migration Scorecard
 
@@ -16,8 +16,8 @@
 | Evaluation Layer | Coverage / Status | Audit Confidence Assessment |
 |---|---|---|
 | **First-Party Code (`src/`)** | **100% Audited** (0 Custom Primitives) | 🟢 **HIGH** (Direct AST & SAST verified clean) |
-| **Third-Party Supply Chain** | **6.3%** (10 of 159 dependencies cataloged) | 🔴 LOW (Known profiles assimilated) |
-| **Overall Audit Confidence Score** | **6.9%** | **🔴 LOW** (149 unassimilated supply chain dependencies) |
+| **Third-Party Supply Chain** | **7.8%** (10 of 129 dependencies cataloged) | 🔴 LOW (Known profiles assimilated) |
+| **Overall Audit Confidence Score** | **8.5%** | **🔴 LOW** (119 unassimilated supply chain dependencies) |
 
 ### ✅ Post-Quantum Cryptography Migrated Assets
 
@@ -45,19 +45,19 @@
 
 | Dependency Name | Version | Package URL (purl) | Status |
 |---|---|---|---|
-| `actions/checkout` | v7 | `pkg:github/actions/checkout@v7` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/checkout` | v7.0.1 | `pkg:github/actions/checkout@v7.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/checkout` | v7.0.1 | `pkg:github/actions/checkout@v7.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/checkout` | v7.0.1 | `pkg:github/actions/checkout@v7.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/checkout` | v7.0.1 | `pkg:github/actions/checkout@v7.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/github-script` | v9.0.0 | `pkg:github/actions/github-script@v9.0.0` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/setup-java` | v6.0.1 | `pkg:github/actions/setup-java@v6.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/setup-java` | v6.0.1 | `pkg:github/actions/setup-java@v6.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/setup-python` | v5.6.0 | `pkg:github/actions/setup-python@v5.6.0` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/setup-python` | v7.0.0 | `pkg:github/actions/setup-python@v7.0.0` | 🟡 Unassimilated (No upstream CBOM) |
-| `actions/upload-artifact` | v4.6.2 | `pkg:github/actions/upload-artifact@v4.6.2` | 🟡 Unassimilated (No upstream CBOM) |
-| `anchore/sbom-action` | v0.24.2 | `pkg:github/anchore/sbom-action@v0.24.2` | 🟡 Unassimilated (No upstream CBOM) |
-| `aquasecurity/trivy-action` | v0.35.0 | `pkg:github/aquasecurity/trivy-action@v0.35.0` | 🟡 Unassimilated (No upstream CBOM) |
-| `cbomkit/cbomkit-action` | v2.3.0 | `pkg:github/cbomkit/cbomkit-action@v2.3.0` | 🟡 Unassimilated (No upstream CBOM) |
-| `docker/build-push-action` | v6.19.2 | `pkg:github/docker/build-push-action@v6.19.2` | 🟡 Unassimilated (No upstream CBOM) |
-| *... and 134 more unassimilated dependencies* | | | |
+| `spring-boot-starter-jackson` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-starter-jackson@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-starter` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-starter@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-starter-logging` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-starter-logging@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `logback-classic` | 1.5.38 | `pkg:maven/ch.qos.logback/logback-classic@1.5.38` | 🟡 Unassimilated (No upstream CBOM) |
+| `logback-core` | 1.5.38 | `pkg:maven/ch.qos.logback/logback-core@1.5.38` | 🟡 Unassimilated (No upstream CBOM) |
+| `slf4j-api` | 2.0.18 | `pkg:maven/org.slf4j/slf4j-api@2.0.18` | 🟡 Unassimilated (No upstream CBOM) |
+| `log4j-to-slf4j` | 2.25.5 | `pkg:maven/org.apache.logging.log4j/log4j-to-slf4j@2.25.5` | 🟡 Unassimilated (No upstream CBOM) |
+| `log4j-api` | 2.25.5 | `pkg:maven/org.apache.logging.log4j/log4j-api@2.25.5` | 🟡 Unassimilated (No upstream CBOM) |
+| `jul-to-slf4j` | 2.0.18 | `pkg:maven/org.slf4j/jul-to-slf4j@2.0.18` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-autoconfigure` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-autoconfigure@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-core` | 7.0.9 | `pkg:maven/org.springframework/spring-core@7.0.9` | 🟡 Unassimilated (No upstream CBOM) |
+| `commons-logging` | 1.3.6 | `pkg:maven/commons-logging/commons-logging@1.3.6` | 🟡 Unassimilated (No upstream CBOM) |
+| `jspecify` | 1.0.1 | `pkg:maven/org.jspecify/jspecify@1.0.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-context` | 7.0.9 | `pkg:maven/org.springframework/spring-context@7.0.9` | 🟡 Unassimilated (No upstream CBOM) |
+| *... and 104 more unassimilated dependencies* | | | |

@@ -39,7 +39,7 @@ jobs:
           cache: 'gradle'
 
       # -------------------------------------------------------------
-      # 1. Generate SBOM (Anchore / Syft & Gradle Runtime Dependencies)
+      # 1. Generate SBOM (CycloneDX and SPDX via Anchore / Syft)
       # -------------------------------------------------------------
       - name: Generate CycloneDX SBOM (Anchore / Syft)
         uses: anchore/sbom-action@006b7ce8314066bdf1765b4500370d40fa6917a3 # v0.24.2
@@ -107,8 +107,14 @@ jobs:
       - name: Generate PQC Migration Dashboard & Step Summary
         run: |
           if [ -f scripts/analyze_cbom.py ]; then
+            SBOM_ARG=""
+            if [ -f oss/sbom.cyclonedx.json ]; then
+              SBOM_ARG="--sbom oss/sbom.cyclonedx.json"
+            elif [ -f oss/sbom.spdx.json ]; then
+              SBOM_ARG="--sbom oss/sbom.spdx.json"
+            fi
             python3 scripts/analyze_cbom.py oss/cbom.json \
-              --sbom oss/sbom.cyclonedx.json \
+              $SBOM_ARG \
               --json oss/crypto-analysis.json \
               --markdown oss/crypto-summary.md \
               --step-summary
