@@ -264,3 +264,7 @@ Here are a few common issues and best practices to keep in mind when working wit
 
 ## 🤝 Human in the Loop (Contributing)
 While the agent is designed to be highly autonomous—opening its own Pull Requests with finished drafts—human contributions to the core Java architecture or prompts are always welcome. Just branch off, make your tweaks to the agents, and open a PR!
+
+
+## 🛡️ Security & Cryptographic Posture
+This project tracks Software & Cryptographic Bill of Materials (SBOM & CBOM) and Post-Quantum Cryptography (PQC) readiness. See the latest [Cryptographic Audit & PQC Migration Report](docs/security/CRYPTOGRAPHIC_AUDIT.md).
