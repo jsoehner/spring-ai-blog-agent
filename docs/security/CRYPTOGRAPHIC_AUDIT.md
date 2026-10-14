@@ -61,5 +61,5 @@
 | `anchore/sbom-action` | v0.24.2 | `pkg:github/anchore/sbom-action@v0.24.2` | 🟡 Unassimilated (No upstream CBOM) |
 | `aquasecurity/trivy-action` | v0.35.0 | `pkg:github/aquasecurity/trivy-action@v0.35.0` | 🟡 Unassimilated (No upstream CBOM) |
 | `cbomkit/cbomkit-action` | v2.3.0 | `pkg:github/cbomkit/cbomkit-action@v2.3.0` | 🟡 Unassimilated (No upstream CBOM) |
-| `docker/build-push-action` | v6.19.2 | `pkg:github/docker/build-push-action@v6.19.2` | 🟡 Unassimilated (No upstream CBOM) |
+| `docker/build-push-action` | v7.4.0 | `pkg:github/docker/build-push-action@v7.4.0` | 🟡 Unassimilated (No upstream CBOM) |
 | *... and 134 more unassimilated dependencies* | | | |
