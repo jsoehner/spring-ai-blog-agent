@@ -30,7 +30,7 @@
 | Component / Algorithm | Type / Primitive | Key Length / Curve | Recommended Target | Provenance / Context |
 |---|---|---|---|---|
 | **`spring-web (Spring WebClient / RestTemplate HTTPS)`**<br><sub>HTTPS / TLS 1.3</sub> | protocol / protocol | ECDH-X25519 / RSA-2048 | **Ensure target AI endpoints (e.g. Ollama/OpenAI) and client support hybrid post-quantum key encapsulation (ML-KEM-768)** | Assimilated Upstream CBOM: Spring Framework HTTP Client Security Specification<br>`Dependency: spring-web@7.0.9` |
-| **`tomcat-embed-core (Tomcat TLS Transport Engine)`**<br><sub>TLS 1.2 / TLS 1.3</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Upgrade to Post-Quantum hybrid key exchange (X25519+ML-KEM-768) via OpenSSL 3.4+ or Java 25 JSSE provider** | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.26` |
+| **`tomcat-embed-core (Tomcat TLS Transport Engine)`**<br><sub>TLS 1.2 / TLS 1.3</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Upgrade to Post-Quantum hybrid key exchange (X25519+ML-KEM-768) via OpenSSL 3.4+ or Java 25 JSSE provider** | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.27` |
 | **`spring-webmvc (Spring WebClient / RestTemplate HTTPS)`**<br><sub>HTTPS / TLS 1.3</sub> | protocol / protocol | ECDH-X25519 / RSA-2048 | **Ensure target AI endpoints (e.g. Ollama/OpenAI) and client support hybrid post-quantum key encapsulation (ML-KEM-768)** | Assimilated Upstream CBOM: Spring Framework HTTP Client Security Specification<br>`Dependency: spring-webmvc@7.0.9` |
 | **`amqp-client (RabbitMQ AMQPS Transport)`**<br><sub>TLS 1.2 / TLS 1.3 (JSSE)</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Configure TLS 1.3 hybrid post-quantum cipher suites in RabbitMQ broker & client connection factory** | Assimilated Upstream CBOM: RabbitMQ Transport Security Specification<br>`Dependency: amqp-client@5.37.0` |
 | **`spring-webflux (Spring WebClient / RestTemplate HTTPS)`**<br><sub>HTTPS / TLS 1.3</sub> | protocol / protocol | ECDH-X25519 / RSA-2048 | **Ensure target AI endpoints (e.g. Ollama/OpenAI) and client support hybrid post-quantum key encapsulation (ML-KEM-768)** | Assimilated Upstream CBOM: Spring Framework HTTP Client Security Specification<br>`Dependency: spring-webflux@7.0.9` |
@@ -39,7 +39,7 @@
 
 | Component Name | Primitive | Key Length | Quantum Resistance Assessment | Provenance / Location(s) |
 |---|---|---|---|---|
-| `tomcat-embed-core (Tomcat TLS Symmetric Cipher Suites)` | block-cipher | 256 | Quantum-Resistant (Grover's proof) | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.26` |
+| `tomcat-embed-core (Tomcat TLS Symmetric Cipher Suites)` | block-cipher | 256 | Quantum-Resistant (Grover's proof) | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.27` |
 
 ### ⚠️ Unassimilated Third-Party Binaries & Cryptographic Blind Spots
 
