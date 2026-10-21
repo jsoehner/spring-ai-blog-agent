@@ -32,7 +32,7 @@ dependencies {
 	implementation 'org.aspectj:aspectjweaver:1.9.25.1'
 	implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
 	implementation 'org.jsoup:jsoup:1.23.2'
-	implementation 'com.drewnoakes:metadata-extractor:2.21.0'
+	implementation 'com.drewnoakes:metadata-extractor:2.22.0'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.17.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
