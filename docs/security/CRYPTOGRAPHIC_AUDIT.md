@@ -1,6 +1,6 @@
 ## 🛡️ Cryptographic Bill of Materials (CBOM) & PQC Migration Assessment
 
-**Format**: CycloneDX (v1.7) | **First-Party Code Crypto Assets**: 0 | **Total Tracked Crypto Assets**: 4
+**Format**: CycloneDX (v1.6) | **First-Party Code Crypto Assets**: 0 | **Total Tracked Crypto Assets**: 4
 
 ### 📊 Post-Quantum Migration Scorecard
 
@@ -16,8 +16,8 @@
 | Evaluation Layer | Coverage / Status | Audit Confidence Assessment |
 |---|---|---|
 | **First-Party Code (`src/`, `scripts/`)** | **100% Audited** (0 Custom Primitives) | 🟢 **HIGH** (Direct AST & SAST verified) |
-| **Third-Party Supply Chain** | **6.2%** (8 of 129 dependencies cataloged) | 🔴 LOW (Known profiles assimilated) |
-| **Overall Audit Confidence Score** | **6.9%** | 🔴 LOW (121 unassimilated supply chain dependencies) |
+| **Third-Party Supply Chain** | **19.0%** (29 of 153 dependencies cataloged) | 🔴 LOW (Known profiles assimilated) |
+| **Overall Audit Confidence Score** | **19.5%** | 🔴 LOW (124 unassimilated supply chain dependencies) |
 
 | **System OS Inventory** | **Pending Update** | 🟡 **Warning** (Local OS crypto components not yet inventoried) |
 
@@ -29,15 +29,15 @@
 
 | Component / Algorithm | Type / Primitive | Key Length / Curve | Recommended Target | Provenance / Context |
 |---|---|---|---|---|
-| **`spring-web (Spring WebClient / RestTemplate HTTPS)`**<br><sub>HTTPS / TLS 1.3</sub> | protocol / protocol | ECDH-X25519 / RSA-2048 | **Ensure target AI endpoints (e.g. Ollama/OpenAI) and client support hybrid post-quantum key encapsulation (ML-KEM-768)** | Assimilated Upstream CBOM: Spring Framework HTTP Client Security Specification<br>`Dependency: spring-web@7.0.9` |
-| **`tomcat-embed-core (Tomcat TLS Transport Engine)`**<br><sub>TLS 1.2 / TLS 1.3</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Upgrade to Post-Quantum hybrid key exchange (X25519+ML-KEM-768) via OpenSSL 3.4+ or Java 25 JSSE provider** | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.26` |
-| **`amqp-client (RabbitMQ AMQPS Transport)`**<br><sub>TLS 1.2 / TLS 1.3 (JSSE)</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Configure TLS 1.3 hybrid post-quantum cipher suites in RabbitMQ broker & client connection factory** | Assimilated Upstream CBOM: RabbitMQ Transport Security Specification<br>`Dependency: amqp-client@5.37.0` |
+| **`spring-web (Spring WebClient / RestTemplate HTTPS)`**<br><sub>HTTPS / TLS 1.3</sub> | protocol / protocol | ECDH-X25519 / RSA-2048 | **Ensure target AI endpoints (e.g. Ollama/OpenAI) and client support hybrid post-quantum key encapsulation (ML-KEM-768)** | Assimilated Upstream CBOM: Spring Framework HTTP Client Security Specification<br>`Dependency: spring-web@7.0.10` |
+| **`tomcat-embed-core (Tomcat TLS Transport Engine)`**<br><sub>TLS 1.2 / TLS 1.3</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Upgrade to Post-Quantum hybrid key exchange (X25519+ML-KEM-768) via OpenSSL 3.4+ or Java 25 JSSE provider** | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.27` |
+| **`amqp-client (RabbitMQ AMQPS Transport)`**<br><sub>TLS 1.2 / TLS 1.3 (JSSE)</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Configure TLS 1.3 hybrid post-quantum cipher suites in RabbitMQ broker & client connection factory** | Assimilated Upstream CBOM: RabbitMQ Transport Security Specification<br>`Dependency: amqp-client@5.37.1` |
 
 ### 🔒 Classical Symmetric & Digest Assets
 
 | Component Name | Primitive | Key Length | Quantum Resistance Assessment | Provenance / Location(s) |
 |---|---|---|---|---|
-| `tomcat-embed-core (Tomcat TLS Symmetric Cipher Suites)` | block-cipher | 256 | Quantum-Resistant (Grover's proof) | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.26` |
+| `tomcat-embed-core (Tomcat TLS Symmetric Cipher Suites)` | block-cipher | 256 | Quantum-Resistant (Grover's proof) | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.27` |
 
 ### ⚠️ Unassimilated Third-Party Binaries & Cryptographic Blind Spots
 
@@ -45,19 +45,19 @@
 
 | Dependency Name | Version | Package URL (purl) | Status |
 |---|---|---|---|
-| `spring-boot-starter-jackson` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-starter-jackson@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `spring-boot-starter` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-starter@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `spring-boot-starter-logging` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-starter-logging@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
+| `github/codeql-action/upload-sarif` | v3.38.2 | `pkg:github/github/codeql-action@v3.38.2#upload-sarif` | 🟡 Unassimilated (No upstream CBOM) |
+| `gradle-wrapper` | UNKNOWN | `pkg:maven/org.gradle/gradle-wrapper` | 🟡 Unassimilated (No upstream CBOM) |
+| `peter-evans/create-pull-request` | v8 | `pkg:github/peter-evans/create-pull-request@v8` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-starter-jackson` | 4.1.2 | `pkg:maven/org.springframework.boot/spring-boot-starter-jackson@4.1.2` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-starter` | 4.1.2 | `pkg:maven/org.springframework.boot/spring-boot-starter@4.1.2` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-starter-logging` | 4.1.2 | `pkg:maven/org.springframework.boot/spring-boot-starter-logging@4.1.2` | 🟡 Unassimilated (No upstream CBOM) |
 | `logback-classic` | 1.5.38 | `pkg:maven/ch.qos.logback/logback-classic@1.5.38` | 🟡 Unassimilated (No upstream CBOM) |
 | `logback-core` | 1.5.38 | `pkg:maven/ch.qos.logback/logback-core@1.5.38` | 🟡 Unassimilated (No upstream CBOM) |
-| `slf4j-api` | 2.0.18 | `pkg:maven/org.slf4j/slf4j-api@2.0.18` | 🟡 Unassimilated (No upstream CBOM) |
+| `slf4j-api` | 2.0.20 | `pkg:maven/org.slf4j/slf4j-api@2.0.20` | 🟡 Unassimilated (No upstream CBOM) |
 | `log4j-to-slf4j` | 2.25.5 | `pkg:maven/org.apache.logging.log4j/log4j-to-slf4j@2.25.5` | 🟡 Unassimilated (No upstream CBOM) |
 | `log4j-api` | 2.25.5 | `pkg:maven/org.apache.logging.log4j/log4j-api@2.25.5` | 🟡 Unassimilated (No upstream CBOM) |
-| `jul-to-slf4j` | 2.0.18 | `pkg:maven/org.slf4j/jul-to-slf4j@2.0.18` | 🟡 Unassimilated (No upstream CBOM) |
-| `spring-boot-autoconfigure` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot-autoconfigure@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `spring-boot` | 4.1.1 | `pkg:maven/org.springframework.boot/spring-boot@4.1.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `spring-core` | 7.0.9 | `pkg:maven/org.springframework/spring-core@7.0.9` | 🟡 Unassimilated (No upstream CBOM) |
-| `commons-logging` | 1.3.6 | `pkg:maven/commons-logging/commons-logging@1.3.6` | 🟡 Unassimilated (No upstream CBOM) |
-| `jspecify` | 1.0.1 | `pkg:maven/org.jspecify/jspecify@1.0.1` | 🟡 Unassimilated (No upstream CBOM) |
-| `spring-context` | 7.0.9 | `pkg:maven/org.springframework/spring-context@7.0.9` | 🟡 Unassimilated (No upstream CBOM) |
-| *... and 106 more unassimilated dependencies* | | | |
+| `jul-to-slf4j` | 2.0.20 | `pkg:maven/org.slf4j/jul-to-slf4j@2.0.20` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot-autoconfigure` | 4.1.2 | `pkg:maven/org.springframework.boot/spring-boot-autoconfigure@4.1.2` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-boot` | 4.1.2 | `pkg:maven/org.springframework.boot/spring-boot@4.1.2` | 🟡 Unassimilated (No upstream CBOM) |
+| `spring-core` | 7.0.10 | `pkg:maven/org.springframework/spring-core@7.0.10` | 🟡 Unassimilated (No upstream CBOM) |
+| *... and 109 more unassimilated dependencies* | | | |
