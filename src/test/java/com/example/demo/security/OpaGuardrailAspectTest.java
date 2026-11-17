@@ -69,6 +69,25 @@ class OpaGuardrailAspectTest {
         assertThrows(SecurityException.class, () -> {
             dummyAspectTools.writeFile(unsafeRequest);
         });
+
+        // Verify sibling directory sharing workspace name prefix is rejected
+        String siblingPrefixPath = workspace + "-evil/secret.txt";
+        assertThrows(SecurityException.class, () -> {
+            dummyAspectTools.writeFile(new WriteRequest(siblingPrefixPath, "content"));
+        });
+    }
+
+    @Test
+    void testMoveImagesValidatesTargetDirectory() {
+        String workspace = java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString();
+        String safeSource = java.nio.file.Paths.get(workspace, "output").toAbsolutePath().normalize().toString();
+        when(opaClient.evaluatePolicy(any())).thenReturn(true);
+
+        com.example.demo.agent.ImageTools.MoveRequest unsafeTarget =
+                new com.example.demo.agent.ImageTools.MoveRequest(safeSource, "/tmp/exfil");
+        assertThrows(SecurityException.class, () -> {
+            dummyAspectTools.moveImages(unsafeTarget);
+        });
     }
 
     @Test
@@ -96,5 +115,10 @@ class DummyAspectTools {
     @Tool
     public String readFile(String path) {
         return "read";
+    }
+
+    @Tool
+    public String moveImages(com.example.demo.agent.ImageTools.MoveRequest request) {
+        return "moved";
     }
 }

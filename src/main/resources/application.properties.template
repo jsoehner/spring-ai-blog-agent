@@ -10,12 +10,12 @@ wordpress.url=https://YOUR_WORDPRESS_SITE.com
 wordpress.username=YOUR_USERNAME_OR_EMAIL
 wordpress.password=YOUR_APPLICATION_PASSWORD
 
-server.error.include-stacktrace=always
+server.error.include-stacktrace=never
 spring.ai.openai.client.timeout=10m
 
 # Ollama Global Configuration
 spring.ai.ollama.base-url=http://192.168.100.190:11434
-logging.level.org.springframework.ai=DEBUG
+logging.level.org.springframework.ai=INFO
 spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration
 
 # Default URLs for the WebCrawler Agent when a search returns no results

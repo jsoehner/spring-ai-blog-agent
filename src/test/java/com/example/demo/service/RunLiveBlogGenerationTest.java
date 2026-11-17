@@ -28,6 +28,12 @@ public class RunLiveBlogGenerationTest {
 
     @Test
     void testLiveBlogGenerationForTopic() throws Exception {
+        try (java.net.Socket socket = new java.net.Socket()) {
+            socket.connect(new java.net.InetSocketAddress("192.168.100.190", 11434), 1500);
+        } catch (Exception e) {
+            org.junit.jupiter.api.Assumptions.assumeTrue(false,
+                    "Skipping live Ollama test (192.168.100.190:11434 unreachable): " + e.getMessage());
+        }
         String topic = "The Importance of Architecture Review Boards";
 
         // Load blogger-prompt.txt

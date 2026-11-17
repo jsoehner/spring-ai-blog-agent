@@ -97,7 +97,8 @@ public class AgentOrchestrator {
     public void handleSupervisorTask(String jsonPayload) {
         String topic = null;
         try {
-            Map<String, String> payload = objectMapper.readValue(jsonPayload, Map.class);
+            Map<String, String> payload = objectMapper.readValue(
+                    jsonPayload, new com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {});
             topic = payload.get("topic");
             if (topic == null) {
                 log.error("Topic is missing in payload");

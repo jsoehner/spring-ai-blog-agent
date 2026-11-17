@@ -57,3 +57,10 @@ __pycache__/
 
 # Generated BOM artifacts
 oss/
+
+# Trusted OSS local config & mTLS PKI (never commit)
+.mvn/
+uv.toml
+mtls-pki/
+*.key
+*.p12

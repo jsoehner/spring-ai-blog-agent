@@ -46,8 +46,14 @@ public class TextHumanizerProcessor implements ContentProcessor {
 
         try (InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName)) {
             if (in != null) {
-                File tempFile = File.createTempFile("humanize-", ".py");
+                java.nio.file.Path tempPath = java.nio.file.Files.createTempFile("humanize-", ".py");
+                File tempFile = tempPath.toFile();
                 tempFile.deleteOnExit();
+                // Restrict temp script to owner-only read/write/execute where supported
+                tempFile.setReadable(false, false);
+                tempFile.setReadable(true, true);
+                tempFile.setWritable(false, false);
+                tempFile.setWritable(true, true);
                 try (OutputStream out = new FileOutputStream(tempFile)) {
                     in.transferTo(out);
                 }

@@ -76,7 +76,7 @@ public class WebCrawlerConfig {
         return urls;
     }
 
-    private boolean isSafeUrl(String urlString) {
+    boolean isSafeUrl(String urlString) {
         try {
             java.net.URI uri = new java.net.URI(urlString);
             String scheme = uri.getScheme();
@@ -87,16 +87,18 @@ public class WebCrawlerConfig {
             if (host == null || host.isEmpty()) {
                 return false;
             }
+            String normalizedHost = host.toLowerCase(java.util.Locale.ROOT);
             
             // Check against deny list (IP ranges and hostnames)
             for (String denied : DENY_LIST) {
-                if (host.equals(denied) || host.contains(denied)) {
+                if (normalizedHost.equals(denied) || normalizedHost.contains(denied)) {
                     return false;
                 }
             }
             
-            // Check against allowlist
-            boolean isAllowed = ALLOWED_DOMAINS.stream().anyMatch(host::endsWith);
+            // Check against allowlist using exact domain or subdomain boundary match
+            boolean isAllowed = ALLOWED_DOMAINS.stream().anyMatch(
+                    domain -> normalizedHost.equals(domain) || normalizedHost.endsWith("." + domain));
             if (!isAllowed) {
                 System.out.println("URL " + host + " is not in the allowlist.");
                 return false;
@@ -105,6 +107,7 @@ public class WebCrawlerConfig {
             java.net.InetAddress[] addresses = java.net.InetAddress.getAllByName(host);
             for (java.net.InetAddress addr : addresses) {
                 if (addr.isLoopbackAddress() || 
+                    addr.isAnyLocalAddress() ||
                     addr.isLinkLocalAddress() || 
                     addr.isSiteLocalAddress() || 
                     addr.isMulticastAddress() ||
@@ -136,6 +139,7 @@ public class WebCrawlerConfig {
                 System.out.println("Researcher Agent crawling: " + formattedUrl);
                 Document doc = Jsoup.connect(formattedUrl)
                         .userAgent("Mozilla/5.0 Spring AI Agent")
+                        .followRedirects(false)
                         .timeout(5000)
                         .get();
                 // Extract text from the page

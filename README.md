@@ -18,6 +18,8 @@ By utilizing a **RabbitMQ message bus**, the system instantly accepts a large ba
 
 ### 🧠 Multi-Agent Microservices Workflow
 
+![Spring AI Autonomous Blog Agent — Architecture & Data Flow](docs/images/architecture-dataflow.png)
+
 ```mermaid
 graph TD
     %% Define Styles
@@ -181,7 +183,12 @@ The Autonomous Issue Agent has been extracted from this project into its own sta
 Please refer to the new project at `gh-issue-agent` on your local filesystem for standalone setup and usage.
 
 ### 7. Dependency Updates & Local Docker Verification
-To keep dependencies secure and up-to-date, we scan the codebase using the `com.github.ben-manes.versions` plugin and apply updates dynamically via a Python utility script.
+To keep dependencies secure and up-to-date, we scan the codebase using the `io.github.ben-manes.versions` plugin and apply updates dynamically via a Python utility script.
+
+### 8. Trusted OSS Supply Chain Cache (Split-Horizon Setup)
+This repository is configured to optionally route Maven/Gradle and PyPI dependencies through a self-hosted **Trusted OSS Harbor / Gatekeeper** cache while keeping public upstream registries (`mavenCentral()`, PyPI) as the zero-config default:
+- **Local LAN**: Uses `http://oss.jsigroup.local:8080` via gitignored `.env` / `.mvn/` (avoiding NAT hairpinning).
+- **GitHub Actions (WAN)**: Conditionally uses `vars.TRUSTED_OSS_CACHE_URL` (`https://jsigroup-oss.duckdns.org`) with mTLS client credentials (`OSS_MTLS_CLIENT_CERT`, `OSS_MTLS_CLIENT_KEY`).
 
 To check and apply updates:
 1. Run Gradle's dependency updates task to see available versions:

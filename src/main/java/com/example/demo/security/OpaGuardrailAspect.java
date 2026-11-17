@@ -51,25 +51,34 @@ public class OpaGuardrailAspect {
         if (fileAccessTools.contains(toolName)) {
             input.put("resource_type", "file");
             if (args.length > 0) {
-                String path;
+                java.util.List<String> pathsToValidate = new java.util.ArrayList<>();
                 if (args[0] instanceof CodeTools.WriteRequest writeRequest) {
-                    path = writeRequest.absolutePath();
+                    pathsToValidate.add(writeRequest.absolutePath());
                 } else if (args[0] instanceof ImageTools.MoveRequest moveRequest) {
-                    path = moveRequest.sourceDirectory();
+                    pathsToValidate.add(moveRequest.sourceDirectory());
+                    pathsToValidate.add(moveRequest.targetDirectory());
                 } else {
-                    path = args[0].toString();
+                    pathsToValidate.add(args[0].toString());
                 }
-                
-                try {
-                    String normalizedPath = Paths.get(path).toAbsolutePath().normalize().toString();
-                    if (!normalizedPath.startsWith(workspacePath)) {
-                        throw new SecurityException("Path traversal attempt detected: " + path);
+
+                Path workspaceBase = Paths.get(workspacePath).toAbsolutePath().normalize();
+                for (int i = 0; i < pathsToValidate.size(); i++) {
+                    String path = pathsToValidate.get(i);
+                    try {
+                        Path normalizedPath = Paths.get(path).toAbsolutePath().normalize();
+                        if (!normalizedPath.startsWith(workspaceBase)) {
+                            throw new SecurityException("Path traversal attempt detected: " + path);
+                        }
+                        if (i == 0) {
+                            request.put("path", normalizedPath.toString());
+                        } else {
+                            request.put("target_path", normalizedPath.toString());
+                        }
+                    } catch (SecurityException se) {
+                        throw se;
+                    } catch (Exception e) {
+                        throw new SecurityException("Failed to normalize path: " + path, e);
                     }
-                    request.put("path", normalizedPath);
-                } catch (SecurityException se) {
-                    throw se;
-                } catch (Exception e) {
-                    throw new SecurityException("Failed to normalize path: " + path, e);
                 }
                 
                 request.put("action", ("writeFile".equals(toolName) || "moveImages".equals(toolName)) ? "write" : "read");

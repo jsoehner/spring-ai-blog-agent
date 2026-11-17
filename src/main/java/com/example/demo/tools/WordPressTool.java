@@ -42,7 +42,14 @@ public class WordPressTool implements ExternalTool {
 
     @Tool(description = "Creates a draft blog post on the WordPress site. Input requires a catchy title and the full HTML content of the blog post.")
     public String createDraftPost(DraftRequest request) {
-        String safeBaseName = request.topic().replaceAll("[^a-zA-Z0-9\\s-]", "").strip().replaceAll("\\s+", "-").toLowerCase();
+        if (request == null || request.topic() == null || request.topic().isBlank()) {
+            throw new IllegalArgumentException("Topic must not be null or blank.");
+        }
+        String sanitizedTopic = request.topic().replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
+        if (sanitizedTopic.isEmpty()) {
+            throw new IllegalArgumentException("Topic must contain at least one alphanumeric character.");
+        }
+        String safeBaseName = sanitizedTopic.replaceAll("\\s+", "-").toLowerCase();
         
         Path baseDir = Paths.get("output").toAbsolutePath().normalize();
         Path fileTarget = baseDir.resolve(safeBaseName + ".html").normalize();

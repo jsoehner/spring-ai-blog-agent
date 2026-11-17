@@ -35,4 +35,11 @@ class StorageServiceTest {
         // Clean up
         Files.deleteIfExists(expectedPath);
     }
+
+    @Test
+    void testRejectsNullBlankAndSymbolOnlyTopics() {
+        assertThrows(IllegalArgumentException.class, () -> storageService.getSafePath(null, ".html"));
+        assertThrows(IllegalArgumentException.class, () -> storageService.getSafePath("   ", ".html"));
+        assertThrows(IllegalArgumentException.class, () -> storageService.getSafePath("!!!...", ".html"));
+    }
 }

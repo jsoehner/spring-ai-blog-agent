@@ -32,8 +32,14 @@ public class StorageService {
     }
 
     public Path getSafePath(String topic, String extension) {
+        if (topic == null || topic.isBlank()) {
+            throw new IllegalArgumentException("Topic must not be null or blank.");
+        }
         // Sanitize filename to prevent path traversal
         String safeBaseName = topic.replaceAll("[^a-zA-Z0-9\\s-]", "").strip();
+        if (safeBaseName.isEmpty()) {
+            throw new IllegalArgumentException("Topic must contain at least one alphanumeric character.");
+        }
         String filename = safeBaseName.replaceAll("\\s+", "-").toLowerCase() + extension;
         
         Path baseDir = Paths.get("output").toAbsolutePath().normalize();

@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.1.2'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id 'com.github.ben-manes.versions' version '0.67.0'
+	id 'io.github.ben-manes.versions' version '0.67.0'
 }
 
 group = 'com.example'
@@ -15,6 +15,11 @@ java {
 }
 
 repositories {
+	def trustedOssUrl = System.getenv('TRUSTED_OSS_CACHE_URL')?.replaceAll('/+$', '')
+	if (trustedOssUrl) {
+		def trustedOssMode = System.getenv('TRUSTED_OSS_MODE') ?: 'virtual'
+		maven { url = "${trustedOssUrl}/maven/${trustedOssMode}" }
+	}
 	mavenCentral()
 	maven { url = 'https://repo.spring.io/milestone' }
 }
