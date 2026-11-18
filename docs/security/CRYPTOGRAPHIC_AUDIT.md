@@ -29,7 +29,7 @@
 
 | Component / Algorithm | Type / Primitive | Key Length / Curve | Recommended Target | Provenance / Context |
 |---|---|---|---|---|
-| **`amqp-client (RabbitMQ AMQPS Transport)`**<br><sub>TLS 1.2 / TLS 1.3 (JSSE)</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Configure TLS 1.3 hybrid post-quantum cipher suites in RabbitMQ broker & client connection factory** | Assimilated Upstream CBOM: RabbitMQ Transport Security Specification<br>`Dependency: amqp-client@5.37.1` |
+| **`amqp-client (RabbitMQ AMQPS Transport)`**<br><sub>TLS 1.2 / TLS 1.3 (JSSE)</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Configure TLS 1.3 hybrid post-quantum cipher suites in RabbitMQ broker & client connection factory** | Assimilated Upstream CBOM: RabbitMQ Transport Security Specification<br>`Dependency: amqp-client@5.38.0` |
 | **`tomcat-embed-core (Tomcat TLS Transport Engine)`**<br><sub>TLS 1.2 / TLS 1.3</sub> | protocol / protocol | RSA-2048 / ECDSA-P256 | **Upgrade to Post-Quantum hybrid key exchange (X25519+ML-KEM-768) via OpenSSL 3.5+ or Java 25 JSSE provider** | Assimilated Upstream CBOM: Apache Tomcat Security Advisory & JSSE Specification<br>`Dependency: tomcat-embed-core@11.0.29` |
 
 ### 🔒 Classical Symmetric & Digest Assets
