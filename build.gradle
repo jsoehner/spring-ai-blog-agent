@@ -39,7 +39,7 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.24.1'
 	implementation 'com.drewnoakes:metadata-extractor:2.22.0'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'io.micrometer:micrometer-registry-prometheus:1.17.2'
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.18.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.3'
