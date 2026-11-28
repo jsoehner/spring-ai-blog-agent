@@ -1,6 +1,6 @@
 # 🤖 Spring AI Autonomous Blog Agent
 
-![License](https://img.shields.io/badge/License-MIT-blue.svg) ![Java](https://img.shields.io/badge/Java-25-orange.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.x-brightgreen.svg) ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange.svg) [![Build Verified](https://img.shields.io/badge/Build%20Verified-2026--11--20-brightgreen.svg)](docs/BUILD_VERIFICATION.md)
+![License](https://img.shields.io/badge/License-MIT-blue.svg) ![Java](https://img.shields.io/badge/Java-25-orange.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.2.x-brightgreen.svg) ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg) ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Event--Driven-orange.svg) [![Build Verified](https://img.shields.io/badge/Build%20Verified-2026--11--20-brightgreen.svg)](docs/BUILD_VERIFICATION.md)
 
 > **Build Verification (2026-11-20):** Verified functional by **Jeffs' Automated build and deploy agent** — see [docs/BUILD_VERIFICATION.md](docs/BUILD_VERIFICATION.md).
 
@@ -220,21 +220,13 @@ To verify and test dependency updates locally within the multi-agent container e
 
 ## 📐 Architecture Decisions (ADRs) & Agent Skills
 
-### Architecture Decision Records (ADRs)
-- **[ADR-0001: Security Hardening and Dependency Injection Refactoring](docs/architecture/decisions/0001-security-hardening-and-dependency-injection.md)** — Outlines the path traversal protections, SSRF mitigation, TLS option separation, ChatClient builder mutate adjustments, and Spring Dependency Injection configurations implemented to secure and clean the codebase.
-- **[ADR-0002: Mitigating DNS Rebinding SSRF and Aligning Project Rules](docs/architecture/decisions/0002-mitigating-dns-rebinding-ssrf-and-aligning-project-rules.md)** — Documents the resolutions for DNS Rebinding, SSRF in Python scripts, Docker image layer build sequence, and aligning prompt/filename patterns with the project rules.
-- **[ADR-0003: Workflow and Agent Coordination Optimization](docs/architecture/decisions/0003-workflow-and-agent-coordination-optimization.md)** — Explains the parallelization of security scans in GitHub Actions, dynamic dependency updates querying Maven Central, and converting Supervisor task processing to asynchronous CompletableFuture coordination.
-- **[ADR-0004: Dependency Updates and Gradle Build Configuration Fixes](docs/architecture/decisions/0004-dependency-updates-and-gradle-build-fixing.md)** — Documents the fixes for the OWASP dependencycheck plugin configuration and Java compilation errors, the inclusion of the Gradle versions plugin, and applying dependency updates.
-- **[ADR-0005: Fixing CI/CD Test Failures and Semgrep Warnings](docs/architecture/decisions/0005-fixing-ci-cd-test-failures.md)** — Documents fixing Semgrep security warnings and ensuring consistent test passes in CI/CD.
-- **[ADR-0006: Configure Gemma 4 and Qwen 3 Models](docs/architecture/decisions/0006-configure-gemma4-and-qwen3-models.md)** — Documents configuring `gemma4:12b` for researcher agent and `qwen3.5:9b` for supervisor blogger agent in local Ollama environments.
-- **[ADR-0007: Defense-in-Depth Path Validation](docs/architecture/decisions/0007-defense-in-depth-path-validation.md)** — Documents path traversal mitigations and strict file system boundary validation.
-- **[ADR-0008: OPA Client Hardening](docs/architecture/decisions/0008-opa-client-hardening.md)** — Documents OPA client hardening and request validation policy enforcement.
-- **[ADR-0009: Integrating TextHumanize for AI Blog Post Naturalization](docs/architecture/decisions/0009-integrating-texthumanize-for-blog-naturalization.md)** — Documents integrating the `texthumanize` Python package via a local CLI wrapper to naturalize research facts before passing them to the supervisor blogger pass.
-- **[ADR-0010: Lombok Integration and Java Build Compatibility](docs/architecture/decisions/0010-lombok-integration-and-java-build-compatibility.md)** — *(Superseded by ADR-0012)* Documents configuring the `io.freefair.lombok` plugin and resolving build issues prior to JDK 25 migration.
-- **[ADR-0011: Gitignore Agent Artifacts and README Gotchas Update](docs/architecture/decisions/0011-gitignore-agent-artifacts-and-readme-gotchas.md)** — Documents ignoring agent artifact directories (`.pi/`, `.pi-subagents/`) and syncing framework/agent gotchas into README documentation.
-- **[ADR-0012: Java 25 Upgrade and Gutenberg Block Formatting Normalization](docs/architecture/decisions/0012-java-25-upgrade-and-gutenberg-formatting-normalization.md)** — Documents native Java 25 support, migrating from Lombok to standard SLF4J loggers/POJOs, isolating `texthumanize` to pre-supervisor research facts, and sanitizing Gutenberg blocks against stray linefeeds and comment spacing.
-- **[ADR-0013: Align Docker Base Images with Java 25](docs/architecture/decisions/0013-align-docker-base-images-with-java-25.md)** — Documents updating Dockerfile builder and runtime base images to Java 25 (`eclipse-temurin:25-jdk-alpine` and `eclipse-temurin:25-jre-alpine`) to align with Gradle toolchain requirements and eliminate CI/CD buildx toolchain provisioning errors.
-- **[ADR-0014: Multi-Agent Redundancy Elimination and Progressive Blog Generation Pipeline](docs/architecture/decisions/0014-multi-agent-redundancy-elimination-and-progressive-generation.md)** — Documents prompt restructuring to eliminate sentence repetition mandates, expanding researcher fact-gathering across 4 architectural dimensions, tuning text naturalization intensity to 30 to protect domain vocabulary, and introducing automated Jaccard sentence deduplication before Gutenberg formatting.
+### Key Architecture Decision Records (ADRs)
+- **[ADR-0032: Eliminate Trailing Adverb Padding and Restore Natural Sentence Cadence](docs/adr/README.md#index-of-architectural-decisions)** ([Full ADR](docs/adr/0032-eliminate-trailing-adverb-padding-and-restore-natural-cadence.md)) — Removes trailing adverb padding in generated prose to restore natural reading cadence.
+- **[ADR-0031: Automated Nightly Dependency Updates and Unattended Auto-Merge Governance](docs/adr/README.md#index-of-architectural-decisions)** ([Full ADR](docs/adr/0031-automated-nightly-dependency-updates-and-unattended-auto-merge.md)) — Governs nightly dependency updates, build verification, and automated PR merging.
+- **[ADR-0030: Automated SBOM & CBOM Supply Chain Governance and PQC Readiness](docs/adr/README.md#index-of-architectural-decisions)** ([Full ADR](docs/adr/0030-automated-sbom-cbom-supply-chain-governance.md)) — Automates SBOM/CBOM auditing and Post-Quantum Cryptography readiness scoring.
+- **[ADR-0029: Consolidate Security Workflows and Retire Redundant Testing Workflow](docs/adr/README.md#index-of-architectural-decisions)** ([Full ADR](docs/adr/0029-consolidate-security-workflows-and-remove-redundant-testing-workflow.md)) — Standardizes CI security gates into a single consolidated governance workflow.
+
+To learn more about the project's full architectural and security decision history, visit the complete ADR index in [docs/adr/README.md](docs/adr/README.md).
 
 ### Agent Skills
 We maintain specialized agent skills inside the `.agents/skills/` directory. New skills can be installed using the `npx skills` tool:
@@ -244,29 +236,14 @@ We maintain specialized agent skills inside the `.agents/skills/` directory. New
 
 ## ⚠️ Gotchas & Troubleshooting
 
-Here are a few common issues and best practices to keep in mind when working with this project:
+Here are the latest key operational gotchas to keep in mind when working with this project:
 
-- **Docker Base Image Java Version Alignment:** When updating Gradle's `toolchain { languageVersion = JavaLanguageVersion.of(...) }`, ensure the `Dockerfile` multi-stage base images (both JDK builder and JRE runtime) are updated to match (e.g., `eclipse-temurin:25-jdk-alpine` and `eclipse-temurin:25-jre-alpine`). Otherwise, container builds in CI/CD environments (like GitHub Actions `docker/build-push-action`) will fail during `./gradlew build -x test --no-daemon` because Gradle cannot locate or auto-provision the matching JDK toolchain in the container.
-- **Java 25 Native Support & Logging Patterns:** The codebase is configured with `toolchain { languageVersion = JavaLanguageVersion.of(25) }`. To prevent JDK 25 javac internal annotation processing conflicts, standard SLF4J `LoggerFactory.getLogger(...)` and plain POJO constructs are used in place of Lombok.
-- **WordPress Gutenberg Block Formatting & Whitespace Normalization:** When generating WordPress block HTML, ensure comment tags are well-formed (e.g. `<!-- wp:paragraph -->` with no space inside `wp:`) and individual blocks (`<!-- wp:paragraph --><p>...</p><!-- /wp:paragraph -->`) reside on single lines without internal carriage returns or line feeds. `MarkdownSanitizer` automatically cleans and normalizes these blocks.
-- **Gitignore Agent Artifacts:** Agent execution frameworks may create `.pi` and `.pi-subagents` directories during local execution. These are ignored in `.gitignore` to prevent tracking temporary agent context and state files.
-- **Prompting for Paragraph Structure:** When prompting an LLM to generate blog posts or articles, explicitly instruct it with: `CRITICAL: Do NOT bold the first sentence of your paragraphs, and do NOT separate the opening sentence from the rest of the paragraph; integrate it naturally into the same paragraph block.` This prevents the common LLM quirk of aggressively highlighting and isolating topic sentences.
-- **Class Cyclic Inheritance:** Ensure service implementations do not accidentally declare `implements ServiceClass` targeting their own class name (e.g. `public class StorageService implements StorageService`), which causes compiler cyclic inheritance errors.
-- **Checked Exceptions in Spring Component Constructors:** When reading classpath resources (e.g., `Resource.getInputStream().readAllBytes()`) in `@Service` constructors, always wrap the read in a `try-catch` block to handle checked `IOException`s rather than letting unhandled exceptions break component initialization.
-- **TextHumanize & WordPress Compatibility Order:** When applying `texthumanize` to AI-generated blog posts, execute text naturalization on the researcher's raw facts *before* providing them to the supervisor blogger model. Applying text naturalization after HTML structure generation can alter custom HTML markup, figure tags, and WordPress shortcode comments (`<!-- wp:image -->`). Running humanization on factual context before the blogger pass preserves both naturalized text tone and valid WordPress HTML output.
-- **Python CLI Execution in Spring Boot Containers:** When calling python CLI utilities (like `humanize.py`) via `ProcessBuilder` inside multi-stage Docker containers, the source files (e.g., `src/main/resources/scripts/...`) are typically not present on the container's filesystem. Ensure `py3-pip` and required packages are explicitly installed in the runtime stage of your `Dockerfile`. Additionally, implement a classpath extractor to dynamically copy the script resource from the packaged JAR to a temporary filesystem path (like `/tmp/`) before execution, and gracefully handle non-zero exit codes by logging stderr and falling back to original content.
-- **Asynchronous Unit Tests & CompletableFuture:** When wrapping RabbitMQ listener methods or controller actions in asynchronous execution (`CompletableFuture.runAsync`), the main thread will return immediately. Ensure your JUnit tests call `.join()` on the returned Future before verifying assertions (e.g. checking file creation) to avoid race conditions and false successes.
-- **GitHub Actions & Node 24:** When a GitHub Action runner complains about Node 20 deprecation, simply injecting `setup-node` does not fix third-party actions. You MUST bump the major version of the affected actions (e.g., `actions/checkout@v7`, `peter-evans/create-pull-request@v8`) for native Node 24 support.
-- **Spring AI ChatModel Conflicts:** Do not include both `spring-ai-starter-model-ollama` and `spring-ai-starter-model-openai` dependencies without disabling auto-configuration for one of them (e.g., `spring.autoconfigure.exclude=org.springframework.ai.model.ollama.autoconfigure.OllamaChatAutoConfiguration`). Otherwise, Spring will throw an `UnsatisfiedDependencyException` due to ambiguous `ChatModel` beans.
-- **Docker Volume Mapping for Logs:** When mapping a single log file (like `request-activity.log`) as a volume in `docker-compose.yml`, you **must** ensure the file exists on the host machine first. If it does not exist, Docker will automatically create it as a directory, which will cause Logback to crash on startup.
-- **Ollama vs Open-WebUI Base URLs:** 
-  - When using the Spring AI OpenAI starter pointing directly to Ollama, ensure the base URL explicitly includes `/v1`.
-  - When pointing to Open-WebUI, append `/api` to the base URL, or else it will hit the web frontend and result in a `405 Method Not Allowed` error.
-- **Spring AI `ChatClient.Builder`:** The `ChatClient.Builder` instances are mutable. Do NOT reuse the same builder instance to configure multiple clients by calling `.defaultSystem(...)`, as it will overwrite the configuration for all clients. Call `.build()` to create a base `ChatClient`, and then use `.mutate()` to branch off separate configurations.
-- **Docker Networking:** Avoid using hostnames like `open-webui` in your configuration unless they are explicitly resolvable in the Docker network. Prefer explicit IP addresses (e.g., `192.168.100.190`).
-- **Spring AI 2.0.0 Naming:** Starting with Spring AI 2.0.0, dependencies require the `-model-` segment (e.g., `spring-ai-starter-model-openai` instead of `spring-ai-starter-openai`).
-- **Search Tool Fallbacks:** When implementing web search tools for AI agents (like the Researcher Agent), prefer using open APIs (like the Wikipedia API) instead of scraping search engines (e.g., DuckDuckGo) as they aggressively block automated requests. Additionally, ensure the fallback `webcrawler.default.urls` contains a solid list of generic security-related URLs.
-- **Local File Output Naming:** When saving generated HTML blog posts locally, standardize the filename by using the topic string, replacing spaces with hyphens, and converting to lowercase (e.g., `topic.replaceAll("\\s+", "-").toLowerCase() + ".html"`).
+- **[Spring Boot 4.2 RabbitMQ Starter](docs/GOTCHAS.md#spring-boot-42-rabbitmq-starter):** Use `spring-boot-starter-rabbitmq` for classic RabbitMQ (AMQP 0-9-1) instead of `spring-boot-starter-amqp`.
+- **[Docker Base Image Java Version Alignment](docs/GOTCHAS.md#docker-base-image-java-version-alignment):** Keep Dockerfile JDK/JRE base image tags aligned with Gradle's Java 25 toolchain.
+- **[Java 25 Native Support & Logging Patterns](docs/GOTCHAS.md#java-25-native-support--logging-patterns):** Use standard SLF4J loggers and plain POJOs instead of Lombok to avoid JDK 25 annotation processing conflicts.
+- **[WordPress Gutenberg Block Formatting & Whitespace Normalization](docs/GOTCHAS.md#wordpress-gutenberg-block-formatting--whitespace-normalization):** Keep WordPress block comments well-formed and single-line via `MarkdownSanitizer`.
+
+To learn more and browse the complete list of operational gotchas, root causes, and troubleshooting workarounds, visit [docs/GOTCHAS.md](docs/GOTCHAS.md).
 
 
 ---
@@ -281,11 +258,6 @@ This repository integrates the [`jsoehner/jsi-bom-actions`](https://github.com/j
 
 - **Latest Audit Report:** [`docs/security/CRYPTOGRAPHIC_AUDIT.md`](docs/security/CRYPTOGRAPHIC_AUDIT.md)
 - **Learn More:** [jsoehner/jsi-bom-actions](https://github.com/jsoehner/jsi-bom-actions)
-
-## Architectural Decision Record
-
-For detailed architectural context, design rationale, trade-off analysis, and regulatory traceability, refer to:
-- [ADR-0030: Automated SBOM & CBOM Supply Chain Governance and Post-Quantum Cryptography Readiness](docs/adr/0030-automated-sbom-cbom-supply-chain-governance.md)
 
 ---
 
