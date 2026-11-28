@@ -1,0 +1,12 @@
+# Standard build, dependency, and VCS directories
+.git/
+.gradle/
+build/
+target/
+node_modules/
+dist/
+out/
+
+# Documentation and audit reports (non-executable prose; avoids SAST regex false positives)
+*.md
+docs/
